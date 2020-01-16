@@ -70,10 +70,4 @@ class RelationshipsTest extends TestCase
         $screening = factory('App\Screening')->create($attributes);
         $this->assertEquals($screening->id, $film->screenings[0]->id);
     }
-
-    /** @test */
-    // public function an_edge_has_a_source()
-    // {
-    //     $this->assertTrue(true);
-    // }
 }

@@ -50,7 +50,7 @@ class UsersTest extends TestCase
     /** @test */
     public function a_user_cannot_log_in_with_bad_credentials()
     {
-        $user = $user = factory('App\User')->create();
+        $user = factory('App\User')->create();
         $this->from('/login')->post('/login', [
             'email' => $user->email,
             'password' => 'bad_pass',
@@ -94,6 +94,7 @@ class UsersTest extends TestCase
     /** @test */
     public function default_users_cannot_view_users_list()
     {
+        $this->get('/admin')->assertStatus(403);
         $this->actingAs(factory('App\User')->make())->get('/admin')->assertStatus(403);
     }
 
