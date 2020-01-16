@@ -1,0 +1,84 @@
+$lightest-landing: rgb(2, 151, 126);
+$lighter-landing: rgb(2, 133, 111);
+$main: rgb(4, 124, 104);
+$highlight: rgb(201, 15, 93);
+$warning: rgb(92, 2, 39);
+$danger: rgb(128, 0, 11);
+$subtle-gray: rgb(73, 73, 73);
+$soft-border-gray: rgb(141, 141, 141);
+$cell-highlight: rgb(211, 224, 222);
+$font: 'Lato', sans-serif;
+
+:root {
+  box-sizing: border-box;
+  font-size: calc(0.8vw + 0.6em);
+}
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+body {
+  background-color: $lightest-landing;
+  font-family: $font, sans-serif;
+  color: white;
+}
+.centered-title {
+  position: absolute;
+  top: 45%;
+  width: 100%;
+}
+h1,
+h2 {
+  text-align: center;
+}
+h1 {
+  text-transform: uppercase;
+}
+h2 {
+  font-style: italic;
+}
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+}
+.nav-buttons a {
+  display: inline-block;
+  background-color: rgba(2, 133, 111, 0);
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  text-decoration: none;
+  padding: 1rem 1.5rem;
+  border: 1px solid white;
+  margin: 1rem 2.5rem;
+}
+.nav-buttons a:hover {
+  background-color: white;
+  color: $lighter-landing;
+}
+@media (max-width: 500px) {
+  .nav-buttons a {
+    font-size: 1rem;
+  }
+}
+#bangladesh:hover,
+#india:hover,
+#pakistan:hover,
+#sri_lanka:hover,
+#nepal:hover,
+#bhutan:hover {
+  fill: $main;
+}
+svg {
+  fill: $lighter-landing;
+  position: fixed;
+  z-index: -1;
+  top: -4vh;
+  left: -10vw;
+  height: 115vh;
+  width: 115vw;
+}
+svg path {
+  stroke: $lightest-landing;
+}
