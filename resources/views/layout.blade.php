@@ -11,7 +11,7 @@
   content="Indian Cinema in Context aims to provide tools for a new global model of film history from the edges.">
 <meta property="og:title" content="Indian Cinema in Context: People">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>@yield('title', 'ICIC')</title>
+<title>@yield('title', 'CWL 207')</title>
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lato:300,300b,300i" rel="stylesheet">
 @yield('scripts')

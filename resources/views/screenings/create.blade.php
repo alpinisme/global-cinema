@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('scripts')
-<script src="http://laravel-playground.test/js/fetch-film.js" type="text/Javascript" defer></script>
+<script src="/js/fetch-film.js" type="text/Javascript" defer></script>
 @endsection
 
 @section('content')
