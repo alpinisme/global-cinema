@@ -11,7 +11,7 @@ class RelationshipsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function instructors_and_students_are_properly_related_through_assignments()
+    public function instructors_and_students_are_connected_via_assignments()
     {
         $instructor = factory('App\User')->create();
         $student = factory('App\User')->create();
