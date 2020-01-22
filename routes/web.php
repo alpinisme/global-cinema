@@ -26,7 +26,9 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/dates', 'DatesController@index');
 });
 
-
+Route::get('/test', function() {
+  return view('test');
+});
 
 Route::get('/admin', 'PermissionsController@index')->middleware('can:see admin tools');
 Route::post('/admin/user/{id}', 'PermissionsController@update')->middleware('can:see admin tools');
