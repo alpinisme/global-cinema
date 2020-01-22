@@ -34,6 +34,10 @@ class StandardResourceController extends Controller
     {
         $this->request = $request;
         $this->processFormSubmission();
+        if ($request->wantsJson()) {
+            return $this->object;
+
+        }
         return redirect($this->tableName);
     }
 
@@ -42,6 +46,10 @@ class StandardResourceController extends Controller
         $this->request = $request;
         $this->id = $id;
         $this->processFormSubmission();
+        if ($request->wantsJson()) {
+            return $this->object;
+
+        }
         return redirect($this->tableName . '/' . $this->id);
     }
 
