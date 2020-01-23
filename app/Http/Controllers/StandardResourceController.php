@@ -17,8 +17,11 @@ class StandardResourceController extends Controller
     protected $tableName = '';
     protected $objectName = ''; // how to refer to an instance
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->wantsJson) {
+            return $this->model::all();
+        }
         $resource = $this->model;
         return view('/stdResources/index', compact('resource'));
     }
@@ -53,10 +56,13 @@ class StandardResourceController extends Controller
         return redirect($this->tableName . '/' . $this->id);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $this->id = $id;
         $this->destroyObject();
+        if ($request->wantsJson()) {
+            return ['status' => 'success'];
+        }
         return redirect($this->tableName);
     }
 

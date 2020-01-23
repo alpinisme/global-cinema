@@ -106,7 +106,7 @@ class DataResourcesTest extends TestCase
     /** @test */
     public function a_request_to_films_json_will_yield_formatted_data()
     {
-        $this->get('films/json')->assertOk()->assertExactJson(Film::all()->toArray());
+        $this->actingAs(factory('App\User')->state('admin')->make())->get('films/json')->assertOk()->assertExactJson(Film::all()->toArray());
     }
 
     /** @test */
@@ -114,7 +114,9 @@ class DataResourcesTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $screening = factory('App\Screening')->create();
-        $this->actingAs(factory('App\User')->state('admin')->make())->delete('/screenings/' . $screening->id)->assertRedirect('/screenings');
-        // add line to make sure databse lacks screening
+        $this->actingAs(factory('App\User')->state('admin')->make())
+            ->delete('/screenings/' . $screening->id)
+            ->assertRedirect('/screenings');
+        $this->assertDatabaseMissing('screenings', ['id' => $screening->id]);
     }
 }
