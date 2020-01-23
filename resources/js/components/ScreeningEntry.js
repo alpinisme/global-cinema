@@ -3,18 +3,37 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import Fuse from 'fuse.js';
 
-const ConfirmYear = ({ film, submitScreening }) => {
+import ErrorBox from './ErrorBox';
+import Select from './Select';
+
+const ConfirmYear = ({
+    film,
+    handleSubmit,
+    handleValidationError,
+    maxYear,
+    addFilm
+}) => {
     const [year, setYear] = useState('');
     const [isError, setIsError] = useState(false);
 
     const handleClick = useCallback(() => {
+        if (year < 1900 || year > maxYear || parseInt(year) != year) {
+            handleValidationError(
+                `Please enter a valid year between 1900 and ${maxYear}`
+            );
+            return;
+        }
+        setIsError(false);
+
         console.log('submitting film: ', { title: film, year });
         axios
             .post('/films', { title: film, year })
-            .then(res => res.data.id)
-            .then(submitScreening)
-            .catch(e => console.log('no go: ', e));
-        false && setIsError(true);
+            .then(res => {
+                addFilm(res.data);
+                return res.data.id;
+            })
+            .then(handleSubmit)
+            .catch(() => setIsError(true));
     }, [film, year]);
 
     return (
@@ -41,7 +60,7 @@ const ConfirmYear = ({ film, submitScreening }) => {
     );
 };
 
-const Matches = ({ matches, handleFilmSelection, setIsNewFilm }) => (
+const Matches = ({ matches, handleSubmit, handleManualAdd }) => (
     <>
         {matches.length > 0 && (
             <p>Select the correct title to submit the entry.</p>
@@ -51,7 +70,7 @@ const Matches = ({ matches, handleFilmSelection, setIsNewFilm }) => (
                 type="submit"
                 data-film={match.id}
                 key={match.id}
-                onClick={handleFilmSelection}
+                onClick={handleSubmit}
             >
                 {match.title + ' (' + match.year + ')'}
             </button>
@@ -64,20 +83,34 @@ const Matches = ({ matches, handleFilmSelection, setIsNewFilm }) => (
                 info to identify the film.
             </p>
         )}
-        <button onClick={() => setIsNewFilm(true)}>Add film manually</button>
+        <button onClick={handleManualAdd}>Add film manually</button>
     </>
 );
 
-const ScreeningEntry = ({ date, theaters, saveScreening, films }) => {
-    const [film, setFilm] = useState('');
-    const [theater, setTheater] = useState('');
-    const [isNewFilm, setIsNewFilm] = useState(false);
-    const [matches, setMatches] = useState([]);
+const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
+    const [theaterID, setTheaterID] = useState('');
+    const [film, setFilm] = useState({
+        id: '',
+        title: '',
+        isNew: false,
+        matches: []
+    });
+    const [validationErrors, setValidationErrors] = useState([]);
+    const [submissionError, setSubmissionError] = useState('');
+    const [isSubmissionReady, setIsSubmissionReady] = useState(false);
 
+    const maxYear = parseInt(date.slice(0, 4), 10);
+
+    const handleSubmit = id => {
+        setFilm(old => ({ ...old, id }));
+        setIsSubmissionReady(true);
+    };
+
+    // find five closest matches for user-input title in db
     useEffect(() => {
         const options = {
             shouldSort: true,
-            threshold: 0.4,
+            threshold: 0.5,
             location: 0,
             distance: 100,
             maxPatternLength: 32,
@@ -86,32 +119,33 @@ const ScreeningEntry = ({ date, theaters, saveScreening, films }) => {
         };
 
         const fuse = new Fuse(films, options);
+        const all = fuse.search(film.title);
+        const top5 = all.slice(0, 4);
 
-        setMatches(fuse.search(film).slice(0, 5));
-    }, [films, film]);
+        setFilm(old => ({ ...old, matches: top5 }));
+    }, [films, film.title]);
 
-    const handleFilmSelection = useCallback(
-        event =>
-            saveScreening({
-                date,
-                film_id: event.target.dataset.film,
-                theater_id: theater
-            }),
-        [theater]
-    );
+    // submit screening if ready
+    useEffect(() => {
+        if (isSubmissionReady) {
+            setIsSubmissionReady(false);
+            setSubmissionError('');
 
-    const handleNewFilmSubmission = useCallback(
-        film => {
-            console.log(films);
-            console.log('submitting', {
-                date,
-                film_id: film,
-                theater_id: theater
-            });
-            saveScreening({ date, film_id: film, theater_id: theater });
-        },
-        [theater]
-    );
+            if (theaterID == '') {
+                setValidationErrors(old => ['Theater is required', ...old]);
+                return;
+            }
+
+            const data = { film_id: film.id, theater_id: theaterID, date };
+            axios
+                .post('/screenings', data)
+                .then(res => res.data)
+                .then(handleSuccess)
+                .catch(e =>
+                    setSubmissionError(`Screening could not be saved: ${e}`)
+                );
+        }
+    }, [isSubmissionReady]);
 
     return (
         <>
@@ -119,16 +153,19 @@ const ScreeningEntry = ({ date, theaters, saveScreening, films }) => {
             <Select
                 id="theater-select"
                 options={theaters.map(t => ({ label: t.name, value: t.id }))}
-                value={theater}
-                handleChange={e => setTheater(e.target.value)}
+                value={theaterID}
+                handleChange={e => setTheaterID(e.target.value)}
             />
 
             <label htmlFor="film">Film Title</label>
             <input
                 type="text"
                 name="film"
-                value={film}
-                onChange={e => setFilm(e.target.value)}
+                value={film.title}
+                onChange={e => {
+                    const title = e.target.value;
+                    setFilm(old => ({ ...old, title }));
+                }}
             />
 
             <p>
@@ -136,62 +173,62 @@ const ScreeningEntry = ({ date, theaters, saveScreening, films }) => {
                 below.
             </p>
 
-            {film && (
+            {film.title && (
                 <Matches
-                    matches={matches}
-                    film={film}
-                    handleFilmSelection={handleFilmSelection}
-                    setIsNewFilm={setIsNewFilm}
+                    matches={film.matches}
+                    handleSubmit={e => handleSubmit(e.target.dataset.film)}
+                    handleManualAdd={() =>
+                        setFilm(old => ({ ...old, isNew: true }))
+                    }
                 />
             )}
 
-            {isNewFilm && (
+            {film.isNew && (
                 <ConfirmYear
-                    film={film}
-                    submitScreening={handleNewFilmSubmission}
+                    film={film.title}
+                    maxYear={maxYear}
+                    addFilm={addFilm}
+                    handleSubmit={handleSubmit}
+                    handleValidationError={() =>
+                        setValidationErrors(old => [
+                            'Please enter a valid date',
+                            ...old
+                        ])
+                    }
                 />
+            )}
+
+            {validationErrors.length > 0 && (
+                <ErrorBox errors={validationErrors} />
+            )}
+
+            {submissionError.length > 0 && (
+                <ErrorBox errors={[submissionError]} />
             )}
         </>
     );
 };
 
-const Select = ({ id, options, value, handleChange }) => (
-    <select id={id} value={value} onChange={handleChange} autoFocus>
-        <option disabled value="">
-            Select...
-        </option>
-
-        {options.map(opt => (
-            <option key={opt.value} value={opt.value}>
-                {opt.label}
-            </option>
-        ))}
-    </select>
-);
-
 ScreeningEntry.propTypes = {
     theaters: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
     films: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
-    saveScreening: PropTypes.func.isRequired,
-    date: PropTypes.string.isRequired
+    date: PropTypes.string.isRequired,
+    addFilm: PropTypes.func.isRequired,
+    handleSuccess: PropTypes.func.isRequired
 };
 
 ConfirmYear.propTypes = {
     film: PropTypes.string.isRequired,
-    submitScreening: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    handleValidationError: PropTypes.func.isRequired,
+    maxYear: PropTypes.number.isRequired,
+    addFilm: PropTypes.func.isRequired
 };
 
 Matches.propTypes = {
-    handleFilmSelection: PropTypes.func.isRequired,
-    setIsNewFilm: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
+    handleManualAdd: PropTypes.func.isRequired,
     matches: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired
-};
-
-Select.propTypes = {
-    id: PropTypes.string.isRequired,
-    options: PropTypes.array.isRequired,
-    value: PropTypes.any.isRequired,
-    handleChange: PropTypes.func.isRequired
 };
 
 export default ScreeningEntry;
