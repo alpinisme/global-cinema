@@ -57,6 +57,8 @@ const Root = () => {
 
     return (
         <>
+            <h1>{new Date(date).toLocaleDateString()}</h1>
+            <p>Back to all dates</p>
             <div>
                 <h2>Save new screening</h2>
 
