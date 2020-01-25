@@ -30,4 +30,15 @@ class ScreeningsController extends StandardResourceController
         $screening = Screening::class;
         return view('screenings/create', compact('screening'));
     }
+
+    /**
+     * overwrites parent function to add createdBy field
+     * via the currently authenticated user 
+     * (field is not submitted in request)
+     */
+    protected function setObjectData()
+    {
+        $this->object->createdBy = auth()->id();
+        parent::setObjectData();
+    }
 }

@@ -12,9 +12,14 @@ class Screening extends Model
         'film' => 'film'
     ];
 
+
     const ALLFIELDS = Screening::QUICKFIELDS;
 
     const DISPLAYNAME = 'Screenings';
+
+    protected $guarded = [
+        'id', 'created_at', 'updated_at', 'createdBy'
+    ];
 
     public function film()
     {
@@ -24,5 +29,10 @@ class Screening extends Model
     public function theater()
     {
         return $this->belongsTo('App\Theater');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo('App\User');
     }
 }

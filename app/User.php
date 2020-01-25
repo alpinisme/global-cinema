@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->hasMany(Assignment::class, 'instructor_id');
     }
 
+    public function screenings()
+    {
+        return $this->hasMany(Screening::class, 'createdBy');
+    }
+
     public function hasRole($role)
     {
         return $this->role === $role;

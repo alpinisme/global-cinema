@@ -32,4 +32,15 @@ class FilmsController extends StandardResourceController
     {
         return Film::all();
     }
+
+    /**
+     * overwrites parent function to add createdBy field
+     * via the currently authenticated user 
+     * (field is not submitted in request)
+     */
+    protected function setObjectData()
+    {
+        $this->object->createdBy = auth()->id();
+        parent::setObjectData();
+    }
 }

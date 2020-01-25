@@ -20,7 +20,7 @@ class Film extends Model
     const DISPLAYNAME = 'Films';
 
     protected $guarded = [
-        'id', 'created_at', 'updated_at'
+        'id', 'created_at', 'updated_at', 'createdBy'
     ];
 
     public function screenings()

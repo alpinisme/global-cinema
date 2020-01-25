@@ -86,7 +86,6 @@ class DataResourcesTest extends TestCase
     /** @test */
     public function a_user_can_add_a_screening()
     {
-        $this->withoutExceptionHandling();
         $screening = factory('App\Screening')->create();
         $attributes = $screening->toArray();
         $this->actingAs(factory('App\User')->state('admin')->create())
