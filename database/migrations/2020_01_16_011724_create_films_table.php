@@ -17,7 +17,11 @@ class CreateFilmsTable extends Migration
             $table->increments('id');
             $table->string('title', 80)->index();
             $table->year('year')->index();
+            $table->unsignedBigInteger('createdBy');
             $table->timestamps();
+
+            $table->foreign('createdBy')
+                ->references('id')->on('users');
         });
     }
 

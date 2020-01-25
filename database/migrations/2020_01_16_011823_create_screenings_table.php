@@ -19,6 +19,7 @@ class CreateScreeningsTable extends Migration
             $table->unsignedInteger('theater_id');
             $table->unsignedInteger('film_id');
             $table->timestamps();
+            $table->unsignedBigInteger('createdBy');
 
             $table->foreign('theater_id')
                 ->references('id')->on('theaters')
@@ -27,6 +28,10 @@ class CreateScreeningsTable extends Migration
             $table->foreign('film_id')
                 ->references('id')->on('films')
                 ->onDelete('restrict');
+
+
+            $table->foreign('createdBy')
+                ->references('id')->on('users');
         });
     }
 

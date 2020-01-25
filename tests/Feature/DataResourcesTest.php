@@ -25,9 +25,10 @@ class DataResourcesTest extends TestCase
     /** @test */
     public function an_admin_can_add_a_film()
     {
-        $film = factory('App\Film')->make();
+        $user = factory('App\User')->state('admin')->create();
+        $film = factory('App\Film')->make(['createdBy' => $user->id]);
         $attributes = $film->toArray();
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        $this->actingAs($user)
             ->post('/films', $attributes)
             ->assertRedirect('/films');
         $this->assertDatabaseHas('films', $attributes);
@@ -41,7 +42,7 @@ class DataResourcesTest extends TestCase
             'title' => 'Some Other Title',
             'year' => 1987
         ];
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        $this->actingAs(factory('App\User')->state('admin')->create())
             ->patch('/films/' . $film->id, $attributes)
             ->assertRedirect('/films/' . $film->id);
         $film = Film::find($film->id);
@@ -85,9 +86,10 @@ class DataResourcesTest extends TestCase
     /** @test */
     public function a_user_can_add_a_screening()
     {
+        $this->withoutExceptionHandling();
         $screening = factory('App\Screening')->create();
         $attributes = $screening->toArray();
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        $this->actingAs(factory('App\User')->state('admin')->create())
             ->post('/screenings', $attributes)
             ->assertRedirect('/screenings');
         $this->assertDatabaseHas('screenings', $attributes);
