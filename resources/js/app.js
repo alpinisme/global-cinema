@@ -13,6 +13,7 @@ const Root = () => {
     const [errors, setErrors] = useState([]);
     const [screenings, setScreenings] = useState([]);
     const date = '1999-12-12';
+    const headers = { headers: { Accept: 'application/json' } };
 
     const deleteFromDB = (id, index) => {
         axios
@@ -29,7 +30,7 @@ const Root = () => {
 
     useEffect(() => {
         axios
-            .get('/theaters/json')
+            .get('/theaters', headers)
             .then(res => res.data)
             .then(setTheaters)
             .catch(e =>
@@ -39,7 +40,7 @@ const Root = () => {
 
     useEffect(() => {
         axios
-            .get('/films/json')
+            .get('/films', headers)
             .then(res => res.data)
             .then(setFilms)
             .catch(e =>
@@ -49,7 +50,7 @@ const Root = () => {
 
     useEffect(() => {
         axios
-            .get('/screenings', { headers: { Accept: 'application/json' } })
+            .get('/screenings', headers)
             .then(res => res.data)
             .then(setScreenings)
             .catch(console.log);

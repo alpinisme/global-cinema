@@ -15,10 +15,8 @@ Route::group(['middleware' => ['auth']], function () {
   Route::get('/', 'UserHomeController@index');
   Route::get('/home', 'UserHomeController@index');
   
-  Route::get('/films/json', 'FilmsController@json');
   Route::resource('/films', 'FilmsController');
   
-  Route::get('theaters/json', 'TheatersController@json');
   Route::resource('/theaters', 'TheatersController');
   
   Route::resource('/screenings', 'ScreeningsController');
@@ -28,7 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::get('/test', function() {
   return view('test');
-});
+})->middleware('auth');
 
 Route::get('/admin', 'PermissionsController@index')->middleware('can:see admin tools');
 Route::post('/admin/user/{id}', 'PermissionsController@update')->middleware('can:see admin tools');

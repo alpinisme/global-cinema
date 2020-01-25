@@ -19,7 +19,8 @@ class ScreeningsController extends StandardResourceController
     public function index(Request $request)
     {
         if ($request->wantsJson()) {
-            return Screening::all();
+            return auth()->user()->screenings;
+            //return Screening::all();
         } 
         $screening = Screening::class;
         return view('screenings/index', compact('screening'));

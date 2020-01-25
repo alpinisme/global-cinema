@@ -30,7 +30,7 @@ class StandardResourceController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->wantsJson) {
+        if ($request->wantsJson()) {
             return $this->model::all();
         }
         $resource = $this->model;

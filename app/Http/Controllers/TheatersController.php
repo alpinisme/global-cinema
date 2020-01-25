@@ -31,9 +31,4 @@ class TheatersController extends StandardResourceController
         $resource = $theater;
         return view('/stdResources/edit', compact('resource'));
     }
-
-    public function json()
-    {
-        return Theater::all();
-    }
 }

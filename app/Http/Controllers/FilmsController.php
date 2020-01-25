@@ -28,11 +28,6 @@ class FilmsController extends StandardResourceController
         return view('/stdResources/edit', compact('resource'));
     }
 
-    public function json()
-    {
-        return Film::all();
-    }
-
     /**
      * overwrites parent function to add createdBy field
      * via the currently authenticated user 
