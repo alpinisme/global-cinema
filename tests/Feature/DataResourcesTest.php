@@ -26,12 +26,11 @@ class DataResourcesTest extends TestCase
     public function an_admin_can_add_a_film()
     {
         $user = factory('App\User')->state('admin')->create();
-        $film = factory('App\Film')->make(['createdBy' => $user->id]);
-        $attributes = $film->toArray();
+        $film = factory('App\Film')->raw(['createdBy' => $user->id]);
         $this->actingAs($user)
-            ->post('/films', $attributes)
+            ->post('/films', $film)
             ->assertRedirect('/films');
-        $this->assertDatabaseHas('films', $attributes);
+        $this->assertDatabaseHas('films', $film);
     }
 
     /** @test */
@@ -75,12 +74,11 @@ class DataResourcesTest extends TestCase
     /** @test */
     public function an_admin_can_see_a_theater()
     {
-        $theater = factory('App\Theater')->make();
-        $attributes = $theater->toArray();
+        $theater = factory('App\Theater')->raw();
         $this->actingAs(factory('App\User')->state('admin')->make())
-            ->post('/theaters', $attributes)
+            ->post('/theaters', $theater)
             ->assertRedirect('/theaters');
-        $this->assertDatabaseHas('theaters', $attributes);
+        $this->assertDatabaseHas('theaters', $theater);
     }
 
     /** @test */
