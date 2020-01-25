@@ -5,18 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 
+/**
+ * An generic controller for handling CRUD operations
+ * on resources. Child controllers may override specific
+ * methods as needed.
+ */
 class StandardResourceController extends Controller
 {
     protected $request;
     protected $object;
     protected $id = false;
 
-    // child class properties
+    /**
+     *  properties declared in child class and used here
+     */ 
     protected $model = ''; // e.g. 'App\Product'
     protected $fields = []; // field-name => validation-rule pairs
     protected $tableName = '';
     protected $objectName = ''; // how to refer to an instance
 
+    /**
+     * Handle GET requests for all instances
+     * returning JSON or HTML, as needed
+     */
     public function index(Request $request)
     {
         if ($request->wantsJson) {
@@ -26,6 +37,10 @@ class StandardResourceController extends Controller
         return view('/stdResources/index', compact('resource'));
     }
 
+
+    /**
+     * Handle GET requests for form that, when POSTed, creates new row to DB
+     */
     public function create()
     {
         $resource = $this->model;
@@ -33,6 +48,10 @@ class StandardResourceController extends Controller
     }
 
 
+    /**
+     * Handle POST requests to create new row in DB
+     * returning JSON or HTML, as needed
+     */
     public function store(Request $request)
     {
         $this->request = $request;
@@ -44,6 +63,11 @@ class StandardResourceController extends Controller
         return redirect($this->tableName);
     }
 
+    /**
+     * Handle PUT/PATCH requests to update existing row in DB
+     * returning JSON representation of result with id
+     * or HTML, as needed
+     */
     public function update(Request $request, $id)
     {
         $this->request = $request;
@@ -56,6 +80,11 @@ class StandardResourceController extends Controller
         return redirect($this->tableName . '/' . $this->id);
     }
 
+    /**
+     * Handle DELETE requests to destroy existing row in DB
+     * returning JSON success message
+     * or redirecting to index, as neeeded
+     */
     public function destroy(Request $request, $id)
     {
         $this->id = $id;
@@ -79,7 +108,7 @@ class StandardResourceController extends Controller
     }
 
     /**
-     * Set the object property.
+     * Set the `object` attribute of this instance.
      * If there's no id, create a new object of the appropriate type,
      * otherwise instantiate the object to correspond to the object id.
      */
