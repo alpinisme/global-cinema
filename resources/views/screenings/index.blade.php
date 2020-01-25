@@ -2,20 +2,22 @@
 
 @section('content')
 <main class="container wide">
-  <h1 class="title">{{$screening::DISPLAYNAME}}</h1>
+  <h1 class="title">Screenings</h1>
 
   <table>
     <thead>
       <th>date</th>
       <th>theater</th>
       <th>film</th>
+      <th>created by</th>
       <th>delete</th>
     </thead>
-    @foreach (auth()->user()->screenings as $screening)
+    @foreach ($screenings as $screening)
         <tr>
           <td><a href="/screenings/{{$screening->id}}">{{$screening->date}}</a></td>
           <td>{{$screening->theater->name}}</td>
           <td>{{$screening->film->title}}</td>
+          <td>{{$screening->createdBy/*->name*/}}</td>
           <td>
             <form method="POST" action="/screenings/{{$screening->id}}">
               @csrf @method('DELETE')

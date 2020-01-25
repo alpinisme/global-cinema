@@ -57,6 +57,17 @@ class User extends Authenticatable
         return $this->role === $role;
     }
 
+    public function isStudent()
+    {
+        return $this->hasRole('student');
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+
     /**
      * The attributes that should be cast to native types.
      *

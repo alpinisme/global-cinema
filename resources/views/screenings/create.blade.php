@@ -6,7 +6,7 @@
 
 @section('content')
 <main class="container">
-  <h1 class="title">{{$screening::DISPLAYNAME}}</h1>
+  <h1 class="title">Screenings</h1>
 
   <form method="POST" action="/screenings">
     @csrf

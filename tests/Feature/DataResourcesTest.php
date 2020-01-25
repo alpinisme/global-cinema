@@ -82,11 +82,11 @@ class DataResourcesTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_add_a_screening()
+    public function a_student_can_add_a_screening()
     {
         $screening = factory('App\Screening')->create();
         $attributes = $screening->toArray();
-        $this->actingAs(factory('App\User')->state('admin')->create())
+        $this->actingAs(factory('App\User')->state('student')->create())
             ->post('/screenings', $attributes)
             ->assertRedirect('/screenings');
         $this->assertDatabaseHas('screenings', $attributes);
@@ -132,14 +132,26 @@ class DataResourcesTest extends TestCase
     public function a_student_can_only_access_their_own_screenings()
     {
         $notOwnScreening = factory('App\Screening')->create();
-        $student = factory('App\User')->state('admin')->create();
+        $student = factory('App\User')->state('student')->create();
         $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
 
         // $this->actingAs($student)->json('GET', '/screenings')
-        //     ->assertJsonMissing($notOwnScreening->toArray())
+        //     //->assertJsonMissing($notOwnScreening->toArray())
         //     ->assertJson($ownScreening->toArray());
         $this->actingAs($student)->get('/screenings')
             ->assertDontSee($notOwnScreening->film->title)
+            ->assertSee($ownScreening->film->title);
+    }
+
+    /** @test */
+    public function an_admin_can_access_all_screenings() 
+    {
+        $this->withoutExceptionHandling();
+        $notOwnScreening = factory('App\Screening')->create();
+        $student = factory('App\User')->state('admin')->create();
+        $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
+        $this->actingAs($student)->get('/screenings')
+            ->assertSee($notOwnScreening->film->title)
             ->assertSee($ownScreening->film->title);
     }
 }

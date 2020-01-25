@@ -19,17 +19,16 @@ class ScreeningsController extends StandardResourceController
     public function index(Request $request)
     {
         if ($request->wantsJson()) {
-            return auth()->user()->screenings;
-            //return Screening::all();
+            return $this->authorizedScreenings();
         } 
-        $screening = Screening::class;
-        return view('screenings/index', compact('screening'));
+        $screenings = $this->authorizedScreenings();
+        return view('screenings/index', compact('screenings'));
     }
 
     public function create()
     {
-        $screening = Screening::class;
-        return view('screenings/create', compact('screening'));
+        $screenings = $this->authorizedScreenings();
+        return view('screenings/create', compact('screenings'));
     }
 
     /**
@@ -41,5 +40,16 @@ class ScreeningsController extends StandardResourceController
     {
         $this->object->createdBy = auth()->id();
         parent::setObjectData();
+    }
+
+    protected function authorizedScreenings() {
+        $user = auth()->user();
+        if ($user->isStudent()) {
+            return $user->screenings;
+        }
+        if ($user->isAdmin()) {
+            return Screening::all();
+        }
+        return 'user type not recognized';
     }
 }
