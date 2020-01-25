@@ -11,7 +11,7 @@
       <th>film</th>
       <th>delete</th>
     </thead>
-    @foreach ($screening::all() as $screening)
+    @foreach (auth()->user()->screenings as $screening)
         <tr>
           <td><a href="/screenings/{{$screening->id}}">{{$screening->date}}</a></td>
           <td>{{$screening->theater->name}}</td>
