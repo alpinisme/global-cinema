@@ -72,7 +72,7 @@ class StandardResourceController extends Controller
     protected function processFormSubmission()
     {
         $this->setObject();
-        $this->validate($this->request, $this->fields);;
+        $this->validate($this->request, $this->fields);
         $this->setObjectData();
         $this->saveObject();
         $this->setSuccessMessage('save');
