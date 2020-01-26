@@ -81,16 +81,6 @@ class DataResourcesTest extends TestCase
         $this->assertDatabaseHas('theaters', $theater);
     }
 
-    /** @test */
-    public function a_student_can_add_a_screening()
-    {
-        $screening = factory('App\Screening')->create();
-        $attributes = $screening->toArray();
-        $this->actingAs(factory('App\User')->state('student')->create())
-            ->post('/screenings', $attributes)
-            ->assertRedirect('/screenings');
-        $this->assertDatabaseHas('screenings', $attributes);
-    }
 
     /** @test */
     // public function a_user_can_view_screenings_list()
@@ -103,55 +93,11 @@ class DataResourcesTest extends TestCase
     // }
 
     /** @test */
-    public function a_request_to_films_json_will_yield_formatted_data()
+    public function a_json_request_to_films_returns_json()
     {
         factory('App\Theater', 10);
         $this->actingAs(factory('App\User')->state('admin')->make())
             ->json('GET', 'films')->assertOk()
             ->assertExactJson(Film::all()->toArray());
-    }
-
-    /** @test */
-    public function an_admin_can_delete_a_screening()
-    {
-        $screening = factory('App\Screening')->create();
-        $this->actingAs(factory('App\User')->state('admin')->make())
-            ->delete('/screenings/' . $screening->id)
-            ->assertRedirect('/screenings');
-        $this->assertDatabaseMissing('screenings', ['id' => $screening->id]);
-    }
-
-    /** @test */
-    public function only_authenticated_users_can_add_a_screening()
-    {
-        $screening = factory('App\Screening')->raw();
-        $this->post('/screenings', $screening)->assertRedirect('login');
-    }
-
-    /** @test */
-    public function a_student_can_only_access_their_own_screenings()
-    {
-        $notOwnScreening = factory('App\Screening')->create();
-        $student = factory('App\User')->state('student')->create();
-        $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
-
-        // $this->actingAs($student)->json('GET', '/screenings')
-        //     //->assertJsonMissing($notOwnScreening->toArray())
-        //     ->assertJson($ownScreening->toArray());
-        $this->actingAs($student)->get('/screenings')
-            ->assertDontSee($notOwnScreening->film->title)
-            ->assertSee($ownScreening->film->title);
-    }
-
-    /** @test */
-    public function an_admin_can_access_all_screenings() 
-    {
-        $this->withoutExceptionHandling();
-        $notOwnScreening = factory('App\Screening')->create();
-        $student = factory('App\User')->state('admin')->create();
-        $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
-        $this->actingAs($student)->get('/screenings')
-            ->assertSee($notOwnScreening->film->title)
-            ->assertSee($ownScreening->film->title);
     }
 }
