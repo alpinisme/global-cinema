@@ -43,9 +43,13 @@ const ConfirmYear = ({
             <input
                 type="text"
                 required
+                autoFocus
                 placeholder="1977"
                 value={year}
                 onChange={e => setYear(e.target.value)}
+                onKeyPress={e => {
+                    if (e.key === 'Enter') handleClick();
+                }}
             />
             <button type="submit" onClick={handleClick}>
                 Confirm Film
@@ -88,22 +92,30 @@ const Matches = ({ matches, handleSubmit, handleManualAdd }) => (
 );
 
 const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
-    const [theaterID, setTheaterID] = useState('');
-    const [film, setFilm] = useState({
+    const initialFilmState = {
         id: '',
         title: '',
         isNew: false,
         matches: []
-    });
+    };
+    const [theaterID, setTheaterID] = useState('');
+    const [film, setFilm] = useState(initialFilmState);
     const [validationErrors, setValidationErrors] = useState([]);
     const [submissionError, setSubmissionError] = useState('');
     const [isSubmissionReady, setIsSubmissionReady] = useState(false);
 
-    const maxYear = parseInt(date.slice(0, 4), 10);
+    const maxYear = date.getUTCFullYear();
 
     const handleSubmit = id => {
         setFilm(old => ({ ...old, id }));
         setIsSubmissionReady(true);
+    };
+
+    const resetState = () => {
+        setTheaterID('');
+        setFilm(initialFilmState);
+        setValidationErrors([]);
+        setSubmissionError('');
     };
 
     // find five closest matches for user-input title in db
@@ -136,11 +148,19 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
                 return;
             }
 
-            const data = { film_id: film.id, theater_id: theaterID, date };
+            const data = {
+                film_id: film.id,
+                theater_id: theaterID,
+                date: date.toISOString().slice(0, 10)
+            };
+
+            console.log('submitting: ', data);
+
             axios
                 .post('/screenings', data)
                 .then(res => res.data)
                 .then(handleSuccess)
+                .then(resetState)
                 .catch(e =>
                     setSubmissionError(`Screening could not be saved: ${e}`)
                 );
@@ -157,21 +177,25 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
                 handleChange={e => setTheaterID(e.target.value)}
             />
 
-            <label htmlFor="film">Film Title</label>
-            <input
-                type="text"
-                name="film"
-                value={film.title}
-                onChange={e => {
-                    const title = e.target.value;
-                    setFilm(old => ({ ...old, title }));
-                }}
-            />
+            {theaterID && (
+                <>
+                    <label htmlFor="film">Film Title</label>
+                    <input
+                        type="text"
+                        name="film"
+                        value={film.title}
+                        onChange={e => {
+                            const title = e.target.value;
+                            setFilm(old => ({ ...old, title }));
+                        }}
+                    />
 
-            <p>
-                As you begin typing a film title, possible matches will appear
-                below.
-            </p>
+                    <p>
+                        As you begin typing a film title, possible matches will
+                        appear below.
+                    </p>
+                </>
+            )}
 
             {film.title && (
                 <Matches
@@ -212,7 +236,7 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
 ScreeningEntry.propTypes = {
     theaters: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
     films: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
-    date: PropTypes.string.isRequired,
+    date: PropTypes.object.isRequired,
     addFilm: PropTypes.func.isRequired,
     handleSuccess: PropTypes.func.isRequired
 };
