@@ -9,12 +9,10 @@ const Screening = ({ data, handleDelete }) => {
     const film = films.find(film => film.id == screening.film_id);
 
     return (
-        <ul>
-            <li>
-                {`${theater.name} (${film.title})`}
-                <button onClick={handleDelete}>delete</button>
-            </li>
-        </ul>
+        <li>
+            {`${theater.name} (${film.title})`}
+            <button onClick={handleDelete}>delete</button>
+        </li>
     );
 };
 

@@ -1,36 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import axios from 'axios';
-import ScreeningEntry from './components/ScreeningEntry';
+import Day from './components/Day';
+import DaySelector from './components/DaySelector';
 import ErrorBox from './components/ErrorBox';
-import Screening from './components/Screening';
 
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+const assignment = '1999-02-01';
 
 const Root = () => {
+    const [errors, setErrors] = useState([]);
+
+    return errors.lenth > 0 ? (
+        <ErrorBox errors={errors} />
+    ) : (
+        <App setErrors={setErrors} />
+    );
+};
+
+const App = ({ setErrors }) => {
+    const initialDate = '1999-12-12';
+    const [date, setDate] = useState(initialDate);
     const [theaters, setTheaters] = useState([]);
     const [films, setFilms] = useState([]);
-    const [errors, setErrors] = useState([]);
-    const [screenings, setScreenings] = useState([]);
-    const date = '1999-12-12';
-    const headers = { headers: { Accept: 'application/json' } };
+    const [isDateSelected, setIsDateSelected] = useState(false);
 
-    const deleteFromDB = (id, index) => {
-        axios
-            .delete(`/screenings/${id}`)
-            .then(() =>
-                setScreenings(old => [
-                    ...old.slice(0, index),
-                    ...old.slice(index + 1)
-                ])
-            )
-            .then(console.log('successful delete'))
-            .catch(console.log);
+    const handleDateSelection = date => {
+        setDate(date);
+        setIsDateSelected(true);
     };
 
     useEffect(() => {
         axios
-            .get('/theaters', headers)
+            .get('/screenings')
+            .then(res => res.data)
+            .catch(console.log);
+    }, []);
+
+    /**
+     * loads theaters from api
+     */
+    useEffect(() => {
+        axios
+            .get('/theaters')
             .then(res => res.data)
             .then(setTheaters)
             .catch(e =>
@@ -38,9 +50,12 @@ const Root = () => {
             );
     }, []);
 
+    /**
+     * loads films from api
+     */
     useEffect(() => {
         axios
-            .get('/films', headers)
+            .get('/films')
             .then(res => res.data)
             .then(setFilms)
             .catch(e =>
@@ -48,44 +63,22 @@ const Root = () => {
             );
     }, []);
 
-    useEffect(() => {
-        axios
-            .get('/screenings', headers)
-            .then(res => res.data)
-            .then(setScreenings)
-            .catch(console.log);
-    }, [films]);
-
-    return (
-        <>
-            <h1>{new Date(date).toLocaleDateString()}</h1>
-            <p>Back to all dates</p>
-            <div>
-                <h2>Save new screening</h2>
-
-                <ErrorBox errors={errors} />
-
-                <ScreeningEntry
-                    theaters={theaters}
-                    films={films}
-                    date={date}
-                    addFilm={film => setFilms(old => [film, ...old])}
-                    handleSuccess={data => setScreenings(old => [data, ...old])}
-                />
-            </div>
-
-            <div>
-                <h2>Already Saved</h2>
-                {screenings.reverse().map((data, index) => (
-                    <Screening
-                        key={data.id}
-                        data={{ screening: data, films, theaters }}
-                        handleDelete={() => deleteFromDB(data.id, index)}
-                    />
-                ))}
-            </div>
-        </>
+    return isDateSelected ? (
+        <Day
+            date={date}
+            handleSubmission={() => setIsDateSelected(false)}
+            handleCancel={() => setIsDateSelected(false)}
+            theaters={theaters}
+            films={films}
+            addFilm={film => setFilms(old => [film, ...old])}
+        />
+    ) : (
+        <DaySelector date={assignment} handleClick={handleDateSelection} />
     );
+};
+
+App.propTypes = {
+    setErrors: PropTypes.func.isRequired
 };
 
 const root = document.getElementById('root');
