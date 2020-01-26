@@ -12,9 +12,9 @@ class User extends Authenticatable
     use Notifiable;
 
     const ADMIN_TYPE = 'admin';
-    const DEFAULT_TYPE = 'user';
+    const DEFAULT_TYPE = 'student';
     const ROLES = [
-        'user', 'student', 'instructor', 'admin', 'super-admin'
+        'user', 'student', 'instructor', 'admin'
     ];
 
     protected $fillable = [
@@ -52,6 +52,12 @@ class User extends Authenticatable
         return $this->hasMany(Screening::class, 'createdBy');
     }
 
+    /**
+     * Checks actual role against argument, used when iterating over
+     * all roles. For checking specific roles, use isStudent, etc.
+     * 
+     * @param string $role
+     */
     public function hasRole($role)
     {
         return $this->role === $role;
@@ -65,6 +71,11 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->hasRole('admin');
+    }
+
+    public function isInstructor()
+    {
+        return $this->hasRole('instructor');
     }
 
 
