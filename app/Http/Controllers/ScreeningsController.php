@@ -31,6 +31,11 @@ class ScreeningsController extends StandardResourceController
         return view('screenings/create', compact('screenings'));
     }
 
+    public function date($date)
+    {
+        return Screening::where('date', $date)->get();
+    }
+
     /**
      * overwrites parent function to add createdBy field
      * via the currently authenticated user 

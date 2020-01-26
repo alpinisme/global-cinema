@@ -19,10 +19,9 @@ Route::group(['middleware' => ['auth']], function () {
   
   Route::resource('/theaters', 'TheatersController');
   
+  Route::get('/screenings/{date}', 'ScreeningsController@date');
   Route::resource('/screenings', 'ScreeningsController');
-  
-  Route::get('/dates', 'DatesController@index');
-});
+  });
 
 Route::get('/test', function() {
   return view('test');
