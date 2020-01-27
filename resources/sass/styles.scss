@@ -156,33 +156,9 @@ body {
     }
 
     .nav {
-        position: fixed;
-        left: 0;
-        top: 0;
         background: $main;
         flex-direction: column;
-        height: 4rem;
-
-        &.is-open {
-            height: 100vh;
-            transition: ease 0.3s;
-
-            ul,
-            li {
-                list-style-type: none;
-            }
-        }
-
-        .hamburger-menu {
-            display: block;
-            margin: 0.5rem 0;
-            order: -1;
-            align-self: flex-end;
-
-            span {
-                background-color: white;
-            }
-        }
+        padding: 1.5rem;
 
         .nav-links,
         .admin-links {
@@ -429,9 +405,9 @@ button,
 .button {
     font-family: $font;
     border: 1px solid $main;
-    color: white;
+    color: $main;
     font-size: 1rem;
-    background-color: $main;
+    background-color: white;
     padding: 0.5rem 0.75rem;
     & + .button,
     & + button {
@@ -552,4 +528,9 @@ p {
 .already-saved {
     margin-top: 1rem;
     text-align: left;
+}
+
+.user-links a {
+    margin-right: 2rem;
+    color: white;
 }
