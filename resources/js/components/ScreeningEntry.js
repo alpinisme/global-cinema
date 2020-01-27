@@ -69,16 +69,19 @@ const Matches = ({ matches, handleSubmit, handleManualAdd }) => (
         {matches.length > 0 && (
             <p>Select the correct title to submit the entry.</p>
         )}
-        {matches.map(match => (
-            <button
-                type="submit"
-                data-film={match.id}
-                key={match.id}
-                onClick={handleSubmit}
-            >
-                {match.title + ' (' + match.year + ')'}
-            </button>
-        ))}
+        <ul className="button-list">
+            {matches.map(match => (
+                <li key={match.id}>
+                    <button
+                        type="submit"
+                        data-film={match.id}
+                        onClick={handleSubmit}
+                    >
+                        {match.title + ' (' + match.year + ')'}
+                    </button>
+                </li>
+            ))}
+        </ul>
         {matches.length > 0 ? (
             <p>If the correct film is not listed above, </p>
         ) : (
@@ -178,7 +181,7 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
             />
 
             {theaterID && (
-                <>
+                <div>
                     <label htmlFor="film">Film Title</label>
                     <input
                         type="text"
@@ -190,11 +193,13 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
                         }}
                     />
 
-                    <p>
-                        As you begin typing a film title, possible matches will
-                        appear below.
-                    </p>
-                </>
+                    {!film.title && (
+                        <p>
+                            As you begin typing a film title, possible matches
+                            will appear below.
+                        </p>
+                    )}
+                </div>
             )}
 
             {film.title && (

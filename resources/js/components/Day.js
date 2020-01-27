@@ -8,7 +8,7 @@ import { toDateString } from './DaySelector';
 const Day = ({
     date,
     handleCancel,
-    handleSubmission,
+    handleComplete,
     theaters,
     films,
     addFilm
@@ -37,12 +37,10 @@ const Day = ({
 
     /**
      * loads screenings from api
-     *
-     * TODO: make this only load screenings for one day
      */
     useEffect(() => {
         axios
-            .get('/screenings')
+            .get('/screenings/' + date.toISOString().slice(0, 10))
             .then(res => res.data)
             .then(setScreenings)
             .catch(console.log);
@@ -56,7 +54,9 @@ const Day = ({
                 Back to all dates
             </button>
 
-            <div>
+            <button onClick={handleComplete}>Mark day complete</button>
+
+            <div className="box">
                 <h2>Save new screening</h2>
 
                 <ScreeningEntry
@@ -68,20 +68,20 @@ const Day = ({
                 />
             </div>
 
-            <button onClick={handleSubmission}>Mark day complete</button>
-
-            <div>
-                <h2>Already Saved</h2>
-                <ul>
-                    {screenings.reverse().map((data, index) => (
-                        <Screening
-                            key={data.id}
-                            data={{ screening: data, films, theaters }}
-                            handleDelete={() => destroy(data.id, index)}
-                        />
-                    ))}
-                </ul>
-            </div>
+            {screenings.length > 0 && (
+                <div className="box">
+                    <h2>Already Saved</h2>
+                    <ul className="already-saved">
+                        {screenings.reverse().map((data, index) => (
+                            <Screening
+                                key={data.id}
+                                data={{ screening: data, films, theaters }}
+                                handleDelete={() => destroy(data.id, index)}
+                            />
+                        ))}
+                    </ul>
+                </div>
+            )}
         </>
     );
 };
@@ -89,7 +89,7 @@ const Day = ({
 Day.propTypes = {
     date: PropTypes.object.isRequired,
     handleCancel: PropTypes.func.isRequired,
-    handleSubmission: PropTypes.func.isRequired,
+    handleComplete: PropTypes.func.isRequired,
     films: PropTypes.array.isRequired,
     theaters: PropTypes.array.isRequired,
     addFilm: PropTypes.func.isRequired

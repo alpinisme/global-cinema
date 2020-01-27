@@ -1,0 +1,555 @@
+@import 'variables';
+
+$main: $dark-landing;
+
+:root {
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+*,
+::before,
+::after {
+    box-sizing: inherit;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    background: white;
+    font-family: 'Lato', sans-serif;
+    color: $main;
+    display: flex;
+    flex-direction: column;
+}
+
+/* nav-bar */
+
+.nav {
+    padding: 0.1rem 1.5rem 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100vw;
+
+    a {
+        text-decoration: none;
+    }
+
+    .hamburger-menu {
+        $width: 2rem;
+
+        display: none;
+        cursor: pointer;
+
+        span {
+            display: block;
+            width: $width;
+            height: $width/8;
+            border-radius: 3px;
+            background-color: $main;
+            margin: $width/4 0;
+            transition: 0.3s;
+        }
+    }
+
+    &.is-open {
+        /* Rotate top bar */
+        .top-bar {
+            -webkit-transform: rotate(-45deg) translate(-0.55rem, 0.5rem);
+            transform: rotate(-45deg) translate(-0.55rem, 0.5rem);
+        }
+
+        /* Hide middle bar */
+        .middle-bar {
+            opacity: 0;
+        }
+
+        /* Rotate bottom bar */
+        .bottom-bar {
+            -webkit-transform: rotate(45deg) translate(-0.55rem, -0.5rem);
+            transform: rotate(45deg) translate(-0.55rem, -0.5rem);
+        }
+    }
+}
+
+@media (min-width: 800px) {
+    .nav {
+        .nav-links {
+            display: flex;
+            justify-content: flex-end;
+
+            li {
+                padding: 0.5rem;
+                list-style-type: none;
+            }
+
+            & > li + li {
+                margin-left: 1rem;
+            }
+
+            & > li > a {
+                color: $main;
+                padding: 1rem;
+                position: relative;
+            }
+
+            .active {
+                font-weight: bold;
+            }
+        }
+
+        .admin-links {
+            display: flex;
+            justify-content: flex-start;
+
+            li {
+                padding: 0.5rem;
+                list-style-type: none;
+            }
+
+            a {
+                color: $highlight;
+                text-decoration: none;
+                font-weight: bold;
+                margin-right: 3rem;
+            }
+        }
+    }
+
+    .nav-links > li > a:after {
+        background-color: $highlight;
+        height: 2px;
+        content: ' ';
+        width: 0;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .nav-links > li > a:hover:after {
+        width: 100%;
+        transition: 0.35s ease-out;
+    }
+}
+
+@media (max-width: 800px) {
+    h1 {
+        margin-top: 7rem;
+    }
+    .nav .nav-links,
+    .nav .admin-links {
+        display: none;
+    }
+
+    .nav.is-open .nav-links,
+    .nav.is-open .admin-links {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .nav-isopen .navlinks li {
+        list-style-type: none;
+    }
+
+    .nav {
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: $main;
+        flex-direction: column;
+        height: 4rem;
+
+        &.is-open {
+            height: 100vh;
+            transition: ease 0.3s;
+
+            ul,
+            li {
+                list-style-type: none;
+            }
+        }
+
+        .hamburger-menu {
+            display: block;
+            margin: 0.5rem 0;
+            order: -1;
+            align-self: flex-end;
+
+            span {
+                background-color: white;
+            }
+        }
+
+        .nav-links,
+        .admin-links {
+            align-self: center;
+            justify-content: initial;
+            text-align: center;
+        }
+
+        .nav-links li,
+        .admin-links li {
+            margin-bottom: 2rem;
+        }
+
+        .admin-links {
+            order: 2;
+        }
+
+        .nav-links li a,
+        .admin-links li a {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    }
+
+    .nav.ul {
+        flex-direction: column;
+    }
+}
+
+/* footer */
+
+footer {
+    display: block;
+    background-color: $main;
+    color: white;
+    padding: 0.2rem 1rem;
+    margin-top: 2rem;
+    text-align: center;
+
+    a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+}
+
+@media (max-width: 500px) {
+    footer {
+        padding: 0.2rem 0.4rem;
+    }
+}
+
+/* main */
+
+main {
+    flex: 1 0 auto;
+
+    h1 {
+        text-align: center;
+        font-style: normal;
+        font-weight: normal;
+    }
+
+    h2 {
+        font-style: italic;
+        font-weight: normal;
+    }
+}
+
+/* container within main (main content box) */
+
+.container {
+    margin: 2rem auto 0;
+    width: 23rem;
+    border: $main solid 1px;
+    padding: 2rem;
+
+    &.wide {
+        width: 35rem;
+    }
+}
+
+/* for timeline */
+
+.year-axis .tick {
+    font-size: 0.8rem;
+    transition: font-size 0.25s;
+
+    &:hover {
+        font-size: 1.25rem;
+        transition: font-size 0.25s;
+        cursor: default;
+
+        & + .tick {
+            font-size: 1rem;
+            transition: font-size 0.25s;
+        }
+    }
+}
+
+.year-axis .prevTick {
+    font-size: 1rem;
+    transition: font-size 0.5s;
+}
+
+.active-year,
+.zoomed-axis .tick {
+    fill: $highlight;
+}
+
+/* general page defaults */
+
+h1.page-title {
+    text-align: center;
+    font-weight: normal;
+}
+
+main {
+    text-align: center;
+    min-height: calc(100vh - 9.5rem);
+}
+
+.container {
+    width: 28rem;
+}
+
+.wide {
+    margin: auto;
+    width: 35rem;
+    border: $main solid 1px;
+    padding: 2rem;
+}
+
+.extra-wide {
+    width: 50rem;
+}
+
+.block {
+    display: block;
+}
+
+/* table and input display */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid $subtle-gray;
+    margin: 0 auto 2rem;
+    color: $subtle-gray;
+
+    caption {
+        margin: 1rem;
+        font-weight: bold;
+    }
+
+    .alternate-spelling:hover {
+        background-color: $cell-highlight;
+        cursor: pointer;
+    }
+
+    th,
+    td {
+        text-align: left;
+        border: 1px dotted black;
+        padding: 0.5rem 0.75rem;
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    input[type='text'],
+    input[type='password'],
+    input[type='number'] {
+        margin: 0.2rem;
+        font-family: $font;
+        font-size: 1rem;
+        width: 100%;
+        padding: 0 0.2rem;
+    }
+}
+
+.autocomplete-suggestions {
+    text-align: left;
+    cursor: default;
+    border: 1px solid #ccc;
+    border-top: 0;
+    background: white;
+    box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.1);
+
+    /* core styles should not be changed */
+    position: absolute;
+    display: none;
+    z-index: 9999;
+    max-height: 254px;
+    overflow: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+
+    .autocomplete-suggestion {
+        position: relative;
+        padding: 0.25rem 0.6rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.02em;
+        color: #333;
+    }
+
+    .autocomplete-suggestion b {
+        font-weight: normal;
+        color: #1f8dd6;
+        color: rgb(2, 151, 126);
+    }
+
+    .autocomplete-suggestion.selected {
+        background: #f0f0f0;
+    }
+}
+
+/* buttons and links */
+
+a {
+    color: $main;
+}
+
+.cta {
+    color: white;
+    background-color: $main;
+
+    &:hover {
+        color: $main;
+        background-color: white;
+    }
+}
+
+input[type='file'] {
+    margin-top: 2rem;
+    position: relative;
+}
+
+button,
+.button {
+    font-family: $font;
+    border: 1px solid $main;
+    color: white;
+    font-size: 1rem;
+    background-color: $main;
+    padding: 0.5rem 0.75rem;
+    & + .button,
+    & + button {
+        margin-left: 0.5rem;
+    }
+}
+
+input.submit {
+    font-size: 1rem;
+    text-emphasis: none;
+    cursor: pointer;
+}
+
+.submit {
+    background-color: $main;
+    color: white;
+}
+
+a.button {
+    text-decoration: none;
+}
+
+.instructions {
+    margin-top: 5rem;
+    text-align: left;
+}
+
+/* alerts, dialogue boxes, etc. */
+
+.errors,
+.alert {
+    border: 2px solid $highlight;
+    color: $highlight;
+    text-align: left;
+    padding: 0.75rem;
+    margin: 1rem;
+}
+
+#spelling-check {
+    width: 20rem;
+    margin: 0 auto;
+}
+
+#root {
+    width: 50%;
+    margin: 0 auto 0 auto;
+}
+
+.button-list {
+    list-style-type: none;
+    padding-left: 0;
+    border-collapse: collapse;
+
+    button {
+        width: 100%;
+        color: $main;
+        background-color: rgb(248, 247, 247);
+        outline: $main;
+        margin: 2px;
+
+        &:hover {
+            color: white;
+            background-color: $main;
+            outline: white;
+        }
+    }
+}
+
+.cancel-btn {
+    display: block;
+    background-color: white;
+    color: $main;
+    margin: auto;
+    border: none;
+    font-style: italic;
+}
+
+.box {
+    outline: $main 1px solid;
+    min-height: 20rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.box select,
+.box input {
+    width: 60%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.box label {
+    text-align: right;
+    margin-right: 0.5rem;
+    width: 5rem;
+}
+
+button.delete {
+    padding: 0;
+    font-style: italic;
+    color: rgb(134, 0, 0);
+    background-color: white;
+    border: none;
+    margin-left: 0.5rem;
+}
+
+.already-saved {
+    list-style-type: none;
+    padding: none;
+}
+
+label,
+p {
+    font-size: 1rem;
+}
+
+.already-saved {
+    margin-top: 1rem;
+    text-align: left;
+}

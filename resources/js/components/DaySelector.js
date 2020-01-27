@@ -57,7 +57,7 @@ const DaySelector = ({ date, handleClick }) => {
         <>
             <h1>Data Entry</h1>
             <p>Select a date to enter screenings for</p>
-            <ul>
+            <ul className="button-list">
                 {range.map(date => (
                     <li key={date.toString()}>
                         <button onClick={() => handleClick(date)}>

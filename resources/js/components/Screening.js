@@ -11,7 +11,9 @@ const Screening = ({ data, handleDelete }) => {
     return (
         <li>
             {`${theater.name} (${film.title})`}
-            <button onClick={handleDelete}>delete</button>
+            <button className="delete" onClick={handleDelete}>
+                delete
+            </button>
         </li>
     );
 };

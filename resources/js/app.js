@@ -66,7 +66,7 @@ const App = ({ setErrors }) => {
     return isDateSelected ? (
         <Day
             date={date}
-            handleSubmission={() => setIsDateSelected(false)}
+            handleComplete={() => setIsDateSelected(false)}
             handleCancel={() => setIsDateSelected(false)}
             theaters={theaters}
             films={films}
