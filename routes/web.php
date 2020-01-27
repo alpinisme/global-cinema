@@ -12,7 +12,7 @@
 */
 
 Route::group(['middleware' => ['auth']], function () {
-  Route::get('/', 'UserHomeController@index');
+  Route::get('/', function() {return view('app'); });
   Route::get('/home', 'UserHomeController@index');
   
   Route::resource('/films', 'FilmsController');
@@ -23,29 +23,9 @@ Route::group(['middleware' => ['auth']], function () {
   Route::resource('/screenings', 'ScreeningsController');
   });
 
-Route::get('/test', function() {
-  return view('test');
-})->middleware('auth');
-
 Route::get('/admin', 'PermissionsController@index')->middleware('can:see admin tools');
 Route::post('/admin/user/{id}', 'PermissionsController@update')->middleware('can:see admin tools');
 
-
-
-// Route::get('/contact', function () {
-//     $tasks = [
-//         'do A',
-//         'do B',
-//         'do C'
-//     ];
-//     // OR: return view('contact').withTasks($tasks)
-//     // OR: return view('contact').withTasks(INLINE LIST of tasks)
-//     // OR return view('contact').with(INLINE DEF of tasks)
-//     // OR: return view('contact', [ASSOCIATIVE ARRAY of variables and vals])
-//     return view('contact', [
-//         'tasks' => $tasks
-//     ]);
-// });
 
 Auth::routes();
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');

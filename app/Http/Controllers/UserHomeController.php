@@ -8,6 +8,15 @@ class UserHomeController extends Controller
 {
     public function index() 
     {
-        return view('admin/home');
+        if (auth()->user()->isAdmin()) {
+            return view('admin/home');
+        }
+
+        if (auth()->user()->isStudent()) {
+            return view('app');
+        }
+
+        return view('app');
+        
     }
 }
