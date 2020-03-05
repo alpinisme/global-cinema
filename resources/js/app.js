@@ -30,6 +30,9 @@ const App = ({ setErrors }) => {
         setIsDateSelected(true);
     };
 
+    /**
+     * loads screenings from api
+     */
     useEffect(() => {
         axios
             .get('/screenings')
