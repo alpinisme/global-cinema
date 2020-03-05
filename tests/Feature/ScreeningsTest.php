@@ -58,7 +58,6 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function an_admin_can_access_all_screenings()
     {
-        $this->withoutExceptionHandling();
         $notOwnScreening = factory('App\Screening')->create();
         $student = factory('App\User')->state('admin')->create();
         $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
