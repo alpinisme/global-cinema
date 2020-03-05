@@ -8,9 +8,10 @@ use DateTime;
 
 class Assignment extends Model
 {
-    const START_YEAR = '1952';
+    const START_YEAR = '1952'; // earliest year to be assigned
 
     public $timestamps = false;
+    public $guarded = ['id'];
 
     /**
      * find next date to assign
@@ -18,8 +19,8 @@ class Assignment extends Model
      */
     public static function nextDate()
     {
-        $count = self::count();
         $assignmentsPerMonth = 2;
+        $count = self::count();
         $monthOffset = floor($count/$assignmentsPerMonth);
 
         $date = new DateTime;
