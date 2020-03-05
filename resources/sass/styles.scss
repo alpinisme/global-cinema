@@ -76,117 +76,55 @@ body {
     }
 }
 
-@media (min-width: 800px) {
-    .nav {
-        .nav-links {
-            display: flex;
-            justify-content: flex-end;
+h1 {
+    margin-top: 7rem;
+}
+.nav .nav-links,
+.nav .admin-links {
+    display: none;
+}
 
-            li {
-                padding: 0.5rem;
-                list-style-type: none;
-            }
+.nav.is-open .nav-links,
+.nav.is-open .admin-links {
+    display: flex;
+    flex-direction: column-reverse;
+}
 
-            & > li + li {
-                margin-left: 1rem;
-            }
+.nav-isopen .navlinks li {
+    list-style-type: none;
+}
 
-            & > li > a {
-                color: $main;
-                padding: 1rem;
-                position: relative;
-            }
+.nav {
+    background: $main;
+    flex-direction: column;
+    padding: 1.5rem;
 
-            .active {
-                font-weight: bold;
-            }
-        }
-
-        .admin-links {
-            display: flex;
-            justify-content: flex-start;
-
-            li {
-                padding: 0.5rem;
-                list-style-type: none;
-            }
-
-            a {
-                color: $highlight;
-                text-decoration: none;
-                font-weight: bold;
-                margin-right: 3rem;
-            }
-        }
+    .nav-links,
+    .admin-links {
+        align-self: center;
+        justify-content: initial;
+        text-align: center;
     }
 
-    .nav-links > li > a:after {
-        background-color: $highlight;
-        height: 2px;
-        content: ' ';
-        width: 0;
-        position: absolute;
-        bottom: 0;
-        right: 0;
+    .nav-links li,
+    .admin-links li {
+        margin-bottom: 2rem;
     }
 
-    .nav-links > li > a:hover:after {
-        width: 100%;
-        transition: 0.35s ease-out;
+    .admin-links {
+        order: 2;
+    }
+
+    .nav-links li a,
+    .admin-links li a {
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
     }
 }
 
-@media (max-width: 800px) {
-    h1 {
-        margin-top: 7rem;
-    }
-    .nav .nav-links,
-    .nav .admin-links {
-        display: none;
-    }
-
-    .nav.is-open .nav-links,
-    .nav.is-open .admin-links {
-        display: flex;
-        flex-direction: column-reverse;
-    }
-
-    .nav-isopen .navlinks li {
-        list-style-type: none;
-    }
-
-    .nav {
-        background: $main;
-        flex-direction: column;
-        padding: 1.5rem;
-
-        .nav-links,
-        .admin-links {
-            align-self: center;
-            justify-content: initial;
-            text-align: center;
-        }
-
-        .nav-links li,
-        .admin-links li {
-            margin-bottom: 2rem;
-        }
-
-        .admin-links {
-            order: 2;
-        }
-
-        .nav-links li a,
-        .admin-links li a {
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-    }
-
-    .nav.ul {
-        flex-direction: column;
-    }
+.nav.ul {
+    flex-direction: column;
 }
 
 /* footer */
