@@ -21,6 +21,8 @@ Route::group(['middleware' => ['auth']], function () {
   
   Route::get('/screenings/{date}', 'ScreeningsController@date');
   Route::resource('/screenings', 'ScreeningsController');
+
+  Route::get('/assignment', function() { return auth()->user()->assignment->assignment; });
   });
 
 Route::get('/admin', 'PermissionsController@index')->middleware('can:see admin tools');
