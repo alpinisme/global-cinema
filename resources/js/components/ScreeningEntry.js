@@ -25,7 +25,6 @@ const ConfirmYear = ({
         }
         setIsError(false);
 
-        console.log('submitting film: ', { title: film, year });
         axios
             .post('/films', { title: film, year })
             .then(res => {
@@ -156,8 +155,6 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
                 theater_id: theaterID,
                 date: date.toISOString().slice(0, 10)
             };
-
-            console.log('submitting: ', data);
 
             axios
                 .post('/screenings', data)

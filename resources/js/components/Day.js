@@ -24,7 +24,6 @@ const Day = ({ date, handleCancel, theaters, films, addFilm }) => {
                     ...old.slice(index + 1)
                 ])
             )
-            .then(console.log('successful delete'))
             .catch(console.log);
     };
 
