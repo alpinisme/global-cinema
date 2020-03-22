@@ -57,7 +57,6 @@ const StudentPage = ({ setErrors }) => {
     return isDateSelected ? (
         <Day
             date={date}
-            handleComplete={() => setIsDateSelected(false)}
             handleCancel={() => setIsDateSelected(false)}
             theaters={theaters}
             films={films}

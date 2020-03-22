@@ -5,14 +5,7 @@ import ScreeningEntry from './ScreeningEntry';
 import Screening from './Screening';
 import { toDateString } from './DaySelector';
 
-const Day = ({
-    date,
-    handleCancel,
-    handleComplete,
-    theaters,
-    films,
-    addFilm
-}) => {
+const Day = ({ date, handleCancel, theaters, films, addFilm }) => {
     const [screenings, setScreenings] = useState([]);
 
     /**
@@ -54,8 +47,6 @@ const Day = ({
                 Back to all dates
             </button>
 
-            <button onClick={handleComplete}>Mark day complete</button>
-
             <div className="box">
                 <h2>Save new screening</h2>
 
@@ -89,7 +80,6 @@ const Day = ({
 Day.propTypes = {
     date: PropTypes.object.isRequired,
     handleCancel: PropTypes.func.isRequired,
-    handleComplete: PropTypes.func.isRequired,
     films: PropTypes.array.isRequired,
     theaters: PropTypes.array.isRequired,
     addFilm: PropTypes.func.isRequired
