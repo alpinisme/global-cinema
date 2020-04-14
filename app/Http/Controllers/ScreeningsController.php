@@ -33,7 +33,7 @@ class ScreeningsController extends StandardResourceController
 
     public function date($date)
     {
-        return Screening::where('date', $date)->get();
+        return Screening::where('date', $date)->where('createdBy', auth()->id())->get();
     }
 
     /**
