@@ -85,7 +85,7 @@ const Matches = ({ matches, handleSubmit, handleManualAdd }) => (
             <p>If the correct film is not listed above, </p>
         ) : (
             <p>
-                Sorry, no matches found. It looks like we need some addition
+                Sorry, no matches found. It looks like we need some additional
                 info to identify the film.
             </p>
         )}
