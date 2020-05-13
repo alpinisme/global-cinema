@@ -52,6 +52,21 @@ class User extends Authenticatable
         return $this->hasMany(Screening::class, 'createdBy');
     }
 
+    public function datesCompleted()
+    {
+        $screenings = $this->screenings;
+        $dates = [];
+
+        foreach ($screenings as $screening) {
+            if (in_array($screening->date, $dates)) {
+                continue;
+            }
+            $dates[] = $screening->date;
+        }
+
+        return $dates;
+    }
+
     /**
      * Checks actual role against argument, used when iterating over
      * all roles. For checking specific roles, use isStudent, etc.
