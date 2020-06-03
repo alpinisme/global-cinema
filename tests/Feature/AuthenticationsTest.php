@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UsersTest extends TestCase
+class AuthenticationsTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
@@ -21,6 +21,7 @@ class UsersTest extends TestCase
             'password' => $user->password,
             'password_confirmation' => $user->password,
             'role' => $user->role,
+            'instructor_id' => '1'
         ])->assertRedirect('/home');
         $this->assertAuthenticated();
         $this->assertDatabaseHas('users', ['email' => $user->email]);
