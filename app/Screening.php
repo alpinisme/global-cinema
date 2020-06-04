@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DateTimeInterface;
 
 class Screening extends Model
 {
@@ -34,5 +35,16 @@ class Screening extends Model
     public function createdBy()
     {
         return $this->belongsTo('App\User');
+    }
+
+    /**
+    * Prepare a date for array / JSON serialization.
+    *
+    * @param  \DateTimeInterface  $date
+    * @return string
+    */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }
