@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ErrorBox from './components/ErrorBox';
 import StudentPage from './components/StudentPage';
 import InstructorPage from './components/InstructorPage';
+import AdminPage from './components/AdminPage';
 import axios from 'axios';
 
 const Root = () => {
@@ -20,10 +21,16 @@ const Root = () => {
             .catch(console.log);
     }, []);
 
+    /**
+     * display errors if any
+     */
     if (errors.lenth > 0) {
         return <ErrorBox errors={errors} />;
     }
 
+    /**
+     * show appropriate page
+     */
     switch (userType) {
         case null:
             return <div>...loading</div>;
@@ -33,6 +40,10 @@ const Root = () => {
 
         case 'instructor':
             return <InstructorPage setErrors={setErrors} />;
+
+        case 'admin':
+            return <AdminPage setErrors={setErrors} />;
+
         default:
             setErrors(errs => errs.push("couldn't recognize user role"));
     }
