@@ -1,12 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import Screening from './Screening';
 import { toDateString } from './DaySelector';
+import {
+    Theater,
+    Film,
+    Screening as ScreeningInterface
+} from './ScreeningEntry';
 
-const Day = ({ date, handleCancel, theaters, films, addFilm }) => {
-    const [screenings, setScreenings] = useState([]);
+export interface Props {
+    date: Date;
+    handleCancel: () => void;
+    theaters: Theater[];
+    films: Film[];
+    addFilm: (film: Film) => void;
+}
+
+const Day = ({
+    date,
+    handleCancel,
+    theaters,
+    films,
+    addFilm
+}: Props): ReactElement => {
+    const [screenings, setScreenings] = useState<ScreeningInterface[]>([]);
 
     /**
      * sends request to server to destroy record at `id`
@@ -15,7 +33,7 @@ const Day = ({ date, handleCancel, theaters, films, addFilm }) => {
      * @param {number} id id to be deleted
      * @param {number} index location in state array
      */
-    const destroy = (id, index) => {
+    const destroy = (id: number, index: number) => {
         axios
             .delete(`/screenings/${id}`)
             .then(() =>
@@ -74,14 +92,6 @@ const Day = ({ date, handleCancel, theaters, films, addFilm }) => {
             )}
         </>
     );
-};
-
-Day.propTypes = {
-    date: PropTypes.object.isRequired,
-    handleCancel: PropTypes.func.isRequired,
-    films: PropTypes.array.isRequired,
-    theaters: PropTypes.array.isRequired,
-    addFilm: PropTypes.func.isRequired
 };
 
 export default Day;

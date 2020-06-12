@@ -1,10 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, CSSProperties, ReactElement } from 'react';
 import axios from 'axios';
 
-const InstructorPage = ({ setErrors }) => {
-    const [studentData, setStudentData] = useState(null);
-    const [selectedStudent, setSelectedStudent] = useState(null);
+const InstructorPage = ({ setErrors }: Props): ReactElement => {
+    const [studentData, setStudentData] = useState<Student[] | null>(null);
+    const [selectedStudent, setSelectedStudent] = useState<Student | null>(
+        null
+    );
+
+    const alphabetizeByEmail = (a: Student, b: Student) => {
+        const emailA = a.info.email.toLowerCase();
+        const emailB = b.info.email.toLowerCase();
+        if (emailA > emailB) {
+            return 1;
+        }
+        if (emailA < emailB) {
+            return -1;
+        }
+        return 0;
+    };
 
     /**
      * get student data from api
@@ -12,13 +25,13 @@ const InstructorPage = ({ setErrors }) => {
     useEffect(() => {
         axios
             .get('/instructor')
-            .then(res => res.data)
-            .then(d => d.sort((a, b) => a.info.email > b.info.email))
+            .then(res => res.data as Student[])
+            .then(d => d.sort(alphabetizeByEmail))
             .then(setStudentData)
-            .catch(setErrors(errs => errs.push('could not load student data')));
+            .catch(setErrors('could not load student data'));
     }, []);
 
-    const titleStyle = {
+    const titleStyle: CSSProperties = {
         fontWeight: 'bold',
         padding: '0.5rem'
     };
@@ -37,7 +50,7 @@ const InstructorPage = ({ setErrors }) => {
             <table style={margin}>
                 <thead style={titleStyle}>
                     <tr>
-                        <td colSpan="3" style={{ textAlign: 'center' }}>
+                        <td colSpan={3} style={{ textAlign: 'center' }}>
                             Number of Days Your Students Completed
                         </td>
                     </tr>
@@ -72,11 +85,21 @@ const InstructorPage = ({ setErrors }) => {
             )}
         </>
     ) : (
-        '...loading'
+        <div>...loading</div>
     );
-};
-InstructorPage.propTypes = {
-    setErrors: PropTypes.func.isRequired
 };
 
 export default InstructorPage;
+
+export interface Props {
+    setErrors: (e: string) => undefined;
+}
+
+interface Student {
+    info: {
+        email: string;
+        name: string;
+        id: string;
+    };
+    datesCompleted: string[];
+}

@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactElement } from 'react';
 
 /**
  * takes a given Date object and returns a new Date
@@ -10,7 +9,7 @@ import PropTypes from 'prop-types';
  *
  * @param {Date} date
  */
-const finishMonth = date => {
+const finishMonth = (date: Date) => {
     date.setUTCMonth(date.getUTCMonth() + 1);
     date.setUTCDate(date.getUTCDate() - 1);
     return date;
@@ -25,9 +24,9 @@ const finishMonth = date => {
  * @param {Date} start date from which to push to array
  * @param {Date} end last date to push to array
  */
-const createDateRange = (start, end) => {
+const createDateRange = (start: Date, end: Date) => {
     const current = new Date(start);
-    const range = [];
+    const range = [] as Date[];
     for (
         const d = new Date(current);
         d <= end;
@@ -44,11 +43,11 @@ const createDateRange = (start, end) => {
  *
  * @param {Date} date
  */
-const toDateString = date => {
+const toDateString = (date: Date): string => {
     return date.toUTCString().slice(5, 17);
 };
 
-const DaySelector = ({ date, handleClick }) => {
+const DaySelector = ({ date, handleClick }: Props): ReactElement => {
     const start = new Date(date);
     const end = finishMonth(new Date(date));
     const range = createDateRange(start, end);
@@ -73,7 +72,7 @@ const DaySelector = ({ date, handleClick }) => {
 export { toDateString };
 export default DaySelector;
 
-DaySelector.propTypes = {
-    date: PropTypes.string.isRequired,
-    handleClick: PropTypes.func.isRequired
-};
+export interface Props {
+    date: string;
+    handleClick: (date: Date) => void;
+}

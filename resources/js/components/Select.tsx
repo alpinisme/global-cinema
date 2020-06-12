@@ -1,7 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ReactElement } from 'react';
 
-const Select = ({ id, options, value, handleChange, autoFocus }) => (
+const Select = ({
+    id,
+    options,
+    value,
+    handleChange,
+    autoFocus
+}: Props): ReactElement => (
     <select
         id={id}
         value={value}
@@ -20,12 +25,15 @@ const Select = ({ id, options, value, handleChange, autoFocus }) => (
     </select>
 );
 
-Select.propTypes = {
-    id: PropTypes.string.isRequired,
-    options: PropTypes.array.isRequired,
-    value: PropTypes.any.isRequired,
-    handleChange: PropTypes.func.isRequired,
-    autoFocus: PropTypes.bool
-};
-
 export default Select;
+
+export interface Props {
+    id: string;
+    options: Array<{
+        value: string;
+        label: string;
+    }>;
+    value: string;
+    handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    autoFocus: boolean;
+}

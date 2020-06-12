@@ -1,10 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import Fuse from 'fuse.js';
 
 import ErrorBox from './ErrorBox';
 import Select from './Select';
+import { addOnce } from '../modules/functions';
+
+export interface Film {
+    id: string;
+    title: string;
+    matches: Film[];
+    isNew: boolean;
+}
+export interface Theater {
+    name: string;
+    id: string;
+}
+
+export interface Screening {
+    id: number;
+    theater_id: string;
+    film_id: string;
+}
 
 const ConfirmYear = ({
     film,
@@ -13,13 +31,13 @@ const ConfirmYear = ({
     maxYear,
     addFilm
 }) => {
-    const [year, setYear] = useState('');
+    const [year, setYear] = useState<string>('');
     const [isError, setIsError] = useState(false);
 
     const handleClick = useCallback(() => {
-        if (year < 1900 || year > maxYear || parseInt(year) != year) {
+        if (!(parseInt(year) > 1900 && parseInt(year) <= maxYear)) {
             handleValidationError(
-                `Please enter a valid year between 1900 and ${maxYear}`
+                `Please enter a valid year between 1901 and ${maxYear}`
             );
             return;
         }
@@ -93,16 +111,22 @@ const Matches = ({ matches, handleSubmit, handleManualAdd }) => (
     </>
 );
 
-const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
+const ScreeningEntry = ({
+    theaters,
+    films,
+    date,
+    addFilm,
+    handleSuccess
+}: Props): ReactElement => {
     const initialFilmState = {
         id: '',
         title: '',
         isNew: false,
         matches: []
-    };
+    } as Film;
     const [theaterID, setTheaterID] = useState('');
     const [film, setFilm] = useState(initialFilmState);
-    const [validationErrors, setValidationErrors] = useState([]);
+    const [validationErrors, setValidationErrors] = useState<string[]>([]);
     const [submissionError, setSubmissionError] = useState('');
     const [isSubmissionReady, setIsSubmissionReady] = useState(false);
 
@@ -146,7 +170,7 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
             setSubmissionError('');
 
             if (theaterID == '') {
-                setValidationErrors(old => ['Theater is required', ...old]);
+                setValidationErrors(addOnce('Theater is required'));
                 return;
             }
 
@@ -174,7 +198,10 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
                 id="theater-select"
                 options={theaters.map(t => ({ label: t.name, value: t.id }))}
                 value={theaterID}
-                handleChange={e => setTheaterID(e.target.value)}
+                handleChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    setTheaterID(e.target.value)
+                }
+                autoFocus={true}
             />
 
             {theaterID && (
@@ -215,11 +242,8 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
                     maxYear={maxYear}
                     addFilm={addFilm}
                     handleSubmit={handleSubmit}
-                    handleValidationError={() =>
-                        setValidationErrors(old => [
-                            'Please enter a valid date',
-                            ...old
-                        ])
+                    handleValidationError={msg =>
+                        setValidationErrors(addOnce(msg))
                     }
                 />
             )}
@@ -234,6 +258,14 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }) => {
         </>
     );
 };
+
+export interface Props {
+    theaters: Theater[];
+    films: Film[];
+    date: Date;
+    addFilm: (film: Film) => void;
+    handleSuccess: (screening: Screening) => void;
+}
 
 ScreeningEntry.propTypes = {
     theaters: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,

@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import Day from './Day';
 import DaySelector from './DaySelector';
+import { Film, Theater } from './ScreeningEntry';
 
-const StudentPage = ({ setErrors }) => {
-    const initialDate = '1999-12-12';
+export interface Props {
+    setErrors: (e: string) => undefined;
+}
+
+const StudentPage = ({ setErrors }: Props): ReactElement => {
+    const initialDate = new Date('1999-12-12');
     const [assignment, setAssignment] = useState('1900-01-01');
     const [date, setDate] = useState(initialDate);
-    const [theaters, setTheaters] = useState([]);
-    const [films, setFilms] = useState([]);
+    const [theaters, setTheaters] = useState<Theater[]>([]);
+    const [films, setFilms] = useState<Film[]>([]);
     const [isDateSelected, setIsDateSelected] = useState(false);
 
     /**
@@ -31,9 +35,7 @@ const StudentPage = ({ setErrors }) => {
             .get('/theaters')
             .then(res => res.data)
             .then(setTheaters)
-            .catch(e =>
-                setErrors(old => [`Theaters could not be loaded: ${e}`, ...old])
-            );
+            .catch(e => setErrors(`Theaters could not be loaded: ${e}`));
     }, []);
 
     /**
@@ -44,9 +46,7 @@ const StudentPage = ({ setErrors }) => {
             .get('/films')
             .then(res => res.data)
             .then(setFilms)
-            .catch(e =>
-                setErrors(old => [`Films could not be loaded: ${e}`, ...old])
-            );
+            .catch(e => setErrors(`Films could not be loaded: ${e}`));
     }, []);
 
     const handleDateSelection = date => {
@@ -65,10 +65,6 @@ const StudentPage = ({ setErrors }) => {
     ) : (
         <DaySelector date={assignment} handleClick={handleDateSelection} />
     );
-};
-
-StudentPage.propTypes = {
-    setErrors: PropTypes.func.isRequired
 };
 
 export default StudentPage;

@@ -36,13 +36,19 @@ const Root = () => {
             return <div>...loading</div>;
 
         case 'user':
-            return <StudentPage setErrors={setErrors} />;
+            return (
+                <StudentPage setErrors={d => setErrors(old => old.push(d))} />
+            );
 
         case 'instructor':
-            return <InstructorPage setErrors={setErrors} />;
+            return (
+                <InstructorPage
+                    setErrors={d => setErrors(old => old.push(d))}
+                />
+            );
 
         case 'admin':
-            return <AdminPage setErrors={setErrors} />;
+            return <AdminPage setErrors={d => setErrors(old => old.push(d))} />;
 
         default:
             setErrors(errs => errs.push("couldn't recognize user role"));
