@@ -2,12 +2,9 @@ import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import Screening from './Screening';
-import {
-    Theater,
-    Film,
-    Screening as ScreeningInterface
-} from './ScreeningEntry';
+import { Screening as ScreeningInterface } from './ScreeningEntry';
 import { toDateString } from '../utils/functions';
+import { Film, Theater } from '../types/apiInterfaces';
 
 export interface Props {
     date: Date;

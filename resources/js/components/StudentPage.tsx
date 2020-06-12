@@ -2,13 +2,9 @@ import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import Day from './Day';
 import DaySelector from './DaySelector';
-import { Film, Theater } from './ScreeningEntry';
+import { Film, Theater } from '../types/apiInterfaces';
 
-export interface Props {
-    setErrors: (e: string) => void;
-}
-
-const StudentPage = ({ setErrors }: Props): ReactElement => {
+const Month = ({ setErrors }: Props): ReactElement => {
     const initialDate = new Date('1999-12-12');
     const [assignment, setAssignment] = useState('1900-01-01');
     const [date, setDate] = useState(initialDate);
@@ -67,4 +63,8 @@ const StudentPage = ({ setErrors }: Props): ReactElement => {
     );
 };
 
-export default StudentPage;
+export default Month;
+
+export interface Props {
+    setErrors: (e: string) => void;
+}
