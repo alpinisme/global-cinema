@@ -6,17 +6,7 @@ import Fuse from 'fuse.js';
 import ErrorBox from './ErrorBox';
 import Select from './Select';
 import { addOnce } from '../utils/functions';
-
-export interface Film {
-    id: string;
-    title: string;
-    matches: Film[];
-    isNew: boolean;
-}
-export interface Theater {
-    name: string;
-    id: string;
-}
+import { Film, Theater } from '../types/apiInterfaces';
 
 export interface Screening {
     id: number;
