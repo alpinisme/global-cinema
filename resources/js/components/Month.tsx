@@ -4,24 +4,10 @@ import Day from './Day';
 import DaySelector from './DaySelector';
 import { Film, Theater } from '../types/apiInterfaces';
 
-const Month = ({ setErrors }: Props): ReactElement => {
-    const initialDate = new Date('1999-12-12');
-    const [assignment, setAssignment] = useState('1900-01-01');
-    const [date, setDate] = useState(initialDate);
+const Month = ({ month, setErrors }: Props): ReactElement => {
+    const [date, setDate] = useState<Date | null>(null);
     const [theaters, setTheaters] = useState<Theater[]>([]);
     const [films, setFilms] = useState<Film[]>([]);
-    const [isDateSelected, setIsDateSelected] = useState(false);
-
-    /**
-     * get student's assignment from api
-     */
-    useEffect(() => {
-        axios
-            .get('/assignment')
-            .then(res => res.data)
-            .then(setAssignment)
-            .catch(console.log);
-    }, []);
 
     /**
      * loads theaters from api
@@ -45,21 +31,16 @@ const Month = ({ setErrors }: Props): ReactElement => {
             .catch(e => setErrors(`Films could not be loaded: ${e}`));
     }, []);
 
-    const handleDateSelection = (date: Date) => {
-        setDate(date);
-        setIsDateSelected(true);
-    };
-
-    return isDateSelected ? (
+    return date ? (
         <Day
             date={date}
-            handleCancel={() => setIsDateSelected(false)}
             theaters={theaters}
             films={films}
+            cancel={() => setDate(null)}
             addFilm={film => setFilms(old => [film, ...old])}
         />
     ) : (
-        <DaySelector date={assignment} handleClick={handleDateSelection} />
+        <DaySelector month={month} handleClick={setDate} />
     );
 };
 
@@ -67,4 +48,5 @@ export default Month;
 
 export interface Props {
     setErrors: (e: string) => void;
+    month: string;
 }

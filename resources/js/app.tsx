@@ -1,11 +1,11 @@
 import React, { useState, useEffect, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import ErrorBox from './components/ErrorBox';
-import Month from './components/StudentPage';
-import InstructorPage from './components/InstructorPage';
-import AdminPage from './components/AdminPage';
+import InstructorPage from './pages/Instructor';
+import AdminPage from './pages/Admin';
 import axios from 'axios';
 import { addOnce } from './utils/functions';
+import Student from './pages/Student';
 
 const App = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
@@ -37,7 +37,7 @@ const App = (): ReactElement => {
             return <div>...loading</div>;
 
         case 'user':
-            return <Month setErrors={d => setErrors(addOnce(d))} />;
+            return <Student setErrors={d => setErrors(addOnce(d))} />;
 
         case 'instructor':
             return <InstructorPage setErrors={d => setErrors(addOnce(d))} />;

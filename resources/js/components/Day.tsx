@@ -1,27 +1,18 @@
 import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
-import Screening from './Screening';
-import { Screening as ScreeningInterface } from './ScreeningEntry';
+import SavedScreening from './SavedScreening';
 import { toDateString } from '../utils/functions';
-import { Film, Theater } from '../types/apiInterfaces';
-
-export interface Props {
-    date: Date;
-    handleCancel: () => void;
-    theaters: Theater[];
-    films: Film[];
-    addFilm: (film: Film) => void;
-}
+import { Film, Theater, Screening as IScreening } from '../types/apiInterfaces';
 
 const Day = ({
     date,
-    handleCancel,
     theaters,
     films,
+    cancel,
     addFilm
-}: Props): ReactElement => {
-    const [screenings, setScreenings] = useState<ScreeningInterface[]>([]);
+}: DayProps): ReactElement => {
+    const [screenings, setScreenings] = useState<IScreening[]>([]);
 
     /**
      * sends request to server to destroy record at `id`
@@ -57,7 +48,7 @@ const Day = ({
         <>
             <h1>{toDateString(date)}</h1>
 
-            <button className="cancel-btn" onClick={handleCancel}>
+            <button className="cancel-btn" onClick={cancel}>
                 Back to all dates
             </button>
 
@@ -78,7 +69,7 @@ const Day = ({
                     <h2>Already Saved</h2>
                     <ul className="already-saved">
                         {screenings.reverse().map((data, index) => (
-                            <Screening
+                            <SavedScreening
                                 key={data.id}
                                 data={{ screening: data, films, theaters }}
                                 handleDelete={() => destroy(data.id, index)}
@@ -90,5 +81,13 @@ const Day = ({
         </>
     );
 };
+
+export interface DayProps {
+    date: Date;
+    theaters: Theater[];
+    films: Film[];
+    cancel: () => void;
+    addFilm: (film: Film) => void;
+}
 
 export default Day;

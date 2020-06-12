@@ -7,7 +7,7 @@
  */
 
 /**
- * get requests to films/ api returns an array of objects with interface Film
+ * get requests to films/ api return an array of objects with interface Film
  */
 export interface Film {
     id: string;
@@ -17,9 +17,30 @@ export interface Film {
 }
 
 /**
- * get requests to theaters/ api returns an array of objects with interface Film
+ * get requests to theaters/ api return an array of objects with interface Film
  */
 export interface Theater {
     name: string;
     id: string;
+}
+
+/**
+ * get requests to screenings/ api return an array of objects with interface Film
+ */
+export interface Screening {
+    id: number;
+    theater_id: string;
+    film_id: string;
+}
+
+/**
+ * get requests to instructor/ api return an array of objects with interface Student
+ */
+export interface Student {
+    info: {
+        email: string;
+        name: string;
+        id: string;
+    };
+    datesCompleted: string[];
 }

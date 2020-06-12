@@ -38,9 +38,9 @@ const createDateRange = (start: Date, end: Date) => {
     return range;
 };
 
-const DaySelector = ({ date, handleClick }: Props): ReactElement => {
-    const start = new Date(date);
-    const end = finishMonth(new Date(date));
+const DaySelector = ({ month, handleClick }: Props): ReactElement => {
+    const start = new Date(month);
+    const end = finishMonth(new Date(month));
     const range = createDateRange(start, end);
 
     return (
@@ -63,6 +63,6 @@ const DaySelector = ({ date, handleClick }: Props): ReactElement => {
 export default DaySelector;
 
 export interface Props {
-    date: string;
+    month: string;
     handleClick: (date: Date) => void;
 }

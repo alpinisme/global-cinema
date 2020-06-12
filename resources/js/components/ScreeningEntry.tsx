@@ -2,17 +2,10 @@ import React, { useState, useEffect, useCallback, ReactElement } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import Fuse from 'fuse.js';
-
 import ErrorBox from './ErrorBox';
 import Select from './Select';
 import { addOnce } from '../utils/functions';
-import { Film, Theater } from '../types/apiInterfaces';
-
-export interface Screening {
-    id: number;
-    theater_id: string;
-    film_id: string;
-}
+import { Film, Theater, Screening } from '../types/apiInterfaces';
 
 const ConfirmYear = ({
     film,

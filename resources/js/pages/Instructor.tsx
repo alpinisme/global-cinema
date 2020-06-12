@@ -1,5 +1,6 @@
 import React, { useEffect, useState, CSSProperties, ReactElement } from 'react';
 import axios from 'axios';
+import { Student } from '../types/apiInterfaces';
 
 const InstructorPage = ({ setErrors }: Props): ReactElement => {
     const [studentData, setStudentData] = useState<Student[] | null>(null);
@@ -89,17 +90,8 @@ const InstructorPage = ({ setErrors }: Props): ReactElement => {
     );
 };
 
-export default InstructorPage;
-
 export interface Props {
     setErrors: (e: string) => void;
 }
 
-interface Student {
-    info: {
-        email: string;
-        name: string;
-        id: string;
-    };
-    datesCompleted: string[];
-}
+export default InstructorPage;
