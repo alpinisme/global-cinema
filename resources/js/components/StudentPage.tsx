@@ -5,7 +5,7 @@ import DaySelector from './DaySelector';
 import { Film, Theater } from './ScreeningEntry';
 
 export interface Props {
-    setErrors: (e: string) => undefined;
+    setErrors: (e: string) => void;
 }
 
 const StudentPage = ({ setErrors }: Props): ReactElement => {

@@ -16,7 +16,7 @@ const AdminPage = ({ setErrors }: Props): ReactElement => {
 };
 
 export interface Props {
-    setErrors: (e: string) => undefined;
+    setErrors: (e: string) => void;
 }
 
 export default AdminPage;

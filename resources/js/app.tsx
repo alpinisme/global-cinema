@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import ErrorBox from './components/ErrorBox';
 import StudentPage from './components/StudentPage';
 import InstructorPage from './components/InstructorPage';
 import AdminPage from './components/AdminPage';
 import axios from 'axios';
+import { addOnce } from './modules/functions';
 
-const Root = () => {
-    const [errors, setErrors] = useState([]);
-    const [userType, setUserType] = useState(null);
+const App = (): ReactElement => {
+    const [errors, setErrors] = useState<string[]>([]);
+    const [userType, setUserType] = useState<string | null>(null);
 
     /**
      * get user type from api
@@ -24,7 +25,7 @@ const Root = () => {
     /**
      * display errors if any
      */
-    if (errors.lenth > 0) {
+    if (errors.length > 0) {
         return <ErrorBox errors={errors} />;
     }
 
@@ -36,25 +37,22 @@ const Root = () => {
             return <div>...loading</div>;
 
         case 'user':
-            return (
-                <StudentPage setErrors={d => setErrors(old => old.push(d))} />
-            );
+            return <StudentPage setErrors={d => setErrors(addOnce(d))} />;
 
         case 'instructor':
-            return (
-                <InstructorPage
-                    setErrors={d => setErrors(old => old.push(d))}
-                />
-            );
+            return <InstructorPage setErrors={d => setErrors(addOnce(d))} />;
 
         case 'admin':
-            return <AdminPage setErrors={d => setErrors(old => old.push(d))} />;
+            return <AdminPage setErrors={d => setErrors(addOnce(d))} />;
 
         default:
-            setErrors(errs => errs.push("couldn't recognize user role"));
+            setErrors(addOnce("couldn't recognize user role"));
+            return <></>;
     }
 };
 
+export default App;
+
 const root = document.getElementById('root');
 
-ReactDOM.render(<Root />, root);
+ReactDOM.render(<App />, root);

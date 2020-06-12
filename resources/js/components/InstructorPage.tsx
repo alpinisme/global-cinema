@@ -28,7 +28,7 @@ const InstructorPage = ({ setErrors }: Props): ReactElement => {
             .then(res => res.data as Student[])
             .then(d => d.sort(alphabetizeByEmail))
             .then(setStudentData)
-            .catch(setErrors('could not load student data'));
+            .catch(() => setErrors('could not load student data'));
     }, []);
 
     const titleStyle: CSSProperties = {
@@ -92,7 +92,7 @@ const InstructorPage = ({ setErrors }: Props): ReactElement => {
 export default InstructorPage;
 
 export interface Props {
-    setErrors: (e: string) => undefined;
+    setErrors: (e: string) => void;
 }
 
 interface Student {
