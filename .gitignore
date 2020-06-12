@@ -11,6 +11,7 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 CWL207.code-workspace
+.vscode/
 .DS_Store
 public/js
 public/css
