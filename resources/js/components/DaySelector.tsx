@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { toDateString } from '../utils/functions';
 
 /**
  * takes a given Date object and returns a new Date
@@ -37,16 +38,6 @@ const createDateRange = (start: Date, end: Date) => {
     return range;
 };
 
-/**
- * returns a human-readable string of date
- * e.g., 01 Feb 2018
- *
- * @param {Date} date
- */
-const toDateString = (date: Date): string => {
-    return date.toUTCString().slice(5, 17);
-};
-
 const DaySelector = ({ date, handleClick }: Props): ReactElement => {
     const start = new Date(date);
     const end = finishMonth(new Date(date));
@@ -69,7 +60,6 @@ const DaySelector = ({ date, handleClick }: Props): ReactElement => {
     );
 };
 
-export { toDateString };
 export default DaySelector;
 
 export interface Props {

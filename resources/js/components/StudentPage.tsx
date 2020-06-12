@@ -49,7 +49,7 @@ const StudentPage = ({ setErrors }: Props): ReactElement => {
             .catch(e => setErrors(`Films could not be loaded: ${e}`));
     }, []);
 
-    const handleDateSelection = date => {
+    const handleDateSelection = (date: Date) => {
         setDate(date);
         setIsDateSelected(true);
     };

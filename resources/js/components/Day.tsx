@@ -2,12 +2,12 @@ import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import Screening from './Screening';
-import { toDateString } from './DaySelector';
 import {
     Theater,
     Film,
     Screening as ScreeningInterface
 } from './ScreeningEntry';
+import { toDateString } from '../utils/functions';
 
 export interface Props {
     date: Date;

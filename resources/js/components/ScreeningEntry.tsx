@@ -5,7 +5,7 @@ import Fuse from 'fuse.js';
 
 import ErrorBox from './ErrorBox';
 import Select from './Select';
-import { addOnce } from '../modules/functions';
+import { addOnce } from '../utils/functions';
 
 export interface Film {
     id: string;
