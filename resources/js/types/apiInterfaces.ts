@@ -12,7 +12,8 @@
 export interface Film {
     id: string;
     title: string;
-    matches: Film[];
+    year: string;
+    matches: Film[]; // note: this doesn't belong to API and must be moved
     isNew: boolean;
 }
 
@@ -43,4 +44,14 @@ export interface Student {
         id: string;
     };
     datesCompleted: string[];
+}
+
+/**
+ * get requests to instructor/ api return an array of objects with interface Student
+ */
+export interface User {
+    email: string;
+    name: string;
+    id: string;
+    role: string;
 }
