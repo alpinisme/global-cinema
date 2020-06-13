@@ -18,6 +18,16 @@ mix.react('resources/js/app.tsx', 'public/js')
     .webpackConfig({
         module: {
             rules: [
+                // {
+                //     test: /\.css$/,
+                //     include: /\/js\//,
+                //     use: [
+                //         { loader: 'style-loader' },
+
+                //         { loader: 'css-modules-typescript-loader' },
+                //         { loader: 'css-loader', options: { modules: true } }
+                //     ]
+                // },
                 {
                     test: /\.tsx?$/,
                     loader: 'ts-loader',
@@ -26,6 +36,6 @@ mix.react('resources/js/app.tsx', 'public/js')
             ]
         },
         resolve: {
-            extensions: ['*', '.js', '.jsx', '.vue', '.ts', '.tsx']
+            extensions: ['.js', '.jsx', '.ts', '.tsx']
         }
     });
