@@ -12,24 +12,32 @@
 */
 
 Route::group(['middleware' => ['auth']], function () {
-  Route::get('/', function() {return view('app'); });
-  Route::get('/home', 'UserHomeController@index');
-  
-  Route::resource('/films', 'FilmsController');
-  
-  Route::resource('/theaters', 'TheatersController');
-  
-  Route::get('/screenings/{date}', 'ScreeningsController@date');
-  Route::resource('/screenings', 'ScreeningsController');
+    Route::get('/', function () {
+        return view('app');
+    });
 
-  Route::get('/assignment', function() { return auth()->user()->assignment->assignment; });
+    Route::get('/home', 'UserHomeController@index');
   
-  Route::get('/role', function() { return auth()->user()->role; });
-  Route::get('/instructor', 'InstructorController@index');
-  });
+    Route::resource('/films', 'FilmsController');
+  
+    Route::resource('/theaters', 'TheatersController');
+  
+    Route::get('/screenings/{date}', 'ScreeningsController@date');
+    Route::resource('/screenings', 'ScreeningsController');
+
+    Route::get('/assignment', function () {
+        return auth()->user()->assignment->assignment;
+    });
+  
+    Route::get('/role', function () {
+        return auth()->user()->role;
+    });
+    Route::get('/instructor', 'InstructorController@index');
+});
 
 Route::get('/admin', 'PermissionsController@index')->middleware('can:see admin tools');
 Route::post('/admin/user/{id}', 'PermissionsController@update')->middleware('can:see admin tools');
+Route::resource('/users', 'UsersController')->middleware('can:see admin tools');
 
 
 Auth::routes();
