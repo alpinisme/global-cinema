@@ -1,7 +1,7 @@
 import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import Month from '../components/Month';
-import { Film, Theater } from '../types/apiInterfaces';
+import type { Film, Theater } from '../types/apiInterfaces';
 
 const Student = ({ setErrors }: Props): ReactElement => {
     const [assignment, setAssignment] = useState('1900-01-01');

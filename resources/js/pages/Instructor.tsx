@@ -1,6 +1,6 @@
 import React, { useEffect, useState, CSSProperties, ReactElement } from 'react';
 import axios from 'axios';
-import { Student } from '../types/apiInterfaces';
+import type { Student } from '../types/apiInterfaces';
 
 const InstructorPage = ({ setErrors }: Props): ReactElement => {
     const [studentData, setStudentData] = useState<Student[] | null>(null);

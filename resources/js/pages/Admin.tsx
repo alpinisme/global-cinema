@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
-import { Film, Theater } from '../types/apiInterfaces';
+import type { Film, Theater /* User */ } from '../types/apiInterfaces';
 import Month from '../components/Month';
 import MonthPicker from '../components/MonthPicker';
 
@@ -8,6 +8,7 @@ const AdminPage = ({ setErrors }: Props): ReactElement => {
     const [theaters, setTheaters] = useState<Theater[]>([]);
     const [films, setFilms] = useState<Film[]>([]);
     const [month, setMonth] = useState<string | null>(null);
+    //const [users, setUsers] = useState<User[]>([]);
 
     /**
      * loads theaters from api
@@ -30,6 +31,17 @@ const AdminPage = ({ setErrors }: Props): ReactElement => {
             .then(setFilms)
             .catch(e => setErrors(`Films could not be loaded: ${e}`));
     }, []);
+
+    // /**
+    //  * loads users from api
+    //  */
+    // useEffect(() => {
+    //     axios
+    //         .get('/users')
+    //         .then(res => res.data)
+    //         .then(setUsers)
+    //         .catch(e => setErrors(`Users could not be loaded: ${e}`));
+    // }, []);
 
     return (
         <>
