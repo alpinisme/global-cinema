@@ -1,19 +1,25 @@
-import React, { useState, useEffect, useCallback, ReactElement } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, useCallback, ReactElement, SyntheticEvent } from 'react';
 import axios from 'axios';
 import Fuse from 'fuse.js';
 import ErrorBox from './ErrorBox';
 import Select from './Select';
 import { addOnce } from '../utils/functions';
-import { Film, Theater, Screening } from '../types/apiInterfaces';
+import type { Film, Theater, Screening } from '../types/apiInterfaces';
 
+interface ConfirmYearProps {
+    film: string;
+    handleSubmit: (a: string) => void;
+    handleValidationError: (msg: string) => void;
+    maxYear: number;
+    addFilm: (f: Film) => void;
+}
 const ConfirmYear = ({
     film,
     handleSubmit,
     handleValidationError,
     maxYear,
     addFilm
-}) => {
+}: ConfirmYearProps) => {
     const [year, setYear] = useState<string>('');
     const [isError, setIsError] = useState(false);
 
@@ -64,7 +70,13 @@ const ConfirmYear = ({
     );
 };
 
-const Matches = ({ matches, handleSubmit, handleManualAdd }) => (
+export interface MatchesProps {
+    matches: Film[];
+    handleSubmit: (e: SyntheticEvent<HTMLButtonElement>) => void;
+    handleManualAdd: () => void;
+}
+
+const Matches = ({ matches, handleSubmit, handleManualAdd }: MatchesProps) => (
     <>
         {matches.length > 0 && (
             <p>Select the correct title to submit the entry.</p>
@@ -104,6 +116,7 @@ const ScreeningEntry = ({
     const initialFilmState = {
         id: '',
         title: '',
+        year: '',
         isNew: false,
         matches: []
     } as Film;
@@ -212,7 +225,7 @@ const ScreeningEntry = ({
             {film.title && (
                 <Matches
                     matches={film.matches}
-                    handleSubmit={e => handleSubmit(e.target.dataset.film)}
+                    handleSubmit={(e: SyntheticEvent<HTMLButtonElement>) => handleSubmit(e.currentTarget.dataset.film)}
                     handleManualAdd={() =>
                         setFilm(old => ({ ...old, isNew: true }))
                     }
@@ -249,27 +262,5 @@ export interface Props {
     addFilm: (film: Film) => void;
     handleSuccess: (screening: Screening) => void;
 }
-
-ScreeningEntry.propTypes = {
-    theaters: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
-    films: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired,
-    date: PropTypes.object.isRequired,
-    addFilm: PropTypes.func.isRequired,
-    handleSuccess: PropTypes.func.isRequired
-};
-
-ConfirmYear.propTypes = {
-    film: PropTypes.string.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    handleValidationError: PropTypes.func.isRequired,
-    maxYear: PropTypes.number.isRequired,
-    addFilm: PropTypes.func.isRequired
-};
-
-Matches.propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
-    handleManualAdd: PropTypes.func.isRequired,
-    matches: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.any)).isRequired
-};
 
 export default ScreeningEntry;
