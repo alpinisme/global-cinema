@@ -10,11 +10,9 @@
  * get requests to films/ api return an array of objects with interface Film
  */
 export interface Film {
-    id: string;
+    id: number;
     title: string;
-    year: string;
-    matches: Film[]; // note: this doesn't belong to API and must be moved
-    isNew: boolean;
+    year: number;
 }
 
 /**
@@ -22,7 +20,7 @@ export interface Film {
  */
 export interface Theater {
     name: string;
-    id: string;
+    id: number;
 }
 
 /**
@@ -30,8 +28,8 @@ export interface Theater {
  */
 export interface Screening {
     id: number;
-    theater_id: string;
-    film_id: string;
+    theater_id: number;
+    film_id: number;
 }
 
 /**
@@ -41,7 +39,7 @@ export interface Student {
     info: {
         email: string;
         name: string;
-        id: string;
+        id: number;
     };
     datesCompleted: string[];
 }
@@ -52,6 +50,6 @@ export interface Student {
 export interface User {
     email: string;
     name: string;
-    id: string;
+    id: number;
     role: string;
 }

@@ -30,7 +30,7 @@ export default Select;
 export interface Props {
     id: string;
     options: Array<{
-        value: string;
+        value: number;
         label: string;
     }>;
     value: string;

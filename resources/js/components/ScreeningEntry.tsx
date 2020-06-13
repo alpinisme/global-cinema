@@ -106,6 +106,11 @@ const Matches = ({ matches, handleSubmit, handleManualAdd }: MatchesProps) => (
     </>
 );
 
+interface FilmSuggestion extends Film {
+    isNew: boolean,
+    matches: Film[]
+}
+
 const ScreeningEntry = ({
     theaters,
     films,
@@ -114,12 +119,12 @@ const ScreeningEntry = ({
     handleSuccess
 }: Props): ReactElement => {
     const initialFilmState = {
-        id: '',
+        id: 0,
         title: '',
-        year: '',
+        year: 0,
         isNew: false,
         matches: []
-    } as Film;
+    } as FilmSuggestion;
     const [theaterID, setTheaterID] = useState('');
     const [film, setFilm] = useState(initialFilmState);
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -264,3 +269,12 @@ export interface Props {
 }
 
 export default ScreeningEntry;
+
+
+/*
+Argument of type '(old: FilmSuggestion) => { matches: Film[]; isNew: boolean; id: string; title: string; year: string; }' is not assignable to parameter of type 'SetStateAction<FilmSuggestion>'.
+  Type '(old: FilmSuggestion) => { matches: Film[]; isNew: boolean; id: string; title: string; year: string; }' is not assignable to type '(prevState: FilmSuggestion) => FilmSuggestion'.
+    Call signature return types '{ matches: Film[]; isNew: boolean; id: string; title: string; year: string; }' and 'FilmSuggestion' are incompatible.
+      The types of 'matches.length' are incompatible between these types.
+        Type 'number' is not assignable to type '0'.ts(2345)
+*/

@@ -19,7 +19,11 @@ const App = (): ReactElement => {
             .get('/role')
             .then(res => res.data)
             .then(setUserType)
-            .catch(console.log);
+            .catch(e =>
+                setErrors(
+                    addOnce('Error: unable to verify user type.\nCause: ' + e)
+                )
+            );
     }, []);
 
     /**
