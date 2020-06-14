@@ -14,7 +14,8 @@ class AlterAssignmentsTableAddCity extends Migration
     public function up()
     {
         Schema::table('assignments', function (Blueprint $table) {
-            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('city_id')->nullable();
+            $table->foreign('city_id')->references('id')->on('cities');
         });
     }
 
@@ -26,7 +27,8 @@ class AlterAssignmentsTableAddCity extends Migration
     public function down()
     {
         Schema::table('assignments', function (Blueprint $table) {
-            //
+            $table->dropForeign('assignments_city_id_foreign');
+            $table->dropColumn('city_id');
         });
     }
 }

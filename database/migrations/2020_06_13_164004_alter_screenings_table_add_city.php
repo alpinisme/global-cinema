@@ -30,7 +30,7 @@ class AlterScreeningsTableAddCity extends Migration
     public function down()
     {
         Schema::table('screenings', function (Blueprint $table) {
-            $table->dropForeign('screenings_city_foreign');
+            $table->dropForeign('screenings_city_id_foreign');
             $table->dropColumn('city_id');
         });
     }
