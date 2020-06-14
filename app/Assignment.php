@@ -40,4 +40,9 @@ class Assignment extends Model
     {
         return $this->belongsTo(User::class, 'student_id');
     }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
 }

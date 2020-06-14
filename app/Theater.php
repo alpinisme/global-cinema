@@ -31,4 +31,9 @@ class Theater extends Model
     {
         return $this->hasMany('App\Screening');
     }
+
+    public function city()
+    {
+        return $this->belongsTo('App\City');
+    }
 }
