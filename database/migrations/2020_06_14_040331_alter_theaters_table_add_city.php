@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterScreeningsTableAddCity extends Migration
+class AlterTheatersTableAddCity extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class AlterScreeningsTableAddCity extends Migration
      */
     public function up()
     {
-        Schema::table('screenings', function (Blueprint $table) {
-            $table->unsignedBigInteger('city_id')->nullable();
-        });
-        
-        Schema::table('screenings', function (Blueprint $table) {
+        Schema::table('theaters', function (Blueprint $table) {
+            $table->unsignedBigInteger('city_id')->default(3);
             $table->foreign('city_id')->references('id')->on('cities');
         });
     }
@@ -29,8 +26,8 @@ class AlterScreeningsTableAddCity extends Migration
      */
     public function down()
     {
-        Schema::table('screenings', function (Blueprint $table) {
-            $table->dropForeign('screenings_city_id_foreign');
+        Schema::table('theaters', function (Blueprint $table) {
+            $table->dropForeign('theaters_city_id_foreign');
             $table->dropColumn('city_id');
         });
     }
