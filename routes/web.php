@@ -16,14 +16,14 @@ Route::group(['middleware' => ['auth']], function () {
         return view('app');
     });
 
-    Route::get('/home', 'UserHomeController@index');
-  
-    Route::resource('/films', 'FilmsController');
-  
-    Route::resource('/theaters', 'TheatersController');
+    // Route::get('/home', 'UserHomeController@index');
   
     Route::get('/screenings/{date}', 'ScreeningsController@date');
     Route::resource('/screenings', 'ScreeningsController');
+
+    Route::resource('/films', 'FilmsController');
+
+    Route::resource('/theaters', 'TheatersController');
 
     Route::get('/assignment', function () {
         return auth()->user()->assignment->assignment;
@@ -32,12 +32,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/role', function () {
         return auth()->user()->role;
     });
+
     Route::get('/instructor', 'InstructorController@index');
 });
 
-Route::get('/admin', 'PermissionsController@index')->middleware('can:see admin tools');
-Route::post('/admin/user/{id}', 'PermissionsController@update')->middleware('can:see admin tools');
-Route::resource('/users', 'UsersController')->middleware('can:see admin tools');
+
+Route::group(['middleware' => ['can:see admin tools']], function () {
+    Route::get('/admin', 'PermissionsController@index');
+    Route::post('/admin/user/{id}', 'PermissionsController@update');
+
+    Route::resource('/users', 'UsersController');
+    
+    Route::get('/assigned_city', 'AssignmentsController@getAssignedCity');
+    Route::post('/assigned_city', 'AssignmentsController@setAssignedCity');
+});
+
+
 
 
 Auth::routes();
