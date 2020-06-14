@@ -14,7 +14,7 @@ class AlterScreeningsTableAddCity extends Migration
     public function up()
     {
         Schema::table('screenings', function (Blueprint $table) {
-            $table->unsignedBigInteger('city_id');
+            $table->unsignedBigInteger('city_id')->nullable();
         });
         
         Schema::table('screenings', function (Blueprint $table) {
