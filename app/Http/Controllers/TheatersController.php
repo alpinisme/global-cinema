@@ -14,11 +14,18 @@ class TheatersController extends StandardResourceController
         'capacity' => 'nullable|integer',
         'open_year' => 'nullable|integer|between:1900,2030',
         'close_year' => 'nullable|integer|between:1900,2030',
+        'city_id' => 'integer',
         'lat' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
         'lng' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/'
     ];
     protected $objectName = 'theater';
     protected $tableName = 'theaters';
+    protected $orderBy = 'name';
+
+    // public function index(Request $request)
+    // {
+    //     return Theater::orderBy('name')->get();
+    // }
 
     public function show(Theater $theater)
     {

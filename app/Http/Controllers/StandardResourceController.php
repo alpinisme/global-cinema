@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Session;
 
 /**
- * An generic controller for handling CRUD operations
+ * A generic controller for handling CRUD operations
  * on resources. Child controllers may override specific
  * methods as needed.
  */
@@ -16,13 +16,32 @@ class StandardResourceController extends Controller
     protected $object;
     protected $id = false;
 
+    /** The following protected properties are to be used here but declared in child class  */
+
     /**
-     *  properties declared in child class and used here
-     */ 
-    protected $model = ''; // e.g. 'App\Product'
-    protected $fields = []; // field-name => validation-rule pairs
+     *  Eloquent model to which the controller is providing access, e.g. 'App\Product' or Product::class
+     */
+    protected $model = '';
+    
+    /**
+     * All writable columns in database, given as array of `field_name => validation_rule` pairs
+     */
+    protected $fields = [];
+
+    /**
+     * the database table name, usually plural, e.g., "products"
+     */
     protected $tableName = '';
-    protected $objectName = ''; // how to refer to an instance
+
+    /**
+     * how to refer to a singular instance, e.g., "product"
+     */
+    protected $objectName = '';
+
+    /**
+     * column name to order by when selecting all
+     */
+    protected $orderBy = '';
 
     /**
      * Handle GET requests for all instances
@@ -31,7 +50,7 @@ class StandardResourceController extends Controller
     public function index(Request $request)
     {
         if ($request->wantsJson()) {
-            return $this->model::all();
+            return $this->orderBy ? $this->model::orderBy($this->orderBy)->get() : $this->model::all();
         }
         $resource = $this->model;
         return view('/stdResources/index', compact('resource'));
@@ -44,7 +63,7 @@ class StandardResourceController extends Controller
     public function create()
     {
         $resource = $this->model;
-        return view('/stdResources/create',  compact('resource'));
+        return view('/stdResources/create', compact('resource'));
     }
 
 
@@ -58,7 +77,6 @@ class StandardResourceController extends Controller
         $this->processFormSubmission();
         if ($request->wantsJson()) {
             return $this->object;
-
         }
         return redirect($this->tableName);
     }
@@ -75,7 +93,6 @@ class StandardResourceController extends Controller
         $this->processFormSubmission();
         if ($request->wantsJson()) {
             return $this->object;
-
         }
         return redirect($this->tableName . '/' . $this->id);
     }
