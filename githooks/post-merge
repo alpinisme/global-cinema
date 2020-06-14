@@ -1,0 +1,15 @@
+echo "Deleting old node_modules"
+
+rm -rf $HOME/CWL207/node_modules
+
+echo "Fresh install of node modules"
+
+npm install
+
+echo "Building app"
+
+npm run prod
+
+echo "Copying files to public directory"
+
+cp -r $HOME/CWL207/public/js/ $HOME/public_html/js
