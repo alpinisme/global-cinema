@@ -6,6 +6,8 @@ import Select from './Select';
 import { addOnce } from '../utils/functions';
 import type { Film, Theater, Screening } from '../types/apiInterfaces';
 
+const city = 3;
+
 interface ConfirmYearProps {
     film: string;
     handleSubmit: (a: string) => void;
@@ -178,7 +180,8 @@ const ScreeningEntry = ({
             const data = {
                 film_id: film.id,
                 theater_id: theaterID,
-                date: date.toISOString().slice(0, 10)
+                date: date.toISOString().slice(0, 10),
+                city_id: city
             };
 
             axios
