@@ -1,8 +1,8 @@
-echo "Deleting old node_modules"
+echo "Deleting old node modules"
 
 rm -rf $HOME/CWL207/node_modules
 
-echo "Fresh install of node modules"
+echo "Installing fresh node modules"
 
 npm install
 
@@ -13,3 +13,4 @@ npm run prod
 echo "Copying files to public directory"
 
 cp -r $HOME/CWL207/public/js/ $HOME/public_html/js
+cp -r $HOME/CWL207/public/css/ $HOME/public_html/css
