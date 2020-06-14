@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = env => {
     const isDev = env.NODE_ENV !== 'production';
-    console.log('isDev? ', isDev);
     return {
         mode: isDev ? 'development' : 'production',
         entry: { app: './resources/js/app.tsx' },
