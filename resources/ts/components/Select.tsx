@@ -5,7 +5,7 @@ const Select = ({
     options,
     value,
     handleChange,
-    autoFocus
+    autoFocus,
 }: Props): ReactElement => (
     <select
         id={id}
@@ -35,5 +35,5 @@ export interface Props {
     }>;
     value: string;
     handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    autoFocus: boolean;
+    autoFocus?: boolean;
 }
