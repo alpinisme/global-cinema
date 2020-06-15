@@ -31,7 +31,7 @@
 
   </table>
 
-  <a href="/home" class="button secondary-action">Back Home</a>
+  <a href="/" class="button secondary-action">Back Home</a>
   <a href="/screenings/create" class="button">Add New</a>
 </main>
 @endsection

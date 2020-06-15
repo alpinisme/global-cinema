@@ -15,8 +15,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/', function () {
         return view('app');
     });
-
-    // Route::get('/home', 'UserHomeController@index');
   
     Route::get('/screenings/{date}', 'ScreeningsController@date');
     Route::resource('/screenings', 'ScreeningsController');

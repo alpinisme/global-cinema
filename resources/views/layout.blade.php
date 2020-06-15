@@ -19,7 +19,7 @@
 
     <div class="user-links">
       @can('see admin tools')
-      <a class="admin-link" href="/home" class="admin-link">admin home</a>
+      <a class="admin-link" href="/" class="admin-link">admin home</a>
       @endcan
 
       @guest
