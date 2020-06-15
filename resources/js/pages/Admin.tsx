@@ -4,6 +4,18 @@ import type { Film, Theater /* User */ } from '../types/apiInterfaces';
 import Month from '../components/Month';
 import MonthPicker from '../components/MonthPicker';
 
+/*
+start page: "what would you like to do?"
+give list of options, with a state variable "active" set to whichever action is clicked on (unset when double clicked)
+the action will open a segment of html below it. 
+
+actions:
+add/edit user privileges
+reset password
+enter data
+
+*/
+
 const AdminPage = ({ setErrors }: Props): ReactElement => {
     const [theaters, setTheaters] = useState<Theater[]>([]);
     const [films, setFilms] = useState<Film[]>([]);
