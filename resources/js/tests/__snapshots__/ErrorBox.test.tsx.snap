@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorBox SubjectToBeTested renders correctly 1`] = `
+<ul>
+  <li
+    className="err-msg"
+  >
+    error
+  </li>
+</ul>
+`;
