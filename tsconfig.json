@@ -19,8 +19,8 @@
         "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
         "noUnusedLocals": false /* Report errors on unused locals. */,
         "strict": true /* Enable all strict type-checking options. */,
-        "outDir": "dist" /* Redirect output structure to the directory. */,
-        "baseUrl": "src" /* Base directory to resolve non-absolute module names. */,
+        "outDir": "public" /* Redirect output structure to the directory. */,
+        "baseUrl": "resources/ts" /* Base directory to resolve non-absolute module names. */,
         "typeRoots": [
             "./types",
             "node_modules/@types"
@@ -28,5 +28,5 @@
         "strictNullChecks": true /* Enable strict null checks. */,
         "allowJs": true /* Allow javascript files to be compiled. */
     },
-    "exclude": ["dist", "node_modules"]
+    "exclude": ["public", "node_modules"]
 }

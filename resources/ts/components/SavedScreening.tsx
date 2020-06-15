@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import type { Screening, Theater, Film } from '../types/apiInterfaces';
+import type { Screening, Theater, Film } from '../types/api';
 
 const SavedScreening = ({ data, handleDelete }: Props): ReactElement => {
     const { theaters, films, screening } = data;

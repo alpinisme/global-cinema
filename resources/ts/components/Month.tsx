@@ -1,14 +1,14 @@
 import React, { useState, ReactElement } from 'react';
 import Day from './Day';
 import DayPicker from './DayPicker';
-import type { Film, Theater } from '../types/apiInterfaces';
+import type { Film, Theater } from '../types/api';
 
 const Month = ({
     month,
     theaters,
     films,
     addFilm,
-    cancel
+    cancel,
 }: Props): ReactElement => {
     const [date, setDate] = useState<Date | null>(null);
 

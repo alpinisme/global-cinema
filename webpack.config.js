@@ -4,7 +4,7 @@ module.exports = env => {
     const isDev = env.NODE_ENV !== 'production';
     return {
         mode: isDev ? 'development' : 'production',
-        entry: { app: './resources/js/app.tsx' },
+        entry: { app: './resources/ts/app.tsx' },
         output: {
             filename: '[name].js',
             path: path.resolve(__dirname, 'public/js'),

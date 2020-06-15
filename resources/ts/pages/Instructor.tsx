@@ -1,6 +1,6 @@
 import React, { useEffect, useState, CSSProperties, ReactElement } from 'react';
 import axios from 'axios';
-import type { Student } from '../types/apiInterfaces';
+import type { Student } from '../types/api';
 
 const InstructorPage = ({ setErrors }: Props): ReactElement => {
     const [studentData, setStudentData] = useState<Student[] | null>(null);
@@ -34,11 +34,11 @@ const InstructorPage = ({ setErrors }: Props): ReactElement => {
 
     const titleStyle: CSSProperties = {
         fontWeight: 'bold',
-        padding: '0.5rem'
+        padding: '0.5rem',
     };
 
     const margin = {
-        marginTop: '2rem'
+        marginTop: '2rem',
     };
 
     return studentData ? (

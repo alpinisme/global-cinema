@@ -12,7 +12,7 @@ import ErrorBox from './ErrorBox';
 import Select from './Select';
 import AutosuggestInput from './Autosuggest';
 import { addOnce } from '../utils/functions';
-import type { Film, Theater, Screening } from '../types/apiInterfaces';
+import type { Film, Theater, Screening } from '../types/api';
 
 const defaultCity = 3;
 

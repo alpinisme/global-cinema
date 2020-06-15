@@ -3,14 +3,14 @@ import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
 import { toDateString } from '../utils/functions';
-import { Film, Theater, Screening as IScreening } from '../types/apiInterfaces';
+import { Film, Theater, Screening as IScreening } from '../types/api';
 
 const Day = ({
     date,
     theaters,
     films,
     cancel,
-    addFilm
+    addFilm,
 }: DayProps): ReactElement => {
     const [screenings, setScreenings] = useState<IScreening[]>([]);
 
@@ -27,7 +27,7 @@ const Day = ({
             .then(() =>
                 setScreenings(old => [
                     ...old.slice(0, index),
-                    ...old.slice(index + 1)
+                    ...old.slice(index + 1),
                 ])
             )
             .catch(console.log);

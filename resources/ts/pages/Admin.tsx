@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
-import type { Film, Theater /* User */ } from '../types/apiInterfaces';
+import type { Film, Theater /* User */ } from '../types/api';
 import Month from '../components/Month';
 import MonthPicker from '../components/MonthPicker';
 
