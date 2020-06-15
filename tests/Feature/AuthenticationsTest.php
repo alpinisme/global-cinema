@@ -22,7 +22,7 @@ class AuthenticationsTest extends TestCase
             'password_confirmation' => $user->password,
             'role' => $user->role,
             'instructor_id' => '1'
-        ])->assertRedirect('/home');
+        ])->assertRedirect('/');
         $this->assertAuthenticated();
         $this->assertDatabaseHas('users', ['email' => $user->email]);
     }
@@ -31,7 +31,7 @@ class AuthenticationsTest extends TestCase
     public function an_existing_user_cannot_register()
     {
         $user = factory('App\User')->make();
-        $this->actingAs($user)->get('/register')->assertRedirect('/home');
+        $this->actingAs($user)->get('/register')->assertRedirect('/');
     }
 
     /** @test */
@@ -43,7 +43,7 @@ class AuthenticationsTest extends TestCase
         $this->from('/login')->post('/login', [
             'email' => $user->email,
             'password' => $password,
-        ])->assertRedirect('/home');
+        ])->assertRedirect('/');
         $this->assertAuthenticated();
     }
 
@@ -77,7 +77,7 @@ class AuthenticationsTest extends TestCase
     public function an_admin_can_see_admin_links()
     {
         $admin = factory('App\User')->states('admin')->create();
-        $this->actingAs($admin)->get('/home')->assertSee('admin-link');
+        $this->actingAs($admin)->get('/')->assertSee('admin-link');
     }
 
     /** @test */
