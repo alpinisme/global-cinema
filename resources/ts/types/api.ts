@@ -21,15 +21,18 @@ export interface Film {
 export interface Theater {
     name: string;
     id: number;
+    city_id: number;
 }
 
 /**
- * get requests to screenings/ api return an array of objects with interface Film
+ * get requests to screenings/ api return an array of objects with interface Screening
  */
 export interface Screening {
-    id: number;
+    id?: number;
     theater_id: number;
     film_id: number;
+    city_id: number;
+    date: string;
 }
 
 /**
