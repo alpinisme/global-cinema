@@ -1,6 +1,5 @@
-import React, { useEffect, useState, ReactElement } from 'react';
-import axios from 'axios';
-import type { Film, Theater /* User */ } from '../types/api';
+import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
+import type { Film, Theater, User } from '../types/api';
 import Month from '../components/Month';
 import MonthPicker from '../components/MonthPicker';
 
@@ -16,43 +15,51 @@ enter data
 
 */
 
-const AdminPage = ({ setErrors }: Props): ReactElement => {
-    const [theaters, setTheaters] = useState<Theater[]>([]);
-    const [films, setFilms] = useState<Film[]>([]);
+const AdminPage = ({ useGetRequest }: Props): ReactElement => {
+    // const [theaters, setTheaters] = useState<Theater[]>([]);
+    // const [films, setFilms] = useState<Film[]>([]);
     const [month, setMonth] = useState<string | null>(null);
-    //const [users, setUsers] = useState<User[]>([]);
+    // const [users, setUsers] = useState<User[]>([]);
 
-    /**
-     * loads theaters from api
-     */
-    useEffect(() => {
-        axios
-            .get('/theaters')
-            .then(res => res.data)
-            .then(setTheaters)
-            .catch(e => setErrors(`Theaters could not be loaded: ${e}`));
-    }, []);
+    // const get = useCallback((a, b, c) => props.get(a, b, c), [props]);
 
-    /**
-     * loads films from api
-     */
-    useEffect(() => {
-        axios
-            .get('/films')
-            .then(res => res.data)
-            .then(setFilms)
-            .catch(e => setErrors(`Films could not be loaded: ${e}`));
-    }, []);
+    const [theaters] = useGetRequest(
+        '/theaters',
+        e => `Theaters could not be loaded: ${e}`
+    );
+
+    const [films, setFilms] = useGetRequest(
+        '/films',
+        e => `Films could not be loaded: ${e}`
+    );
+
+    const [users] = useGetRequest(
+        '/users',
+        e => `Users could not be loaded: ${e}`
+    );
+
+    // /**
+    //  * loads theaters from api
+    //  */
+    // useEffect(() => {
+    //     const createErrMsg = e => `Theaters could not be loaded: ${e}`;
+    //     get('/theaters', setTheaters, createErrMsg);
+    // }, []);
+
+    // /**
+    //  * loads films from api
+    //  */
+    // useEffect(() => {
+    //     const createErrMsg = e => `Films could not be loaded: ${e}`;
+    //     get('/films', setFilms, createErrMsg);
+    // }, []);
 
     // /**
     //  * loads users from api
     //  */
     // useEffect(() => {
-    //     axios
-    //         .get('/users')
-    //         .then(res => res.data)
-    //         .then(setUsers)
-    //         .catch(e => setErrors(`Users could not be loaded: ${e}`));
+    //     const createErrMsg = e => `Users could not be loaded: ${e}`;
+    //     get('/users', setUsers, createErrMsg);
     // }, []);
 
     return (
@@ -60,8 +67,8 @@ const AdminPage = ({ setErrors }: Props): ReactElement => {
             {month ? (
                 <Month
                     month={month}
-                    films={films}
-                    theaters={theaters}
+                    films={(films as Film[]) ?? []}
+                    theaters={(theaters as Theater[]) ?? []}
                     addFilm={film => setFilms(old => [film, ...old])}
                     cancel={() => setMonth(null)}
                 />
@@ -73,7 +80,10 @@ const AdminPage = ({ setErrors }: Props): ReactElement => {
 };
 
 export interface Props {
-    setErrors: (e: string) => void;
+    useGetRequest: <A>(
+        url: string,
+        createErrMsg: (e: string) => string
+    ) => [A | null, Dispatch<SetStateAction<A | null>>];
 }
 
 export default AdminPage;
