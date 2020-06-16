@@ -5,14 +5,9 @@ const Select = ({
     options,
     value,
     handleChange,
-    autoFocus,
+    autoFocus = false,
 }: Props): ReactElement => (
-    <select
-        id={id}
-        value={value}
-        onChange={handleChange}
-        autoFocus={!!autoFocus}
-    >
+    <select id={id} value={value} onChange={handleChange} autoFocus={autoFocus}>
         <option disabled value="">
             Select...
         </option>

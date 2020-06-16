@@ -16,18 +16,13 @@ import type { Film, Theater, Screening } from '../types/api';
 
 const defaultCity = 3;
 
-interface FilmSuggestion extends Film {
-    isNew: boolean;
-    matches: Film[];
-}
-
 const ScreeningEntry = ({
     theaters,
     films,
     date,
     addFilm,
     handleSuccess,
-    city,
+    city = defaultCity,
 }: Props): ReactElement => {
     const initialFilmState = {
         id: 0,
@@ -44,7 +39,6 @@ const ScreeningEntry = ({
     const [isSubmissionReady, setIsSubmissionReady] = useState(false);
 
     const maxYear = date.getUTCFullYear();
-    city = city ?? defaultCity;
 
     const handleSubmit = id => {
         setFilm(old => ({ ...old, id }));
@@ -88,9 +82,9 @@ const ScreeningEntry = ({
                 return;
             }
 
-            const data = {
+            const data: Screening = {
                 film_id: film.id,
-                theater_id: theaterID,
+                theater_id: parseInt(theaterID),
                 date: date.toISOString().slice(0, 10),
                 city_id: city,
             };
@@ -211,13 +205,18 @@ const ConfirmYear = ({
             {isError && (
                 <p className="err-msg">
                     Sorry, something has gone wrong. Try refreshing the page and
-                    submitting again. If that doesn't work, please contact a
-                    site administrator
+                    submitting again. If that doesn&apos;t work, please contact
+                    a site administrator
                 </p>
             )}
         </div>
     );
 };
+
+interface FilmSuggestion extends Film {
+    isNew: boolean;
+    matches: Film[];
+}
 
 interface ConfirmYearProps {
     film: string;
