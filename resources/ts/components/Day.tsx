@@ -72,7 +72,9 @@ const Day = ({
                             <SavedScreening
                                 key={data.id}
                                 data={{ screening: data, films, theaters }}
-                                handleDelete={() => destroy(data.id, index)}
+                                handleDelete={() =>
+                                    destroy(data.id as number, index)
+                                }
                             />
                         ))}
                     </ul>
