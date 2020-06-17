@@ -2,8 +2,9 @@ import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
 import type { Film, Theater, User } from '../types/api';
 import Month from '../components/Month';
 import MonthPicker from '../components/MonthPicker';
+import Autosuggest from '../components/Autosuggest';
 
-type Action = 'edit users' | 'reset password' | 'enter screenings';
+type Action = 'edit users' | 'password reset' | 'enter screenings';
 
 const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     const [month, setMonth] = useState<string | null>(null);
@@ -33,7 +34,27 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     const addFilm = (film: Film) =>
         setFilms(old => (old ? [film, ...old] : [film]));
 
-    console.log(action);
+    /**
+     * Given a `setState` function and an `Action`, this curried function
+     * compares the new `Action` against the previous one, and
+     * sets the state to null if they are the same (re-click)
+     * or to the new `Action` if not
+     *
+     * @param fn react setState function
+     * @param next action that is clicked on
+     */
+    const handleClick = (
+        fn: Dispatch<SetStateAction<Action | null>>,
+        next: Action
+    ) => {
+        const compare = (prev: Action | null) => {
+            if (prev == next) {
+                return null;
+            }
+            return next;
+        };
+        fn(compare);
+    };
 
     return month ? (
         <Month
@@ -48,13 +69,45 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
             <p>What would you like to do?</p>
 
             <ul>
-                <li onClick={() => setAction('edit users')}>
-                    edit users
-                    {users && action == 'edit users' && <div>here you go</div>}
+                <li>
+                    <button
+                        onClick={() => handleClick(setAction, 'edit users')}
+                    >
+                        edit users
+                    </button>
+                    {action == 'edit users' && <div>here you go</div>}
                 </li>
-                <li onClick={() => setAction('enter screenings')}>
-                    enter screenings
-                    {!month && action == 'enter screenings' && (
+                <li>
+                    <button
+                        onClick={() => handleClick(setAction, 'password reset')}
+                    >
+                        reset a password
+                    </button>
+                    {action == 'password reset' && (
+                        <div>
+                            here you go
+                            <Autosuggest
+                                label={'user'}
+                                keys={['name', 'email']}
+                                options={users ?? ([] as User[])}
+                                displayMatch={match =>
+                                    `${match.name} (${match.email})`
+                                }
+                                handleSubmit={id => console.log(id)}
+                                handleManualAdd={name => console.log(name)}
+                            />
+                        </div>
+                    )}
+                </li>
+                <li>
+                    <button
+                        onClick={() =>
+                            handleClick(setAction, 'enter screenings')
+                        }
+                    >
+                        enter screenings
+                    </button>
+                    {action == 'enter screenings' && (
                         <MonthPicker setMonth={setMonth} />
                     )}
                 </li>

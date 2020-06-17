@@ -1,70 +1,99 @@
-import React, { useState, SyntheticEvent, ChangeEvent } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
+import Fuse from 'fuse.js';
 
-export interface Props<A> {
-    value: string;
-    setValue: (e: ChangeEvent<HTMLInputElement>) => void;
-    label: string;
-    matches: Array<A>;
-    displayMatch: (a: A) => string;
-    handleSubmit: (e: SyntheticEvent<HTMLButtonElement>) => void;
-    handleManualAdd: () => void;
+interface Identified {
+    id: number;
 }
 
-const AutosuggestInput = (props: Props<any>) => {
+export interface Props<A> {
+    label: string;
+    keys: string[];
+    options: A[];
+    displayMatch: (a: A) => string;
+    handleSubmit: (id: number) => void;
+    handleManualAdd: (title: string) => void;
+}
+
+function Autosuggest<A extends Identified>({
+    label,
+    keys,
+    options,
+    displayMatch,
+    handleSubmit,
+    handleManualAdd,
+}: Props<A>): ReactElement {
+    const [value, setValue] = useState('');
+    const [matches, setMatches] = useState<A[]>([]);
+
+    // find four closest matches for user-input title in db
+    useEffect(() => {
+        const config = {
+            shouldSort: true,
+            threshold: 0.5,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 2,
+            keys: keys,
+        };
+
+        const fuse = new Fuse(options as A[], config);
+        const all = fuse.search(value);
+        const top4 = all.slice(0, 4);
+
+        setMatches(top4);
+    }, [options, value, keys]);
+
     return (
         <>
             <div>
-                <label htmlFor={props.label}>{props.label}</label>
+                <label htmlFor={label}>{label}</label>
                 <input
                     type="text"
-                    name={props.label}
-                    value={props.value}
-                    onChange={props.setValue}
+                    name={label}
+                    value={value}
+                    onChange={e => setValue(e.target.value)}
                 />
-                {!props.value && (
+                {!value && (
                     <p>
-                        As you begin typing a {props.label.toLowerCase()},
-                        possible matches will appear below.
+                        As you begin typing a {label.toLowerCase()}, possible
+                        matches will appear below.
                     </p>
                 )}
             </div>
 
-            {props.value && (
+            {value && (
                 <>
-                    {props.matches.length > 0 && (
-                        <p>
-                            Select the correct {props.label} to submit the
-                            entry.
-                        </p>
+                    {matches.length > 0 && (
+                        <p>Select the correct {label} to submit the entry.</p>
                     )}
                     <ul className="button-list">
-                        {props.matches.map(match => (
+                        {matches.map(match => (
                             <li key={match.id}>
                                 <button
                                     type="submit"
-                                    data-film={match.id}
-                                    onClick={props.handleSubmit}
+                                    onClick={() => handleSubmit(match.id)}
                                 >
-                                    {props.displayMatch(match)}
+                                    {displayMatch(match)}
                                 </button>
                             </li>
                         ))}
                     </ul>
-                    {props.matches.length > 0 ? (
+                    {matches.length > 0 ? (
                         <p>
-                            If the correct {props.label.toLowerCase()} is not
-                            listed above,{' '}
+                            If the correct {label.toLowerCase()} is not listed
+                            above,{' '}
                         </p>
                     ) : (
                         <p>Sorry, no matches found.</p>
                     )}
-                    <button onClick={props.handleManualAdd}>
-                        Add {props.label.toLowerCase()} manually
+                    <button onClick={() => handleManualAdd(value)}>
+                        Add {label.toLowerCase()} manually
                     </button>
                 </>
             )}
         </>
     );
-};
+}
 
-export default AutosuggestInput;
+export default Autosuggest;

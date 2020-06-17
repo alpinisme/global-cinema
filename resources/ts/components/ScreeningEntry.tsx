@@ -1,16 +1,8 @@
-import React, {
-    useState,
-    useEffect,
-    useCallback,
-    ReactElement,
-    SyntheticEvent,
-    ChangeEvent,
-} from 'react';
+import React, { useState, useCallback, ReactElement } from 'react';
 import axios from 'axios';
-import Fuse from 'fuse.js';
 import ErrorBox from './ErrorBox';
 import Select from './Select';
-import AutosuggestInput from './Autosuggest';
+import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
 import type { Film, Theater, Screening } from '../types/api';
 
@@ -52,25 +44,6 @@ const ScreeningEntry = ({
         setSubmissionError('');
     };
 
-    // find five closest matches for user-input title in db
-    useEffect(() => {
-        const options = {
-            shouldSort: true,
-            threshold: 0.5,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 2,
-            keys: ['title'],
-        };
-
-        const fuse = new Fuse(films, options);
-        const all = fuse.search(film.title);
-        const top5 = all.slice(0, 4);
-
-        setFilm(old => ({ ...old, matches: top5 }));
-    }, [films, film.title]);
-
     // submit screening if ready
     if (isSubmissionReady) {
         setIsSubmissionReady(false);
@@ -111,20 +84,14 @@ const ScreeningEntry = ({
             />
 
             {theaterID && (
-                <AutosuggestInput
+                <Autosuggest
                     label="Film Title"
-                    value={film.title}
-                    setValue={(e: ChangeEvent<HTMLInputElement>) => {
-                        const title = e.target.value; // to avoid run-time error due to event polling, title must be assigned here
-                        setFilm(old => ({ ...old, title }));
-                    }}
-                    matches={film.matches}
+                    keys={['title']}
+                    options={films}
                     displayMatch={match => `${match.title} (${match.year})`}
-                    handleSubmit={(e: SyntheticEvent<HTMLButtonElement>) =>
-                        handleSubmit(e.currentTarget.dataset.film)
-                    }
-                    handleManualAdd={() =>
-                        setFilm(old => ({ ...old, isNew: true }))
+                    handleSubmit={handleSubmit}
+                    handleManualAdd={(title: string) =>
+                        setFilm(old => ({ ...old, title, isNew: true }))
                     }
                 />
             )}

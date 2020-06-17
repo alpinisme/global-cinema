@@ -42,7 +42,7 @@ const Day = ({
             .then(res => res.data)
             .then(setScreenings)
             .catch(console.log);
-    }, [films]);
+    }, [films, date]);
 
     return (
         <>
