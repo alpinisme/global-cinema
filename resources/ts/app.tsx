@@ -2,8 +2,8 @@ import React, {
     useState,
     useEffect,
     ReactElement,
-    SetStateAction,
-    Dispatch,
+    // SetStateAction,
+    // Dispatch,
 } from 'react';
 import ReactDOM from 'react-dom';
 import ErrorBox from './components/ErrorBox';
@@ -12,34 +12,18 @@ import AdminPage from './pages/Admin';
 import axios from 'axios';
 import { addOnce } from './utils/functions';
 import Student from './pages/Student';
+import { useGetRequest } from './utils/hooks';
 
 const App = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
 
-    function useGetRequest<A>(
-        url: string,
-        createErrMsg: (e: string) => string
-    ): [A | null, Dispatch<SetStateAction<A | null>>] {
-        const [data, setData] = useState<A | null>(null);
-
-        useEffect(() => {
-            axios
-                .get(url)
-                .then(res => res.data)
-                .then(setData)
-                .catch(e => setErrors(addOnce(createErrMsg(e))));
-        }, [url, createErrMsg]);
-
-        return [data, setData];
-    }
-
-    /**
-     * get userType from api
-     */
-    const [userType] = useGetRequest(
-        '/role',
-        e => `Error: unable to verify user type.\nCause: ${e}`
+    const [userType] = useGetRequest<string>('role', e =>
+        setErrors(addOnce(`Error: unable to verify user type.\nCause: ${e}`))
     );
+
+    function useStatefulGetRequest<A>(a: string, fn: (s: string) => string) {
+        return useGetRequest<A>(a, b => setErrors(addOnce(fn(b))));
+    }
 
     /**
      * display errors if any
@@ -62,7 +46,7 @@ const App = (): ReactElement => {
             return <InstructorPage setErrors={d => setErrors(addOnce(d))} />;
 
         case 'admin':
-            return <AdminPage useGetRequest={useGetRequest} />;
+            return <AdminPage useGetRequest={useStatefulGetRequest} />;
 
         default:
             setErrors(addOnce("couldn't recognize user role"));

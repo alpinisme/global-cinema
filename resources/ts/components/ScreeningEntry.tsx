@@ -72,16 +72,13 @@ const ScreeningEntry = ({
     }, [films, film.title]);
 
     // submit screening if ready
-    useEffect(() => {
-        if (isSubmissionReady) {
-            setIsSubmissionReady(false);
-            setSubmissionError('');
+    if (isSubmissionReady) {
+        setIsSubmissionReady(false);
+        setSubmissionError('');
 
-            if (theaterID == '') {
-                setValidationErrors(addOnce('Theater is required'));
-                return;
-            }
-
+        if (theaterID == '') {
+            setValidationErrors(addOnce('Theater is required'));
+        } else {
             const data: Screening = {
                 film_id: film.id,
                 theater_id: parseInt(theaterID),
@@ -98,7 +95,7 @@ const ScreeningEntry = ({
                     setSubmissionError(`Screening could not be saved: ${e}`)
                 );
         }
-    }, [isSubmissionReady]);
+    }
 
     return (
         <>
@@ -165,11 +162,23 @@ const ConfirmYear = ({
     const [year, setYear] = useState<string>('');
     const [isError, setIsError] = useState(false);
 
-    const handleClick = useCallback(() => {
-        if (!(parseInt(year) > 1900 && parseInt(year) <= maxYear)) {
+    const validate = useCallback(
+        (input: string): boolean => {
+            const year = parseInt(input);
+            if (1900 < year && year <= maxYear) {
+                return true;
+            }
+
             handleValidationError(
                 `Please enter a valid year between 1901 and ${maxYear}`
             );
+            return false;
+        },
+        [maxYear, handleValidationError]
+    );
+
+    const handleClick = useCallback(() => {
+        if (!validate(year)) {
             return;
         }
         setIsError(false);
@@ -182,7 +191,7 @@ const ConfirmYear = ({
             })
             .then(handleSubmit)
             .catch(() => setIsError(true));
-    }, [film, year]);
+    }, [film, year, handleSubmit, setIsError, validate, addFilm]);
 
     return (
         <div>

@@ -3,78 +3,62 @@ import type { Film, Theater, User } from '../types/api';
 import Month from '../components/Month';
 import MonthPicker from '../components/MonthPicker';
 
-/*
-start page: "what would you like to do?"
-give list of options, with a state variable "active" set to whichever action is clicked on (unset when double clicked)
-the action will open a segment of html below it. 
-
-actions:
-add/edit user privileges
-reset password
-enter data
-
-*/
+type Action = 'edit users' | 'reset password' | 'enter screenings';
 
 const AdminPage = ({ useGetRequest }: Props): ReactElement => {
-    // const [theaters, setTheaters] = useState<Theater[]>([]);
-    // const [films, setFilms] = useState<Film[]>([]);
     const [month, setMonth] = useState<string | null>(null);
-    // const [users, setUsers] = useState<User[]>([]);
+    const [action, setAction] = useState<Action | null>(null);
 
-    // const get = useCallback((a, b, c) => props.get(a, b, c), [props]);
-
-    const [theaters] = useGetRequest(
-        '/theaters',
-        e => `Theaters could not be loaded: ${e}`
-    );
-
-    const [films, setFilms] = useGetRequest(
+    const [films, setFilms] = useGetRequest<Film[]>(
         '/films',
         e => `Films could not be loaded: ${e}`
     );
 
-    const [users] = useGetRequest(
+    const [theaters] = useGetRequest<Theater[]>(
+        '/theaters',
+        e => `Theaters could not be loaded: ${e}`
+    );
+
+    const [users] = useGetRequest<User[]>(
         '/users',
         e => `Users could not be loaded: ${e}`
     );
 
-    // /**
-    //  * loads theaters from api
-    //  */
-    // useEffect(() => {
-    //     const createErrMsg = e => `Theaters could not be loaded: ${e}`;
-    //     get('/theaters', setTheaters, createErrMsg);
-    // }, []);
+    /**
+     * add film to list of films in state
+     * if that list is null, create it with new film as only member
+     * (such a state should be impossible, though)
+     * @param film Film
+     */
+    const addFilm = (film: Film) =>
+        setFilms(old => (old ? [film, ...old] : [film]));
 
-    // /**
-    //  * loads films from api
-    //  */
-    // useEffect(() => {
-    //     const createErrMsg = e => `Films could not be loaded: ${e}`;
-    //     get('/films', setFilms, createErrMsg);
-    // }, []);
+    console.log(action);
 
-    // /**
-    //  * loads users from api
-    //  */
-    // useEffect(() => {
-    //     const createErrMsg = e => `Users could not be loaded: ${e}`;
-    //     get('/users', setUsers, createErrMsg);
-    // }, []);
-
-    return (
+    return month ? (
+        <Month
+            month={month}
+            films={films ?? ([] as Film[])}
+            theaters={theaters ?? ([] as Theater[])}
+            addFilm={addFilm}
+            cancel={() => setMonth(null)}
+        />
+    ) : (
         <>
-            {month ? (
-                <Month
-                    month={month}
-                    films={(films as Film[]) ?? []}
-                    theaters={(theaters as Theater[]) ?? []}
-                    addFilm={film => setFilms(old => [film, ...old])}
-                    cancel={() => setMonth(null)}
-                />
-            ) : (
-                <MonthPicker setMonth={setMonth} />
-            )}
+            <p>What would you like to do?</p>
+
+            <ul>
+                <li onClick={() => setAction('edit users')}>
+                    edit users
+                    {users && action == 'edit users' && <div>here you go</div>}
+                </li>
+                <li onClick={() => setAction('enter screenings')}>
+                    enter screenings
+                    {!month && action == 'enter screenings' && (
+                        <MonthPicker setMonth={setMonth} />
+                    )}
+                </li>
+            </ul>
         </>
     );
 };
