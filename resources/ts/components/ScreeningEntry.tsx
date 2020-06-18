@@ -32,7 +32,7 @@ const ScreeningEntry = ({
 
     const maxYear = date.getUTCFullYear();
 
-    const handleSubmit = id => {
+    const handleSubmit = (id: number) => {
         setFilm(old => ({ ...old, id }));
         setIsSubmissionReady(true);
     };
@@ -196,7 +196,7 @@ interface FilmSuggestion extends Film {
 
 interface ConfirmYearProps {
     film: string;
-    handleSubmit: (a: string) => void;
+    handleSubmit: (a: number) => void;
     handleValidationError: (msg: string) => void;
     maxYear: number;
     addFilm: (f: Film) => void;
