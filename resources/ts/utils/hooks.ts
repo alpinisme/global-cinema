@@ -1,6 +1,36 @@
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import axios from 'axios';
 
+export interface PostRequestResponse<A> {
+    data: A | null;
+    error: string | null;
+    isLoading: boolean;
+}
+
+export function usePostRequest<A, B>(): [
+    PostRequestResponse<B>,
+    (url: string, postData: A) => void
+] {
+    const [res, setRes] = useState<PostRequestResponse<B>>({
+        data: null,
+        error: null,
+        isLoading: false,
+    });
+
+    const makePostRequest = (url: string, postData: A) => {
+        setRes(prevState => ({ ...prevState, isLoading: true }));
+        axios
+            .post(url, postData)
+            .then(res => {
+                setRes({ data: res.data, isLoading: false, error: null });
+            })
+            .catch(error => {
+                setRes({ data: null, isLoading: false, error });
+            });
+    };
+    return [res, makePostRequest];
+}
+
 export function useGetRequest<A>(
     url: string,
     setErrors: (err: string) => void
