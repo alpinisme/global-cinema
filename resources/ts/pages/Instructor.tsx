@@ -1,9 +1,8 @@
-import React, { useEffect, useState, CSSProperties, ReactElement } from 'react';
-import axios from 'axios';
+import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
 import type { Student } from '../types/api';
+import styles from './Instructor.scss';
 
-const InstructorPage = ({ setErrors }: Props): ReactElement => {
-    const [studentData, setStudentData] = useState<Student[] | null>(null);
+const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(
         null
     );
@@ -20,38 +19,22 @@ const InstructorPage = ({ setErrors }: Props): ReactElement => {
         return 0;
     };
 
-    /**
-     * get student data from api
-     */
-    useEffect(() => {
-        axios
-            .get('/instructor')
-            .then(res => res.data as Student[])
-            .then(d => d.sort(alphabetizeByEmail))
-            .then(setStudentData)
-            .catch(() => setErrors('could not load student data'));
-    }, []);
-
-    const titleStyle: CSSProperties = {
-        fontWeight: 'bold',
-        padding: '0.5rem',
-    };
-
-    const margin = {
-        marginTop: '2rem',
-    };
+    const [studentData] = useGetRequest<Student[]>(
+        '/instructor',
+        e => `Student data could not be loaded: ${e}`
+    );
 
     return studentData ? (
         <>
-            <h2 style={margin}>Instructor Overview</h2>
+            <h2 className={styles.margin}>Instructor Overview</h2>
             <p>
                 click on specific rows for a full list of days completed by a
                 student (at page bottom)
             </p>
-            <table style={margin}>
-                <thead style={titleStyle}>
+            <table className={styles.margin}>
+                <thead className={styles.title}>
                     <tr>
-                        <td colSpan={3} style={{ textAlign: 'center' }}>
+                        <td colSpan={3} className={styles.td}>
                             Number of Days Your Students Completed
                         </td>
                     </tr>
@@ -62,7 +45,7 @@ const InstructorPage = ({ setErrors }: Props): ReactElement => {
                     </tr>
                 </thead>
                 <tbody>
-                    {studentData.map(student => (
+                    {studentData.sort(alphabetizeByEmail).map(student => (
                         <tr
                             key={student.info.id}
                             onClick={() => setSelectedStudent(student)}
@@ -91,7 +74,10 @@ const InstructorPage = ({ setErrors }: Props): ReactElement => {
 };
 
 export interface Props {
-    setErrors: (e: string) => void;
+    useGetRequest: <A>(
+        url: string,
+        createErrMsg: (e: string) => string
+    ) => [A | null, Dispatch<SetStateAction<A | null>>];
 }
 
 export default InstructorPage;

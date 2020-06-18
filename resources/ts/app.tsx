@@ -1,15 +1,8 @@
-import React, {
-    useState,
-    useEffect,
-    ReactElement,
-    // SetStateAction,
-    // Dispatch,
-} from 'react';
+import React, { useState, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import ErrorBox from './components/ErrorBox';
 import InstructorPage from './pages/Instructor';
 import AdminPage from './pages/Admin';
-import axios from 'axios';
 import { addOnce } from './utils/functions';
 import Student from './pages/Student';
 import { useGetRequest } from './utils/hooks';
@@ -43,7 +36,7 @@ const App = (): ReactElement => {
             return <Student setErrors={d => setErrors(addOnce(d))} />;
 
         case 'instructor':
-            return <InstructorPage setErrors={d => setErrors(addOnce(d))} />;
+            return <InstructorPage useGetRequest={useStatefulGetRequest} />;
 
         case 'admin':
             return <AdminPage useGetRequest={useStatefulGetRequest} />;
