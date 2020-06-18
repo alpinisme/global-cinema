@@ -33,7 +33,7 @@ const App = (): ReactElement => {
             return <div>...loading</div>;
 
         case 'user':
-            return <Student setErrors={d => setErrors(addOnce(d))} />;
+            return <Student useGetRequest={useStatefulGetRequest} />;
 
         case 'instructor':
             return <InstructorPage useGetRequest={useStatefulGetRequest} />;
