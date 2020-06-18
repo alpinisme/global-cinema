@@ -11,7 +11,7 @@ export interface Props<A> {
     options: A[];
     displayMatch: (a: A) => string;
     handleSubmit: (id: number) => void;
-    handleManualAdd: (title: string) => void;
+    handleManualAdd?: (title: string) => void;
 }
 
 function Autosuggest<A extends Identified>({
@@ -79,17 +79,21 @@ function Autosuggest<A extends Identified>({
                             </li>
                         ))}
                     </ul>
-                    {matches.length > 0 ? (
-                        <p>
-                            If the correct {label.toLowerCase()} is not listed
-                            above,{' '}
-                        </p>
-                    ) : (
-                        <p>Sorry, no matches found.</p>
+                    {handleManualAdd && (
+                        <div>
+                            {matches.length > 0 ? (
+                                <p>
+                                    If the correct {label.toLowerCase()} is not
+                                    listed above,{' '}
+                                </p>
+                            ) : (
+                                <p>Sorry, no matches found.</p>
+                            )}
+                            <button onClick={() => handleManualAdd(value)}>
+                                Add {label.toLowerCase()} manually
+                            </button>
+                        </div>
                     )}
-                    <button onClick={() => handleManualAdd(value)}>
-                        Add {label.toLowerCase()} manually
-                    </button>
                 </>
             )}
         </>
