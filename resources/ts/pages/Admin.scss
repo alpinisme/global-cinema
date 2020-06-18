@@ -1,0 +1,22 @@
+.list {
+    list-style: none;
+}
+
+.action {
+    margin: 1rem 5rem;
+    width: calc(100% - 10rem);
+}
+
+.content {
+    /* css animation */
+    overflow: hidden;
+    padding: 0 1em;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.active {
+    max-height: 500px;
+    opacity: 1;
+    padding: 15px 20px;
+}

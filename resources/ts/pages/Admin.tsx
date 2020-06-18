@@ -3,12 +3,16 @@ import type { Film, Theater, User } from '../types/api';
 import Month from '../components/Month';
 import MonthPicker from '../components/MonthPicker';
 import Autosuggest from '../components/Autosuggest';
+import { usePostRequest } from '../utils/hooks';
+import Clipboard from '../components/Clipboard';
+import styles from './Admin.scss';
 
 type Action = 'edit users' | 'password reset' | 'enter screenings';
 
 const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     const [month, setMonth] = useState<string | null>(null);
     const [action, setAction] = useState<Action | null>(null);
+    const [result, makePostRequest] = usePostRequest<string, string>();
 
     const [films, setFilms] = useGetRequest<Film[]>(
         '/films',
@@ -56,6 +60,11 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
         fn(compare);
     };
 
+    const toggleActive = (content: Action) =>
+        action == content
+            ? `${styles.content} ${styles.active}`
+            : styles.content;
+
     return month ? (
         <Month
             month={month}
@@ -68,24 +77,28 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
         <>
             <p>What would you like to do?</p>
 
-            <ul>
+            <ul className={styles.list}>
                 <li>
                     <button
                         onClick={() => handleClick(setAction, 'edit users')}
+                        className={styles.action}
                     >
                         edit users
                     </button>
-                    {action == 'edit users' && <div>here you go</div>}
+                    <div className={toggleActive('edit users')}>
+                        here you go
+                    </div>
                 </li>
                 <li>
                     <button
                         onClick={() => handleClick(setAction, 'password reset')}
+                        className={styles.action}
                     >
                         reset a password
                     </button>
-                    {action == 'password reset' && (
-                        <div>
-                            here you go
+                    <div className={toggleActive('password reset')}>
+                        here you go
+                        {!result.data ? (
                             <Autosuggest
                                 label={'user'}
                                 keys={['name', 'email']}
@@ -93,23 +106,31 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                                 displayMatch={match =>
                                     `${match.name} (${match.email})`
                                 }
-                                handleSubmit={id => console.log(id)}
+                                handleSubmit={id =>
+                                    makePostRequest(`/password/reset/${id}`, '')
+                                }
                                 handleManualAdd={name => console.log(name)}
                             />
-                        </div>
-                    )}
+                        ) : (
+                            <div>
+                                Reset link:
+                                <Clipboard content={result.data} />
+                            </div>
+                        )}
+                    </div>
                 </li>
                 <li>
                     <button
                         onClick={() =>
                             handleClick(setAction, 'enter screenings')
                         }
+                        className={styles.action}
                     >
                         enter screenings
                     </button>
-                    {action == 'enter screenings' && (
+                    <div className={toggleActive('enter screenings')}>
                         <MonthPicker setMonth={setMonth} />
-                    )}
+                    </div>
                 </li>
             </ul>
         </>
