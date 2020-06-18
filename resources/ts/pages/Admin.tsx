@@ -6,6 +6,7 @@ import Autosuggest from '../components/Autosuggest';
 import { usePostRequest } from '../utils/hooks';
 import Clipboard from '../components/Clipboard';
 import styles from './Admin.scss';
+import Collapsible from '../components/Collapsible';
 
 type Action = 'edit users' | 'password reset' | 'enter screenings';
 
@@ -60,6 +61,8 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
         fn(compare);
     };
 
+    const isOpen = (el: Action) => el == action;
+
     const toggleActive = (content: Action) =>
         action == content
             ? `${styles.content} ${styles.active}`
@@ -79,30 +82,27 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
 
             <ul className={styles.list}>
                 <li>
-                    <button
-                        onClick={() => handleClick(setAction, 'edit users')}
-                        className={styles.action}
+                    <Collapsible
+                        open={isOpen('edit users')}
+                        handleClick={() => handleClick(setAction, 'edit users')}
+                        buttonLabel="edit users"
                     >
-                        edit users
-                    </button>
-                    <div className={toggleActive('edit users')}>
-                        here you go
-                    </div>
+                        <>hear you go</>
+                    </Collapsible>
                 </li>
                 <li>
-                    <button
-                        onClick={() => handleClick(setAction, 'password reset')}
-                        className={styles.action}
+                    <Collapsible
+                        open={isOpen('password reset')}
+                        handleClick={() =>
+                            handleClick(setAction, 'password reset')
+                        }
+                        buttonLabel="edit users"
                     >
-                        reset a password
-                    </button>
-                    <div className={toggleActive('password reset')}>
-                        here you go
                         {!result.data ? (
                             <Autosuggest
                                 label={'user'}
                                 keys={['name', 'email']}
-                                options={users ?? ([] as User[])}
+                                options={users ?? []}
                                 displayMatch={match =>
                                     `${match.name} (${match.email})`
                                 }
@@ -117,20 +117,16 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                                 <Clipboard content={result.data} />
                             </div>
                         )}
-                    </div>
+                    </Collapsible>
                 </li>
                 <li>
-                    <button
-                        onClick={() =>
-                            handleClick(setAction, 'enter screenings')
-                        }
-                        className={styles.action}
+                    <Collapsible
+                        open={isOpen('enter screenings')}
+                        handleClick={() => setAction('enter screenings')}
+                        buttonLabel="enter screenings"
                     >
-                        enter screenings
-                    </button>
-                    <div className={toggleActive('enter screenings')}>
                         <MonthPicker setMonth={setMonth} />
-                    </div>
+                    </Collapsible>
                 </li>
             </ul>
         </>
