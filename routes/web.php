@@ -43,6 +43,8 @@ Route::group(['middleware' => ['can:see admin tools']], function () {
     
     Route::get('/assigned_city', 'AssignmentsController@getAssignedCity');
     Route::post('/assigned_city', 'AssignmentsController@setAssignedCity');
+
+    Route::post('/password/reset/{id}', 'Auth\ResetPasswordController@getResetLink');
 });
 
 

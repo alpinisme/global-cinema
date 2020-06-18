@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\User;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class ResetPasswordController extends Controller
@@ -27,4 +28,12 @@ class ResetPasswordController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+
+    public function getResetLink($id)
+    {
+        $user = User::findOrFail($id);
+        $token = app('auth.password.broker')->createToken($user);
+        $url = \env('APP_URL') . '/password/reset/' . $token;
+        echo $url;
+    }
 }
