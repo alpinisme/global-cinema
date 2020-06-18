@@ -26,7 +26,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     );
 
     /**
-     * add film to list of films in state
+     * add film to list of films in state;
      * if that list is null, create it with new film as only member
      * (such a state should be impossible, though)
      * @param film Film
