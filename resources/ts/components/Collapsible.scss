@@ -1,0 +1,50 @@
+$site-color: #04647c;
+
+.div {
+    margin: 1rem 5rem;
+    width: calc(100% - 10rem);
+    outline: solid $site-color 1px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    cursor: pointer;
+}
+
+.label {
+    grid-column-start: 2;
+    margin: auto;
+    font-size: 1rem;
+}
+
+.content {
+    /* css animation */
+    overflow: hidden;
+    padding: 0 1em;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+
+    &.open {
+        max-height: 500px;
+        opacity: 1;
+        padding: 15px 20px;
+    }
+}
+
+.button {
+    margin-left: auto;
+    margin-right: 3px;
+    border: none;
+}
+
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(-135deg);
+    transition: 0.2s cubic-bezier(0.46, 0.03, 0.52, 0.96);
+
+    &.open {
+        transform: rotate(45deg);
+    }
+}
