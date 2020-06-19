@@ -32,6 +32,13 @@ const ScreeningEntry = ({
 
     const maxYear = date.getUTCFullYear();
 
+    const suggestFilmsConfig = {
+        label: 'Film Title',
+        keys: ['title'],
+        options: films,
+        displayMatch: (match: Film) => `${match.title} (${match.year})`,
+    };
+
     const handleSubmit = (id: number) => {
         setFilm(old => ({ ...old, id }));
         setIsSubmissionReady(true);
@@ -64,9 +71,7 @@ const ScreeningEntry = ({
                 .then(res => res.data)
                 .then(handleSuccess)
                 .then(resetState)
-                .catch(e =>
-                    setSubmissionError(`Screening could not be saved: ${e}`)
-                );
+                .catch(e => setSubmissionError(`Screening could not be saved: ${e}`));
         }
     }
 
@@ -85,10 +90,7 @@ const ScreeningEntry = ({
 
             {theaterID && (
                 <Autosuggest
-                    label="Film Title"
-                    keys={['title']}
-                    options={films}
-                    displayMatch={match => `${match.title} (${match.year})`}
+                    config={suggestFilmsConfig}
                     handleSubmit={handleSubmit}
                     handleManualAdd={(title: string) =>
                         setFilm(old => ({ ...old, title, isNew: true }))
@@ -102,19 +104,13 @@ const ScreeningEntry = ({
                     maxYear={maxYear}
                     addFilm={addFilm}
                     handleSubmit={handleSubmit}
-                    handleValidationError={msg =>
-                        setValidationErrors(addOnce(msg))
-                    }
+                    handleValidationError={msg => setValidationErrors(addOnce(msg))}
                 />
             )}
 
-            {validationErrors.length > 0 && (
-                <ErrorBox errors={validationErrors} />
-            )}
+            {validationErrors.length > 0 && <ErrorBox errors={validationErrors} />}
 
-            {submissionError.length > 0 && (
-                <ErrorBox errors={[submissionError]} />
-            )}
+            {submissionError.length > 0 && <ErrorBox errors={[submissionError]} />}
         </>
     );
 };
@@ -136,9 +132,7 @@ const ConfirmYear = ({
                 return true;
             }
 
-            handleValidationError(
-                `Please enter a valid year between 1901 and ${maxYear}`
-            );
+            handleValidationError(`Please enter a valid year between 1901 and ${maxYear}`);
             return false;
         },
         [maxYear, handleValidationError]
@@ -162,8 +156,8 @@ const ConfirmYear = ({
 
     return (
         <div>
-            Please confirm the spelling of the title above and add the
-            film&apos;s release year below:
+            Please confirm the spelling of the title above and add the film&apos;s release year
+            below:
             <input
                 type="text"
                 required
@@ -180,9 +174,8 @@ const ConfirmYear = ({
             </button>
             {isError && (
                 <p className="err-msg">
-                    Sorry, something has gone wrong. Try refreshing the page and
-                    submitting again. If that doesn&apos;t work, please contact
-                    a site administrator
+                    Sorry, something has gone wrong. Try refreshing the page and submitting again.
+                    If that doesn&apos;t work, please contact a site administrator
                 </p>
             )}
         </div>

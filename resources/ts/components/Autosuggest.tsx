@@ -6,24 +6,19 @@ interface Identified {
 }
 
 export interface Props<A> {
-    label: string;
-    keys: string[];
-    options: A[];
-    displayMatch: (a: A) => string;
+    config: { label: string; keys: string[]; options: A[]; displayMatch: (a: A) => string };
     handleSubmit: (id: number) => void;
     handleManualAdd?: (title: string) => void;
 }
 
 function Autosuggest<A extends Identified>({
-    label,
-    keys,
-    options,
-    displayMatch,
+    config,
     handleSubmit,
     handleManualAdd,
 }: Props<A>): ReactElement {
     const [value, setValue] = useState('');
     const [matches, setMatches] = useState<A[]>([]);
+    const { label, keys, options, displayMatch } = config;
 
     // find four closest matches for user-input title in db
     useEffect(() => {
@@ -56,24 +51,19 @@ function Autosuggest<A extends Identified>({
                 />
                 {!value && (
                     <p>
-                        As you begin typing a {label.toLowerCase()}, possible
-                        matches will appear below.
+                        As you begin typing a {label.toLowerCase()}, possible matches will appear
+                        below.
                     </p>
                 )}
             </div>
 
             {value && (
                 <>
-                    {matches.length > 0 && (
-                        <p>Select the correct {label} to submit the entry.</p>
-                    )}
+                    {matches.length > 0 && <p>Select the correct {label} to submit the entry.</p>}
                     <ul className="button-list">
                         {matches.map(match => (
                             <li key={match.id}>
-                                <button
-                                    type="submit"
-                                    onClick={() => handleSubmit(match.id)}
-                                >
+                                <button type="submit" onClick={() => handleSubmit(match.id)}>
                                     {displayMatch(match)}
                                 </button>
                             </li>
@@ -82,10 +72,7 @@ function Autosuggest<A extends Identified>({
                     {handleManualAdd && (
                         <div>
                             {matches.length > 0 ? (
-                                <p>
-                                    If the correct {label.toLowerCase()} is not
-                                    listed above,{' '}
-                                </p>
+                                <p>If the correct {label.toLowerCase()} is not listed above, </p>
                             ) : (
                                 <p>Sorry, no matches found.</p>
                             )}
