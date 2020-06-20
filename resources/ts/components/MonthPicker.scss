@@ -1,0 +1,21 @@
+$margin: 0.75rem;
+$site-color: rgb(4, 100, 124);
+$button-hover: #486a72;
+
+.input {
+    margin: $margin;
+}
+
+.submit {
+    display: block;
+    margin: $margin auto;
+
+    color: white;
+    border: solid $button-hover 1px;
+    background-color: $button-hover;
+    width: 10rem;
+
+    &:hover {
+        background-color: $site-color;
+    }
+}
