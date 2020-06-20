@@ -105,7 +105,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                     <Collapsible
                         open={isOpen('password reset')}
                         handleClick={() => handleClick(setAction, 'password reset')}
-                        buttonLabel="edit users"
+                        buttonLabel="password reset"
                     >
                         {!passResetResult.data ? (
                             <Autosuggest
@@ -126,7 +126,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                 <li>
                     <Collapsible
                         open={isOpen('enter screenings')}
-                        handleClick={() => setAction('enter screenings')}
+                        handleClick={() => handleClick(setAction, 'enter screenings')}
                         buttonLabel="enter screenings"
                     >
                         <MonthPicker setMonth={setMonth} />
