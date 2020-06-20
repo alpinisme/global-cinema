@@ -1,4 +1,6 @@
 $site-color: #04647c;
+$text-color: #242c2e;
+$content-background: #f1ededd6;
 
 .div {
     margin: 1rem 5rem;
@@ -20,11 +22,16 @@ $site-color: #04647c;
     padding: 0 1em;
     max-height: 0;
     opacity: 0;
-    transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    transition: all 0.2s ease;
+    margin: -1rem auto 0 auto;
+    width: calc(100% - 10rem);
+    background-color: $content-background;
+    box-shadow: 0px 1px 4px 0px #e6e0dd;
+    color: $text-color;
 
     &.open {
         opacity: 1;
-        padding: 15px 20px;
+        padding: 3rem 0.5rem 3.5rem 0.5rem;
     }
 }
 
