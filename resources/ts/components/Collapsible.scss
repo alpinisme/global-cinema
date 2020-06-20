@@ -16,15 +16,13 @@ $site-color: #04647c;
 }
 
 .content {
-    /* css animation */
     overflow: hidden;
     padding: 0 1em;
     max-height: 0;
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
 
     &.open {
-        max-height: 500px;
         opacity: 1;
         padding: 15px 20px;
     }
