@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, ChangeEvent, FormEvent } from 'react';
-import ErrorBox from './ErrorBox';
+import ErrorBox from '../ErrorBox';
 import styles from './MonthPicker.scss';
 
 const MonthPicker = ({ setMonth }: Props): ReactElement => {

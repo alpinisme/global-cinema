@@ -1,9 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ErrorBox renders correctly 1`] = `
-<ul>
+<ul
+  className="box"
+>
   <li
-    className="err-msg"
+    className="message"
   >
     error
   </li>
