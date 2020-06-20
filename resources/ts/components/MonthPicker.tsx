@@ -48,19 +48,11 @@ const MonthPicker = ({ setMonth }: Props): ReactElement => {
     return (
         <form onSubmit={handleSubmit}>
             <label>
-                Choose a month (format MM/YYYY)
-                <input
-                    type="text"
-                    onChange={handleChange}
-                    placeholder="09/1997"
-                />
+                Choose a month (MM/YYYY)
+                <input type="text" onChange={handleChange} placeholder="09/1997" />
             </label>
             {isSubmitted && !isValid && (
-                <ErrorBox
-                    errors={[
-                        'invalid date format, make sure it matches MM/YYYY'
-                    ]}
-                />
+                <ErrorBox errors={['invalid date format, make sure it matches MM/YYYY']} />
             )}
             <input type="submit" />
         </form>
