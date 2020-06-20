@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/screenings', 'ScreeningsController');
 
     Route::resource('/films', 'FilmsController');
+    Route::resource('/cities', 'CitiesController');
 
     Route::resource('/theaters', 'TheatersController');
 
