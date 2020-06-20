@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 
-const ErrorBox = (props: Props): ReactElement => {
-    const list_items = props.errors.map(e => (
+const ErrorBox = ({ errors }: Props): ReactElement => {
+    const errList = errors.map(e => (
         <ul key={e}>
             <li className="err-msg">{e}</li>
         </ul>
     ));
 
-    return <>{list_items}</>;
+    return <>{errList}</>;
 };
 
 export default ErrorBox;
