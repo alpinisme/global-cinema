@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
+import styles from './Autosuggest.scss';
 
 interface Identified {
     id: number;
@@ -42,19 +43,17 @@ function Autosuggest<A extends Identified>({
     return (
         <>
             <div>
-                <label htmlFor={label}>{label}</label>
+                <label htmlFor={label} className={styles.label}>
+                    {label}:
+                </label>
                 <input
                     type="text"
                     name={label}
                     value={value}
                     onChange={e => setValue(e.target.value)}
+                    className={styles.input}
                 />
-                {!value && (
-                    <p>
-                        As you begin typing a {label.toLowerCase()}, possible matches will appear
-                        below.
-                    </p>
-                )}
+                {!value && <p>As you begin typing, possible matches will appear below.</p>}
             </div>
 
             {value && (
