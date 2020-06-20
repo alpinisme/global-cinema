@@ -390,7 +390,8 @@ a.button {
 }
 
 #root {
-    width: 50%;
+    width: 100%;
+    max-width: 60rem;
     margin: 0 auto 0 auto;
 }
 
@@ -471,4 +472,8 @@ p {
 .user-links a {
     margin-right: 2rem;
     color: white;
+}
+
+select {
+    margin: 0.75rem;
 }
