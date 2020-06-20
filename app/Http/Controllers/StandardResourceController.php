@@ -39,7 +39,7 @@ class StandardResourceController extends Controller
     protected $objectName = '';
 
     /**
-     * column name to order by when selecting all
+     * optional column name to order by when selecting all
      */
     protected $orderBy = '';
 
