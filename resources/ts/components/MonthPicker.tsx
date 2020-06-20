@@ -1,30 +1,17 @@
 import React, { ReactElement, useState, ChangeEvent, FormEvent } from 'react';
 import ErrorBox from './ErrorBox';
+import styles from './MonthPicker.scss';
 
 const MonthPicker = ({ setMonth }: Props): ReactElement => {
     const [isValid, setIsValid] = useState<boolean>(false);
     const [input, setInput] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const validate = (s: string): boolean => {
-        const month = s.slice(0, 2);
-        const slash = s[2];
-        const year = s.slice(3);
-
-        if (!(parseInt(month) <= 12)) {
-            return false;
-        }
-
-        if (slash != '/') {
-            return false;
-        }
-
+    const validate = (input: string): boolean => {
+        const year = parseInt(input.slice(3));
         const currentYear = new Date().getFullYear();
-        if (parseInt(year) >= 1901 && parseInt(year) <= currentYear) {
-            return true;
-        }
 
-        return false;
+        return year <= currentYear;
     };
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -48,13 +35,20 @@ const MonthPicker = ({ setMonth }: Props): ReactElement => {
     return (
         <form onSubmit={handleSubmit}>
             <label>
-                Choose a month (MM/YYYY)
-                <input type="text" onChange={handleChange} placeholder="09/1997" />
+                Choose a month:
+                <input
+                    type="text"
+                    className={styles.input}
+                    onChange={handleChange}
+                    placeholder="09/1997"
+                    pattern={'(0[1-9]|1[0-2])/(19|20)[0-9]{2}'}
+                    title={'MM/YYYY'}
+                />
             </label>
-            {isSubmitted && !isValid && (
-                <ErrorBox errors={['invalid date format, make sure it matches MM/YYYY']} />
-            )}
-            <input type="submit" />
+            {isSubmitted && !isValid && <ErrorBox errors={['Month must be from the past']} />}
+            <button type="submit" className={styles.submit}>
+                Submit
+            </button>
         </form>
     );
 };
