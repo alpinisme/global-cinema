@@ -56,3 +56,12 @@ export interface User {
     id: number;
     role: string;
 }
+
+/**
+ * get requests to `cities/` api return an array of objects with interface `City`
+ */
+export interface City {
+    name: string;
+    country: string;
+    id: number;
+}
