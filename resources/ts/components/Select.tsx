@@ -1,12 +1,6 @@
 import React, { ReactElement } from 'react';
 
-const Select = ({
-    id,
-    options,
-    value,
-    handleChange,
-    autoFocus = false,
-}: Props): ReactElement => (
+const Select = ({ id, options, value, handleChange, autoFocus = false }: Props): ReactElement => (
     <select id={id} value={value} onChange={handleChange} autoFocus={autoFocus}>
         <option disabled value="">
             Select...
@@ -23,7 +17,7 @@ const Select = ({
 export default Select;
 
 export interface Props {
-    id: string;
+    id?: string;
     options: Array<{
         value: number;
         label: string;
