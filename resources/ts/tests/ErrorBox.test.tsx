@@ -10,5 +10,7 @@ describe('ErrorBox', () => {
     });
     test('empty error array produces nothing', () => {
         const box = <ErrorBox errors={[]} />;
+        const idea = create(box).root;
+        expect(idea.children.length).toBe(0);
     });
 });
