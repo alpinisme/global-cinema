@@ -1,11 +1,9 @@
 import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
-import type { Student } from '../types/api';
+import type { Student } from '../../types/api';
 import styles from './Instructor.scss';
 
 const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
-    const [selectedStudent, setSelectedStudent] = useState<Student | null>(
-        null
-    );
+    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
     const alphabetizeByEmail = (a: Student, b: Student) => {
         const emailA = a.info.email.toLowerCase();
@@ -28,8 +26,8 @@ const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
         <>
             <h2 className={styles.margin}>Instructor Overview</h2>
             <p>
-                click on specific rows for a full list of days completed by a
-                student (at page bottom)
+                click on specific rows for a full list of days completed by a student (at page
+                bottom)
             </p>
             <table className={styles.margin}>
                 <thead className={styles.title}>
@@ -46,10 +44,7 @@ const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
                 </thead>
                 <tbody>
                     {studentData.sort(alphabetizeByEmail).map(student => (
-                        <tr
-                            key={student.info.id}
-                            onClick={() => setSelectedStudent(student)}
-                        >
+                        <tr key={student.info.id} onClick={() => setSelectedStudent(student)}>
                             <td>{student.info.name}</td>
                             <td>{student.info.email}</td>
                             <td>{student.datesCompleted.length}</td>

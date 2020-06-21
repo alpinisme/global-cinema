@@ -1,13 +1,13 @@
 import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
-import type { Film, Theater, User, City } from '../types/api';
-import Month from '../components/Month';
-import MonthPicker from '../components/MonthPicker';
-import Autosuggest from '../components/Autosuggest';
-import Clipboard from '../components/Clipboard';
-import Collapsible from '../components/Collapsible';
-import { usePostRequest } from '../utils/hooks';
+import type { Film, Theater, User, City } from '../../types/api';
+import Month from '../../components/Month';
+import MonthPicker from '../../components/MonthPicker';
+import Autosuggest from '../../components/Autosuggest';
+import Clipboard from '../../components/Clipboard';
+import Collapsible from '../../components/Collapsible';
+import { usePostRequest } from '../../utils/hooks';
 import styles from './Admin.scss';
-import Select from '../components/Select';
+import Select from '../../components/Select';
 
 type Action = 'edit users' | 'password reset' | 'enter screenings';
 
