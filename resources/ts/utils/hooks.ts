@@ -31,6 +31,30 @@ export function usePostRequest<A, B>(): [
     return [res, makePostRequest];
 }
 
+export function usePutRequest<A, B>(): [
+    PostRequestResponse<B>,
+    (url: string, postData: A) => void
+] {
+    const [res, setRes] = useState<PostRequestResponse<B>>({
+        data: null,
+        error: null,
+        isLoading: false,
+    });
+
+    const makePutRequest = (url: string, postData: A) => {
+        setRes(prevState => ({ ...prevState, isLoading: true }));
+        axios
+            .put(url, postData)
+            .then(res => {
+                setRes({ data: res.data, isLoading: false, error: null });
+            })
+            .catch(error => {
+                setRes({ data: null, isLoading: false, error });
+            });
+    };
+    return [res, makePutRequest];
+}
+
 export function useGetRequest<A>(
     url: string,
     setErrors: (err: string) => void
