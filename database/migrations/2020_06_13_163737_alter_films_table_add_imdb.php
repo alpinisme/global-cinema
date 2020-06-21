@@ -14,7 +14,7 @@ class AlterFilmsTableAddImdb extends Migration
     public function up()
     {
         Schema::table('films', function (Blueprint $table) {
-            $table->bigInteger('imdb')->unsigned()->nullable()->unique();
+            $table->string('imdb', 10)->unsigned()->nullable()->unique();
         });
     }
 
