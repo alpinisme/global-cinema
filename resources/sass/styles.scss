@@ -20,7 +20,7 @@ body {
 }
 
 body {
-    background: white;
+    background: $background;
     font-family: 'Lato', sans-serif;
     color: $main;
     display: flex;
@@ -432,18 +432,18 @@ a.button {
     margin-bottom: 2rem;
 }
 
-.box select,
-.box input {
-    width: 60%;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-}
+// .box select,
+// .box input {
+//     // width: 60%;
+//     margin-top: 0.5rem;
+//     margin-bottom: 0.5rem;
+// }
 
-.box label {
-    text-align: right;
-    margin-right: 0.5rem;
-    width: 5rem;
-}
+// .box label {
+//     text-align: right;
+//     margin-right: 0.5rem;
+//     width: 5rem;
+// }
 
 button.delete {
     padding: 0;
@@ -457,16 +457,13 @@ button.delete {
 .already-saved {
     list-style-type: none;
     padding: none;
+    margin-top: 1rem;
+    text-align: left;
 }
 
 label,
 p {
     font-size: 1rem;
-}
-
-.already-saved {
-    margin-top: 1rem;
-    text-align: left;
 }
 
 .user-links a {
