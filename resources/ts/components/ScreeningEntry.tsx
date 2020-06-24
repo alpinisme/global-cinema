@@ -1,21 +1,15 @@
-import React, { useState, useCallback, ReactElement } from 'react';
+import React, { useState, useCallback, ReactElement, useEffect } from 'react';
 import axios from 'axios';
 import ErrorBox from './ErrorBox';
 import Select from './Select';
 import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
 import type { Film, Theater, Screening } from '../types/api';
+import { useCityContext } from '../contexts/CityContext';
 
-const defaultCity = 3;
+// const defaultCity = { id: 3 };
 
-const ScreeningEntry = ({
-    theaters,
-    films,
-    date,
-    addFilm,
-    handleSuccess,
-    city = defaultCity,
-}: Props): ReactElement => {
+const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }: Props): ReactElement => {
     const initialFilmState = {
         id: 0,
         title: '',
@@ -26,9 +20,10 @@ const ScreeningEntry = ({
 
     const [theaterID, setTheaterID] = useState('');
     const [film, setFilm] = useState(initialFilmState);
+
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
     const [submissionError, setSubmissionError] = useState('');
-    const [isSubmissionReady, setIsSubmissionReady] = useState(false);
+    const [city] = useCityContext();
 
     const maxYear = date.getUTCFullYear();
 
@@ -39,48 +34,54 @@ const ScreeningEntry = ({
         displayMatch: (match: Film) => `${match.title} (${match.year})`,
     };
 
-    const handleSubmit = (id: number) => {
-        setFilm(old => ({ ...old, id }));
-        setIsSubmissionReady(true);
-    };
+    // const handleSubmit = (id: number) => {
+    //     if (theaterID) {
+    //         setScreening({
+    //             date: date.toISOString().slice(0, 10),
+    //             city_id: city?.id ?? 0,
+    //             theater_id: parseInt(theaterID),
+    //             film_id: id,
+    //         });
+    //     } else {
+    //         setValidationErrors(addOnce('Theater is required'));
+    //     }
+    //     // setFilm(old => ({ ...old, id }));
+    //     // setIsSubmissionReady(true);
+    // };
 
-    const resetState = () => {
-        setTheaterID('');
-        setFilm(initialFilmState);
-        setValidationErrors([]);
-        setSubmissionError('');
-    };
+    const handleSubmit = useCallback(
+        id => {
+            if (!city || !theaterID) {
+                throw new Error('submission requires theaterID and city');
+            }
+            setTheaterID('');
+            setFilm(initialFilmState);
+            setValidationErrors([]);
+            setSubmissionError('');
 
-    // submit screening if ready
-    if (isSubmissionReady) {
-        setIsSubmissionReady(false);
-        setSubmissionError('');
-
-        if (theaterID == '') {
-            setValidationErrors(addOnce('Theater is required'));
-        } else {
-            const data: Screening = {
-                film_id: film.id,
-                theater_id: parseInt(theaterID),
+            const screening = {
                 date: date.toISOString().slice(0, 10),
-                city_id: city,
+                city_id: city ? city.id : 0,
+                theater_id: parseInt(theaterID),
+                film_id: id,
             };
-
             axios
-                .post('/screenings', data)
+                .post('/screenings', screening)
                 .then(res => res.data)
                 .then(handleSuccess)
-                .then(resetState)
                 .catch(e => setSubmissionError(`Screening could not be saved: ${e}`));
-        }
-    }
+        },
+        [handleSuccess, initialFilmState, date, theaterID, city]
+    );
 
     return (
         <>
             <label htmlFor="theater-select">Theater</label>
             <Select
                 id="theater-select"
-                options={theaters.map(t => ({ label: t.name, value: t.id }))}
+                options={theaters
+                    .filter(t => t.city_id == city?.id)
+                    .map(t => ({ label: t.name, value: t.id }))}
                 value={theaterID}
                 handleChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                     setTheaterID(e.target.value)
@@ -199,7 +200,6 @@ export interface Props {
     theaters: Theater[];
     films: Film[];
     date: Date;
-    city?: number;
     addFilm: (film: Film) => void;
     handleSuccess: (screening: Screening) => void;
 }

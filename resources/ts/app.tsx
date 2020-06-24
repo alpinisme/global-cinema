@@ -6,6 +6,7 @@ import AdminPage from './pages/Admin';
 import { addOnce } from './utils/functions';
 import Student from './pages/Student';
 import { useGetRequest } from './utils/hooks';
+import { CityContextProvider } from './contexts/CityContext';
 
 const App = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
@@ -33,13 +34,21 @@ const App = (): ReactElement => {
             return <div>...loading</div>;
 
         case 'user':
-            return <Student useGetRequest={useStatefulGetRequest} />;
+            return (
+                <CityContextProvider>
+                    <Student useGetRequest={useStatefulGetRequest} />
+                </CityContextProvider>
+            );
 
         case 'instructor':
             return <InstructorPage useGetRequest={useStatefulGetRequest} />;
 
         case 'admin':
-            return <AdminPage useGetRequest={useStatefulGetRequest} />;
+            return (
+                <CityContextProvider>
+                    <AdminPage useGetRequest={useStatefulGetRequest} />
+                </CityContextProvider>
+            );
 
         default:
             setErrors(addOnce("couldn't recognize user role"));

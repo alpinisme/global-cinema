@@ -5,6 +5,7 @@ import { usePutRequest } from '../utils/hooks';
 
 const UserEdit = ({ users }: Props): ReactElement => {
     const [user, setUser] = useState<User | null>(null);
+    const [isNewUser, setIsNewUser] = useState(false);
     const [userUpdateResult, makeUserUpdateRequest] = usePutRequest<User, string>();
 
     /**
@@ -21,8 +22,14 @@ const UserEdit = ({ users }: Props): ReactElement => {
         options: users ?? [],
     };
 
-    if (!user) {
-        return <Autosuggest config={suggestUsersConfig} handleSubmit={handleSelect} />;
+    if (!user && !isNewUser) {
+        return (
+            <Autosuggest
+                config={suggestUsersConfig}
+                handleSubmit={handleSelect}
+                handleManualAdd={() => setIsNewUser(true)}
+            />
+        );
     }
 
     return <div></div>;
