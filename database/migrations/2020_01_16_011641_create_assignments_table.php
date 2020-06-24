@@ -22,6 +22,10 @@ class CreateAssignmentsTable extends Migration
             $table->foreign('student_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
+
+            $table->foreign('instructor_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
         });
     }
 
