@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, ChangeEvent, FormEvent, useContext } from 'react';
+import React, { ReactElement, useState, ChangeEvent, FormEvent } from 'react';
 import ErrorBox from '../ErrorBox';
 import styles from './MonthPicker.scss';
 

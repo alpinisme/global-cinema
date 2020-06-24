@@ -1,4 +1,4 @@
-import React, { useState, useCallback, ReactElement, useEffect } from 'react';
+import React, { useState, useCallback, ReactElement } from 'react';
 import axios from 'axios';
 import ErrorBox from './ErrorBox';
 import Select from './Select';

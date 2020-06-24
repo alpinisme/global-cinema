@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, ChangeEvent } from 'react';
+import React, { ReactElement, ChangeEvent } from 'react';
 import { City } from '../types/api';
 import Select from './Select';
 import MonthPicker from './MonthPicker';
