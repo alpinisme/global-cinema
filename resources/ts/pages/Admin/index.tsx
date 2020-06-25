@@ -6,8 +6,8 @@ import styles from './Admin.scss';
 import UserEdit from '../../components/UserEdit';
 import PasswordReset from '../../components/PasswordReset';
 import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
-import AdminContext, { AdminContextData } from '../../contexts/AdminContext';
-import ScreeningsContext, { ScreeningsContextData } from '../../contexts/ScreeningsContext';
+import AdminContext from '../../contexts/AdminContext';
+import ScreeningsContext from '../../contexts/ScreeningsContext';
 
 type Action = 'edit users' | 'password reset' | 'enter screenings';
 
