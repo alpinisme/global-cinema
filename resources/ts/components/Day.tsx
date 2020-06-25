@@ -1,18 +1,14 @@
-import React, { useEffect, useState, ReactElement } from 'react';
+import React, { useEffect, useState, ReactElement, useContext } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
 import { toDateString } from '../utils/functions';
-import { Film, Theater, Screening as IScreening } from '../types/api';
+import { Screening } from '../types/api';
+import AdminContext from '../contexts/AdminContext';
 
-const Day = ({
-    date,
-    theaters,
-    films,
-    cancel,
-    addFilm,
-}: DayProps): ReactElement => {
-    const [screenings, setScreenings] = useState<IScreening[]>([]);
+const Day = ({ date, cancel }: DayProps): ReactElement => {
+    const [screenings, setScreenings] = useState<Screening[]>([]);
+    const { films, theaters } = useContext(AdminContext);
 
     /**
      * sends request to server to destroy record at `id`
@@ -24,12 +20,7 @@ const Day = ({
     const destroy = (id: number, index: number) => {
         axios
             .delete(`/screenings/${id}`)
-            .then(() =>
-                setScreenings(old => [
-                    ...old.slice(0, index),
-                    ...old.slice(index + 1),
-                ])
-            )
+            .then(() => setScreenings(old => [...old.slice(0, index), ...old.slice(index + 1)]))
             .catch(console.log);
     };
 
@@ -56,10 +47,7 @@ const Day = ({
                 <h2>Save new screening</h2>
 
                 <ScreeningEntry
-                    theaters={theaters}
-                    films={films}
                     date={date}
-                    addFilm={addFilm}
                     handleSuccess={data => setScreenings(old => [data, ...old])}
                 />
             </div>
@@ -72,9 +60,7 @@ const Day = ({
                             <SavedScreening
                                 key={data.id}
                                 data={{ screening: data, films, theaters }}
-                                handleDelete={() =>
-                                    destroy(data.id as number, index)
-                                }
+                                handleDelete={() => destroy(data.id as number, index)}
                             />
                         ))}
                     </ul>
@@ -86,10 +72,7 @@ const Day = ({
 
 export interface DayProps {
     date: Date;
-    theaters: Theater[];
-    films: Film[];
     cancel: () => void;
-    addFilm: (film: Film) => void;
 }
 
 export default Day;

@@ -1,11 +1,13 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { User } from '../types/api';
 import Autosuggest from './Autosuggest';
 import Clipboard from './Clipboard';
 import { usePostRequest } from '../utils/hooks';
+import AdminContext from '../contexts/AdminContext';
 
-const PasswordReset = ({ users }: Props): ReactElement => {
+const PasswordReset = (): ReactElement => {
     const [passResetResult, makePassResetRequest] = usePostRequest<string, string>();
+    const { users } = useContext(AdminContext);
 
     const suggestUsersConfig = {
         label: 'User',
@@ -30,9 +32,5 @@ const PasswordReset = ({ users }: Props): ReactElement => {
         />
     );
 };
-
-interface Props {
-    users: User[];
-}
 
 export default PasswordReset;

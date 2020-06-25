@@ -1,13 +1,12 @@
 import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
 import type { Film, Theater, User, City } from '../../types/api';
 import Month from '../../components/Month';
-import MonthPicker from '../../components/MonthPicker';
 import Collapsible from '../../components/Collapsible';
 import styles from './Admin.scss';
-import Select from '../../components/Select';
 import UserEdit from '../../components/UserEdit';
 import PasswordReset from '../../components/PasswordReset';
 import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
+import AdminContext, { AdminContextData } from '../../contexts/AdminContext';
 
 type Action = 'edit users' | 'password reset' | 'enter screenings';
 
@@ -66,50 +65,60 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
      */
     const isOpen = (el: Action) => el == action;
 
-    return month ? (
-        <Month
-            month={month}
-            films={films ?? []}
-            theaters={theaters ?? []}
-            addFilm={addFilm}
-            cancel={() => setMonth(null)}
-        />
+    const context = {
+        films,
+        theaters,
+        users,
+        cities,
+        addFilm,
+    };
+
+    const isContextReady = Boolean(cities && theaters && users && films);
+
+    return isContextReady ? (
+        <AdminContext.Provider value={context as AdminContextData}>
+            {month ? (
+                <Month month={month} cancel={() => setMonth(null)} />
+            ) : (
+                <>
+                    <h2>What would you like to do?</h2>
+
+                    <ul className={styles.list}>
+                        <li>
+                            <Collapsible
+                                open={isOpen('edit users')}
+                                handleClick={() => handleClick(setAction, 'edit users')}
+                                label="edit users"
+                            >
+                                <UserEdit />
+                            </Collapsible>
+                        </li>
+
+                        <li>
+                            <Collapsible
+                                open={isOpen('password reset')}
+                                handleClick={() => handleClick(setAction, 'password reset')}
+                                label="password reset"
+                            >
+                                <PasswordReset />
+                            </Collapsible>
+                        </li>
+
+                        <li>
+                            <Collapsible
+                                open={isOpen('enter screenings')}
+                                handleClick={() => handleClick(setAction, 'enter screenings')}
+                                label="enter screenings"
+                            >
+                                <ScreeningEntryPortal setMonth={setMonth} />
+                            </Collapsible>
+                        </li>
+                    </ul>
+                </>
+            )}
+        </AdminContext.Provider>
     ) : (
-        <>
-            <h2>What would you like to do?</h2>
-
-            <ul className={styles.list}>
-                <li>
-                    <Collapsible
-                        open={isOpen('edit users')}
-                        handleClick={() => handleClick(setAction, 'edit users')}
-                        label="edit users"
-                    >
-                        <UserEdit users={users ?? []} />
-                    </Collapsible>
-                </li>
-
-                <li>
-                    <Collapsible
-                        open={isOpen('password reset')}
-                        handleClick={() => handleClick(setAction, 'password reset')}
-                        label="password reset"
-                    >
-                        <PasswordReset users={users ?? []} />
-                    </Collapsible>
-                </li>
-
-                <li>
-                    <Collapsible
-                        open={isOpen('enter screenings')}
-                        handleClick={() => handleClick(setAction, 'enter screenings')}
-                        label="enter screenings"
-                    >
-                        <ScreeningEntryPortal cities={cities ?? []} setMonth={setMonth} />
-                    </Collapsible>
-                </li>
-            </ul>
-        </>
+        <div>...loading</div>
     );
 };
 

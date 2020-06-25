@@ -1,11 +1,14 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useContext } from 'react';
 import { User } from '../types/api';
 import Autosuggest from './Autosuggest';
 import { usePutRequest } from '../utils/hooks';
+import AdminContext from '../contexts/AdminContext';
 
-const UserEdit = ({ users }: Props): ReactElement => {
+const UserEdit = (): ReactElement => {
     const [user, setUser] = useState<User | null>(null);
     const [isNewUser, setIsNewUser] = useState(false);
+
+    const { users } = useContext(AdminContext);
     const [userUpdateResult, makeUserUpdateRequest] = usePutRequest<User, string>();
 
     /**
@@ -34,9 +37,5 @@ const UserEdit = ({ users }: Props): ReactElement => {
 
     return <div></div>;
 };
-
-interface Props {
-    users: User[];
-}
 
 export default UserEdit;

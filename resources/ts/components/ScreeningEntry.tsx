@@ -1,31 +1,26 @@
-import React, { useState, useCallback, ReactElement } from 'react';
+import React, { useState, useCallback, ReactElement, useContext } from 'react';
 import axios from 'axios';
 import ErrorBox from './ErrorBox';
 import Select from './Select';
 import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
-import type { Film, Theater, Screening } from '../types/api';
+import type { Film, Screening, City } from '../types/api';
 import { useCityContext } from '../contexts/CityContext';
+import AdminContext from '../contexts/AdminContext';
 
-// const defaultCity = { id: 3 };
+const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
+    const { films, theaters } = useContext(AdminContext);
+    const [city] = useCityContext() as City[];
+    const [newTitle, setNewTitle] = useState<string | null>(null);
 
-const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }: Props): ReactElement => {
-    const initialFilmState = {
-        id: 0,
-        title: '',
-        year: 0,
-        isNew: false,
-        matches: [],
-    } as FilmSuggestion;
-
-    const [theaterID, setTheaterID] = useState('');
-    const [film, setFilm] = useState(initialFilmState);
-
-    const [validationErrors, setValidationErrors] = useState<string[]>([]);
     const [submissionError, setSubmissionError] = useState('');
-    const [city] = useCityContext();
 
-    const maxYear = date.getUTCFullYear();
+    const init = {
+        date: date.toISOString().slice(0, 10),
+        city_id: city.id,
+    };
+
+    const [screening, setScreening] = useState<Partial<Screening>>(init);
 
     const suggestFilmsConfig = {
         label: 'Film Title',
@@ -34,44 +29,26 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }: Props
         displayMatch: (match: Film) => `${match.title} (${match.year})`,
     };
 
-    // const handleSubmit = (id: number) => {
-    //     if (theaterID) {
-    //         setScreening({
-    //             date: date.toISOString().slice(0, 10),
-    //             city_id: city?.id ?? 0,
-    //             theater_id: parseInt(theaterID),
-    //             film_id: id,
-    //         });
-    //     } else {
-    //         setValidationErrors(addOnce('Theater is required'));
-    //     }
-    //     // setFilm(old => ({ ...old, id }));
-    //     // setIsSubmissionReady(true);
-    // };
-
     const handleSubmit = useCallback(
         id => {
-            if (!city || !theaterID) {
-                throw new Error('submission requires theaterID and city');
+            if (!screening.city_id || !screening.theater_id) {
+                throw new Error('submission requires theater and city');
             }
-            setTheaterID('');
-            setFilm(initialFilmState);
-            setValidationErrors([]);
+            setScreening(init);
             setSubmissionError('');
 
-            const screening = {
-                date: date.toISOString().slice(0, 10),
-                city_id: city ? city.id : 0,
-                theater_id: parseInt(theaterID),
+            const data = {
+                ...screening,
                 film_id: id,
             };
+
             axios
-                .post('/screenings', screening)
+                .post('/screenings', data)
                 .then(res => res.data)
                 .then(handleSuccess)
                 .catch(e => setSubmissionError(`Screening could not be saved: ${e}`));
         },
-        [handleSuccess, initialFilmState, date, theaterID, city]
+        [handleSuccess, init, screening]
     );
 
     return (
@@ -82,49 +59,35 @@ const ScreeningEntry = ({ theaters, films, date, addFilm, handleSuccess }: Props
                 options={theaters
                     .filter(t => t.city_id == city?.id)
                     .map(t => ({ label: t.name, value: t.id }))}
-                value={theaterID}
+                value={screening.theater_id?.toString() ?? ''}
                 handleChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                    setTheaterID(e.target.value)
+                    setScreening(old => ({ ...old, theater_id: parseInt(e.target.value) }))
                 }
                 autoFocus={true}
             />
 
-            {theaterID && (
+            {screening.theater_id && (
                 <Autosuggest
                     config={suggestFilmsConfig}
                     handleSubmit={handleSubmit}
-                    handleManualAdd={(title: string) =>
-                        setFilm(old => ({ ...old, title, isNew: true }))
-                    }
+                    handleManualAdd={setNewTitle}
                 />
             )}
 
-            {film.isNew && (
-                <ConfirmYear
-                    film={film.title}
-                    maxYear={maxYear}
-                    addFilm={addFilm}
-                    handleSubmit={handleSubmit}
-                    handleValidationError={msg => setValidationErrors(addOnce(msg))}
-                />
-            )}
+            {newTitle && <ConfirmYear film={newTitle} handleSubmit={handleSubmit} date={date} />}
 
-            {validationErrors.length > 0 && <ErrorBox errors={validationErrors} />}
-
-            {submissionError.length > 0 && <ErrorBox errors={[submissionError]} />}
+            {submissionError && <ErrorBox errors={[submissionError]} />}
         </>
     );
 };
 
-const ConfirmYear = ({
-    film,
-    handleSubmit,
-    handleValidationError,
-    maxYear,
-    addFilm,
-}: ConfirmYearProps) => {
+const ConfirmYear = ({ date, film, handleSubmit }: ConfirmYearProps) => {
     const [year, setYear] = useState<string>('');
     const [isError, setIsError] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<string[]>([]);
+    const { addFilm } = useContext(AdminContext);
+
+    const maxYear = date.getUTCFullYear();
 
     const validate = useCallback(
         (input: string): boolean => {
@@ -133,10 +96,10 @@ const ConfirmYear = ({
                 return true;
             }
 
-            handleValidationError(`Please enter a valid year between 1901 and ${maxYear}`);
+            setValidationErrors(addOnce(`Please enter a valid year between 1901 and ${maxYear}`));
             return false;
         },
-        [maxYear, handleValidationError]
+        [maxYear]
     );
 
     const handleClick = useCallback(() => {
@@ -179,28 +142,19 @@ const ConfirmYear = ({
                     If that doesn&apos;t work, please contact a site administrator
                 </p>
             )}
+            {validationErrors.length > 0 && <ErrorBox errors={validationErrors} />}
         </div>
     );
 };
 
-interface FilmSuggestion extends Film {
-    isNew: boolean;
-    matches: Film[];
-}
-
 interface ConfirmYearProps {
     film: string;
     handleSubmit: (a: number) => void;
-    handleValidationError: (msg: string) => void;
-    maxYear: number;
-    addFilm: (f: Film) => void;
+    date: Date;
 }
 
 export interface Props {
-    theaters: Theater[];
-    films: Film[];
     date: Date;
-    addFilm: (film: Film) => void;
     handleSuccess: (screening: Screening) => void;
 }
 

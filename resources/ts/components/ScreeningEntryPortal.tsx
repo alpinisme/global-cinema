@@ -1,11 +1,12 @@
-import React, { ReactElement, ChangeEvent } from 'react';
-import { City } from '../types/api';
+import React, { ReactElement, ChangeEvent, useContext } from 'react';
 import Select from './Select';
 import MonthPicker from './MonthPicker';
 import { useCityContext } from '../contexts/CityContext';
+import AdminContext from '../contexts/AdminContext';
 
-const ScreeningEntryPortal = ({ cities, setMonth }: Props): ReactElement => {
+const ScreeningEntryPortal = ({ setMonth }: Props): ReactElement => {
     const [city, setCity] = useCityContext();
+    const { cities } = useContext(AdminContext);
 
     const selectedCity = city ? city.id.toString() : '';
 
@@ -34,7 +35,6 @@ const ScreeningEntryPortal = ({ cities, setMonth }: Props): ReactElement => {
 };
 
 interface Props {
-    cities: City[];
     setMonth: (month: string) => void;
 }
 
