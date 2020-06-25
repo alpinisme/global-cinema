@@ -4,13 +4,13 @@ rm -rf $HOME/CWL207/node_modules
 
 echo "Installing fresh node modules"
 
-npm install
+npm install --quiet --no-progress
 
 echo "Building app"
 
-npm run prod
+npm run -s prod
 
 echo "Copying files to public directory"
 
-cp -r $HOME/CWL207/public/js/ $HOME/public_html/js
-cp -r $HOME/CWL207/public/css/ $HOME/public_html/css
+cp -r $HOME/CWL207/public/js/. $HOME/public_html/js
+cp -r $HOME/CWL207/public/css/. $HOME/public_html/css
