@@ -36,6 +36,7 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
             }
             setScreening(init);
             setSubmissionError('');
+            setNewTitle(null);
 
             const data = {
                 ...screening,
@@ -130,7 +131,10 @@ const ConfirmYear = ({ date, film, handleSubmit }: ConfirmYearProps) => {
                 value={year}
                 onChange={e => setYear(e.target.value)}
                 onKeyPress={e => {
-                    if (e.key === 'Enter') handleClick();
+                    if (e.key === 'Enter') {
+                        handleClick();
+                        setIsError(false);
+                    }
                 }}
             />
             <button type="submit" onClick={handleClick}>
