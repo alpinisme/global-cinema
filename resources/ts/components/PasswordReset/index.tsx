@@ -1,9 +1,12 @@
 import React, { ReactElement, useContext } from 'react';
-import { User } from '../types/api';
-import Autosuggest from './Autosuggest';
-import Clipboard from './Clipboard';
-import { usePostRequest } from '../utils/hooks';
-import AdminContext from '../contexts/AdminContext';
+import { User } from '../../types/api';
+import Autosuggest from '../Autosuggest';
+import Clipboard from '../Clipboard';
+import { usePostRequest } from '../../utils/hooks';
+import AdminContext from '../../contexts/AdminContext';
+import styles from './PasswordReset.scss';
+
+// TODO: allow more than one password reset (add action to button)
 
 const PasswordReset = (): ReactElement => {
     const [passResetResult, makePassResetRequest] = usePostRequest<string, string>();
@@ -21,6 +24,7 @@ const PasswordReset = (): ReactElement => {
             <>
                 Reset link:
                 <Clipboard content={passResetResult.data} />
+                <button className={styles.reset}>reset another password?</button>
             </>
         );
     }

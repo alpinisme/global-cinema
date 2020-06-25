@@ -36,7 +36,6 @@ const Clipboard = ({ content }: Props): ReactElement => {
                     )}
                 </button>
             </div>
-            {isCopied && <button className={styles.reset}>reset another password?</button>}
         </>
     );
 };
