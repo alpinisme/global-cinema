@@ -4,6 +4,7 @@ interface CssExports {
   'button': string;
   'container': string;
   'icon': string;
+  'reset': string;
   'textArea': string;
 }
 export const cssExports: CssExports;
