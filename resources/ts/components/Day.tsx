@@ -4,11 +4,11 @@ import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
 import { toDateString } from '../utils/functions';
 import { Screening } from '../types/api';
-import AdminContext from '../contexts/AdminContext';
+import ScreeningsContext from '../contexts/ScreeningsContext';
 
 const Day = ({ date, cancel }: DayProps): ReactElement => {
     const [screenings, setScreenings] = useState<Screening[]>([]);
-    const { films, theaters } = useContext(AdminContext);
+    const { films, theaters } = useContext(ScreeningsContext);
 
     /**
      * sends request to server to destroy record at `id`

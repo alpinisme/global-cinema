@@ -28,11 +28,7 @@ const finishMonth = (date: Date) => {
 const createDateRange = (start: Date, end: Date) => {
     const current = new Date(start);
     const range = [] as Date[];
-    for (
-        const d = new Date(current);
-        d <= end;
-        d.setUTCDate(d.getUTCDate() + 1)
-    ) {
+    for (const d = new Date(current); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
         range.push(new Date(d));
     }
     return range;
@@ -50,9 +46,7 @@ const DayPicker = ({ month, handleClick }: Props): ReactElement => {
             <ul className="button-list">
                 {range.map(date => (
                     <li key={date.toString()}>
-                        <button onClick={() => handleClick(date)}>
-                            {toDateString(date)}
-                        </button>
+                        <button onClick={() => handleClick(date)}>{toDateString(date)}</button>
                     </li>
                 ))}
             </ul>

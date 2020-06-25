@@ -6,10 +6,10 @@ import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
 import type { Film, Screening, City } from '../types/api';
 import { useCityContext } from '../contexts/CityContext';
-import AdminContext from '../contexts/AdminContext';
+import ScreeningsContext from '../contexts/ScreeningsContext';
 
 const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
-    const { films, theaters } = useContext(AdminContext);
+    const { films, theaters } = useContext(ScreeningsContext);
     const [city] = useCityContext() as City[];
     const [newTitle, setNewTitle] = useState<string | null>(null);
 
@@ -85,7 +85,7 @@ const ConfirmYear = ({ date, film, handleSubmit }: ConfirmYearProps) => {
     const [year, setYear] = useState<string>('');
     const [isError, setIsError] = useState(false);
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
-    const { addFilm } = useContext(AdminContext);
+    const { addFilm } = useContext(ScreeningsContext);
 
     const maxYear = date.getUTCFullYear();
 

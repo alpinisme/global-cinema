@@ -1,6 +1,7 @@
 import React, { ReactElement, Dispatch, SetStateAction } from 'react';
 import Month from '../components/Month';
 import type { Film, Theater } from '../types/api';
+import ScreeningsContext from '../contexts/ScreeningsContext';
 
 const Student = ({ useGetRequest }: Props): ReactElement => {
     const [films, setFilms] = useGetRequest<Film[]>(
@@ -18,13 +19,16 @@ const Student = ({ useGetRequest }: Props): ReactElement => {
         e => `Assignment could not be loaded: ${e}`
     );
 
+    const context = {
+        theaters: theaters ?? [],
+        films: films ?? [],
+        addFilm: film => setFilms(old => (old ? [film, ...old] : [film])),
+    };
+
     return assignment ? (
-        <Month
-            month={assignment}
-            theaters={theaters ?? []}
-            films={films ?? []}
-            addFilm={film => setFilms(old => (old ? [film, ...old] : [film]))}
-        />
+        <ScreeningsContext.Provider value={context}>
+            <Month month={assignment} />
+        </ScreeningsContext.Provider>
     ) : (
         <div> ...loading</div>
     );
