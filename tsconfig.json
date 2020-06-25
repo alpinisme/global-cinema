@@ -12,6 +12,7 @@
         "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
         "removeComments": true /* Do not emit comments to output. */,
         "strict": true /* Enable all strict type-checking options. */,
+        "noImplicitAny": false,
         "outDir": "public" /* Redirect output structure to the directory. */,
         "typeRoots": ["node_modules/@types"] /* List of folders to include type definitions from. */
     },
