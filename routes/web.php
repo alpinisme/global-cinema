@@ -11,6 +11,8 @@
 |
 */
 
+use App\Http\Controllers\CitiesController;
+
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', function () {
         return view('app');
@@ -37,6 +39,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/map/{city}/{date}', 'ScreeningsController@geoJSON');
 });
 
+
+Route::get('/map', 'ScreeningsController@map');
+Route::get('/map/{city}/{date}', 'ScreeningsController@geoJSON');
+Route::get('/cities', 'CitiesController@index');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('/films', 'FilmsController');
+    Route::resource('/cities', 'CitiesController', ['except' => 'index']);
+
+    Route::resource('/theaters', 'TheatersController');
+});
 
 Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::get('/admin', 'PermissionsController@index');
