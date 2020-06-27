@@ -33,6 +33,8 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('/instructor', 'InstructorController@index');
+    Route::get('/map', 'ScreeningsController@map');
+    Route::get('/map/{city}/{date}', 'ScreeningsController@geoJSON');
 });
 
 

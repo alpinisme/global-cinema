@@ -49,11 +49,12 @@ class StandardResourceController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->wantsJson()) {
-            return $this->orderBy ? $this->model::orderBy($this->orderBy)->get() : $this->model::all();
-        }
-        $resource = $this->model;
-        return view('/stdResources/index', compact('resource'));
+        return $this->orderBy ? $this->model::orderBy($this->orderBy)->get() : $this->model::all();
+        // if ($request->wantsJson()) {
+        //     return $this->orderBy ? $this->model::orderBy($this->orderBy)->get() : $this->model::all();
+        // }
+        // $resource = $this->model;
+        // return view('/stdResources/index', compact('resource'));
     }
 
 
