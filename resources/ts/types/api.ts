@@ -64,4 +64,31 @@ export interface City {
     name: string;
     country: string;
     id: number;
+    lat: number;
+    lng: number;
+    zoom: number;
+}
+
+export interface ScreeningsGeoJSON {
+    type: string;
+    name: string;
+    crs: {
+        type: string;
+        properties: {
+            name: string;
+        };
+    };
+    features: Array<{
+        type: string;
+        geometry: {
+            type: string;
+            coordinates: [number, number];
+        };
+        properties: {
+            theater: string;
+            title: string;
+            language: string;
+            country: string;
+        };
+    }>;
 }
