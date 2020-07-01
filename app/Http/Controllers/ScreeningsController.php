@@ -9,12 +9,15 @@ use DB;
 class ScreeningsController extends StandardResourceController
 {
     protected $model = Screening::class;
+
     protected $fields = [
         'date' => 'required',
         'theater_id' => 'required',
-        'film_id' => 'required'
+        'film_id' => 'required',
     ];
+
     protected $objectName = 'screening';
+
     protected $tableName = 'screenings';
 
     public function index(Request $request)
@@ -23,12 +26,14 @@ class ScreeningsController extends StandardResourceController
             return $this->authorizedScreenings();
         }
         $screenings = $this->authorizedScreenings();
+
         return view('screenings/index', compact('screenings'));
     }
 
     public function create()
     {
         $screenings = $this->authorizedScreenings();
+
         return view('screenings/create', compact('screenings'));
     }
 
@@ -52,40 +57,39 @@ class ScreeningsController extends StandardResourceController
                     ->where('theaters.city_id', '=', $city)
                     ->get();
 
-
         // format data according to geoJSON standard
         $features = [];
-        
+
         foreach ($screenings as $screening) {
             $properties = [
-                'theater_name' => $screening->name,
-                'film_name' => $screening->title,
-                'film_language' => $screening->language,
+                'theater' => $screening->name,
+                'title' => $screening->title,
+                'language' => $screening->language,
             ];
-                        
+
             $feature = [];
-            $feature["type"] = "Feature";
-            $feature["properties"] = $properties;
-            $feature["geometry"] = [
-                            "type" => "Point",
-                            "coordinates" => [
-                                $screening->lng,
-                                $screening->lat
-                                ]
-                          ];
-                        
+            $feature['type'] = 'Feature';
+            $feature['properties'] = $properties;
+            $feature['geometry'] = [
+                'type' => 'Point',
+                'coordinates' => [
+                    $screening->lng,
+                    $screening->lat,
+                ],
+            ];
+
             $features[] = $feature;
         }
-                     
+
         $crs = [];
-        $crs["type"] = "name";
-        $crs["properties"] = ["name" => "urn:ogc:def:crs:OGC:1.3:CRS84"];
-                    
+        $crs['type'] = 'name';
+        $crs['properties'] = ['name' => 'urn:ogc:def:crs:OGC:1.3:CRS84'];
+
         $geoJSON = [];
-        $geoJSON["type"] = "FeatureCollection";
-        $geoJSON["name"] = $date;
-        $geoJSON["crs"] = $crs;
-        $geoJSON["features"] = $features;
+        $geoJSON['type'] = 'FeatureCollection';
+        $geoJSON['name'] = $date;
+        $geoJSON['crs'] = $crs;
+        $geoJSON['features'] = $features;
 
         return $geoJSON;
     }
@@ -110,6 +114,7 @@ class ScreeningsController extends StandardResourceController
         if ($user->isAdmin()) {
             return Screening::all();
         }
+
         return 'user type not recognized';
     }
 }
