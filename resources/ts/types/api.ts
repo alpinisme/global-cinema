@@ -69,6 +69,20 @@ export interface City {
     zoom: number;
 }
 
+export interface ScreeningsGeoJSONFeature {
+    type: string;
+    geometry: {
+        type: string;
+        coordinates: [number | null, number | null];
+    };
+    properties: {
+        theater: string;
+        title: string;
+        language: string | null;
+        country: string | null;
+    };
+}
+
 export interface ScreeningsGeoJSON {
     type: string;
     name: string;
@@ -78,17 +92,5 @@ export interface ScreeningsGeoJSON {
             name: string;
         };
     };
-    features: Array<{
-        type: string;
-        geometry: {
-            type: string;
-            coordinates: [number, number];
-        };
-        properties: {
-            theater: string;
-            title: string;
-            language: string;
-            country: string;
-        };
-    }>;
+    features: Array<ScreeningsGeoJSONFeature>;
 }
