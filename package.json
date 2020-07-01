@@ -21,6 +21,7 @@
         "@types/leaflet": "^1.5.12",
         "@types/node-sass": "^4.11.1",
         "@types/react": "^16.9.35",
+        "@types/react-datepicker": "^3.0.2",
         "@types/react-dom": "^16.9.8",
         "@types/react-test-renderer": "^16.9.2",
         "@typescript-eslint/eslint-plugin": "^3.2.0",
