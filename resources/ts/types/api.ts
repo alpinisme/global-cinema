@@ -69,6 +69,9 @@ export interface City {
     zoom: number;
 }
 
+/**
+ * the feature type that is nested inside `ScreeningsGeoJSON`
+ */
 export interface ScreeningsGeoJSONFeature {
     type: string;
     geometry: {
@@ -83,6 +86,9 @@ export interface ScreeningsGeoJSONFeature {
     };
 }
 
+/**
+ * get request to map/{city}/{date}
+ */
 export interface ScreeningsGeoJSON {
     type: string;
     name: string;
