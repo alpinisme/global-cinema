@@ -6,14 +6,13 @@ import { log } from './utils';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'leaflet/dist/leaflet.css';
 import style from './Map.scss';
-import { LatLngTuple } from 'leaflet';
 import { City, ScreeningsGeoJSON } from '../ts/types/api';
 
 const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';
 const MOBILE_ONLY = 'mobile-only';
 
-const bombay = {
+const bombay: City = {
     id: 8,
     name: 'Bombay',
     country: 'India',
@@ -50,6 +49,7 @@ const fetchJSON = async (url, setIsError) => {
 const Root = () => {
     const minDate = new Date('1945');
     const maxDate = new Date('1995');
+
     // since dates are stored in database without timestamp, we only want first ten chars
     const toDateString = (date: Date) => date.toISOString().slice(0, 10);
 
@@ -68,42 +68,24 @@ const Root = () => {
         setIsActiveMap(oldStatus => !oldStatus);
     };
 
-    /**
-     * event handler for city selection -- uses the id submitted with the event to look up
-     * the city data from among the cities stored in state; stores new city in its own state
-     */
     const handleCitySelection = event => {
         // user input will be a string, so parse it to get a number, base 10
         const id = parseInt(event.target.value, 10);
-        log('setting city');
-        setCity(cities[id]);
+
+        // the dropdown only lists valid cities, so we know there will be a match and can type cast confidently
+        setCity(cities.find(city => city.id == id) as City);
     };
 
-    /**
-     * fetch cities and store them in state, setting the error status appropriately
-     */
-    const getCities = () => {
-        const indexCities = arr => {
-            // given an array of cities, it returns an object with each city keyed to its id
-            return arr.reduce((obj, next) => {
-                obj[next.id] = next;
-                return obj;
-            }, {});
-        };
+    // fetch cities
+    useEffect(() => {
+        fetchJSON('/cities', setIsError).then(setCities).catch(log);
+    }, []);
 
-        fetchJSON('/cities', setIsError).then(indexCities).then(setCities).catch(log);
-    };
-
-    /**
-     * fetch theaters and store them in state, setting the error status appropriately
-     */
-    const getTheaters = () => {
+    // fetch theaters
+    useEffect(() => {
         const url = `/map/${city.id}/${toDateString(date)}`;
         fetchJSON(url, setIsError).then(setTheaters).catch(log);
-    };
-
-    useEffect(getCities, []);
-    useEffect(getTheaters, [date, city.id]);
+    }, [date, city.id]);
 
     return (
         <>
@@ -137,9 +119,9 @@ const Root = () => {
 
 const CityPicker = ({ cities, value, handleChange }: CityPickerProps) => (
     <select value={value} onChange={handleChange}>
-        {Object.keys(cities).map(city => (
-            <option key={cities[city].id} value={cities[city].id}>
-                {cities[city].name}
+        {cities.map(city => (
+            <option key={city.id} value={city.id}>
+                {city.name}
             </option>
         ))}
     </select>
@@ -150,7 +132,7 @@ const ErrorDisplay = () => (
 );
 
 const ScreeningsMap = ({ city, theaters: screening, className, handleClick }: MapProps) => {
-    const position = [city.lat, city.lng] as LatLngTuple;
+    const position: [number, number] = [city.lat, city.lng];
 
     return (
         <div className={className}>
@@ -165,7 +147,7 @@ const ScreeningsMap = ({ city, theaters: screening, className, handleClick }: Ma
                         <CircleMarker
                             key={screening.properties.theater}
                             radius={6}
-                            center={screening.geometry.coordinates.reverse() as LatLngTuple}
+                            center={screening.geometry.coordinates.reverse() as [number, number]}
                             color={'purple'}
                             opacity={0}
                             fillOpacity={0.8}
