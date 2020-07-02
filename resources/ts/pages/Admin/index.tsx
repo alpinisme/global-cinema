@@ -40,10 +40,12 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
 
     const [users] = useGetRequest<User[]>('/users', e => `Users could not be loaded: ${e}`);
 
-    const [films, setFilms] = useGetRequest<Film[]>(
-        '/films',
-        e => `Films could not be loaded: ${e}`
-    );
+    // const [films, setFilms] = useGetRequest<Film[]>(
+    //     '/films',
+    //     e => `Films could not be loaded: ${e}`
+    // );
+
+    const [films, setFilms] = useState<Film[]>([]);
 
     const [theaters] = useGetRequest<Theater[]>(
         '/theaters',
