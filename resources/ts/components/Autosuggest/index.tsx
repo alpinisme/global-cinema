@@ -1,6 +1,7 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import Fuse from 'fuse.js';
 import styles from './Autosuggest.scss';
+import { log } from '../../../map-script/utils';
 
 interface Identified {
     id: number;
@@ -35,7 +36,7 @@ function Autosuggest<A extends Identified>({
 
         const fuse = new Fuse(options as A[], config);
         const all = fuse.search(value);
-        const top4 = all.slice(0, 4);
+        const top4 = all.slice(0, 4).map(d => d.item);
 
         setMatches(top4);
     }, [options, value, keys]);
