@@ -97,6 +97,6 @@ class DataResourcesTest extends TestCase
         factory('App\Theater', 10);
         $this->actingAs(factory('App\User')->state('admin')->make())
             ->json('GET', 'films')->assertOk()
-            ->assertExactJson(Film::all()->toArray());
+            ->assertJsonFragment(Film::all()->toArray());
     }
 }

@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/screenings/{date}', 'ScreeningsController@date');
     Route::resource('/screenings', 'ScreeningsController');
 
+    Route::get('/films/search/{string}', 'FilmsController@search');
     Route::resource('/films', 'FilmsController');
     Route::resource('/cities', 'CitiesController');
 
