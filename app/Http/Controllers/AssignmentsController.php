@@ -7,12 +7,11 @@ use Illuminate\Http\Request;
 
 class AssignmentsController extends StandardResourceController
 {
-
     /**
      *  Eloquent model to which the controller is providing access, e.g. 'App\Product' or Product::class
      */
     protected $model = 'App\Assignment';
-    
+
     /**
      * All writable columns in database, given as array of `field_name => validation_rule` pairs
      */
@@ -35,13 +34,14 @@ class AssignmentsController extends StandardResourceController
 
     public function getAssignedCity()
     {
-        $query= DB::select("Select column_default from information_schema.columns where table_name='theaters' and column_name='city_id'");
+        $query = DB::select("Select column_default from information_schema.columns where table_name='theaters' and column_name='city_id'");
+
         return $query[0]->column_default;
     }
 
     public function setAssignedCitys(Request $request)
     {
         // get value from request, make sure it is a valid city; if not, return error; if yes, execute query
-        $query = DB::table("alter table theaters alter city_id set default ?", []);
+        $query = DB::table('alter table theaters alter city_id set default ?', []);
     }
 }

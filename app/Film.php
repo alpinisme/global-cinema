@@ -9,18 +9,18 @@ class Film extends Model
 {
     const QUICKFIELDS = [
         'title' => 'title',
-        'year' => 'year'
+        'year' => 'year',
     ];
 
     const ALLFIELDS = [
         'title' => 'title',
-        'year' => 'year'
+        'year' => 'year',
     ];
 
     const DISPLAYNAME = 'Films';
 
     protected $guarded = [
-        'id', 'created_at', 'updated_at', 'createdBy'
+        'id', 'created_at', 'updated_at', 'createdBy',
     ];
 
     public function screenings()

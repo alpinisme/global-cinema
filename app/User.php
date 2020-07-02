@@ -6,15 +6,16 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-
 class User extends Authenticatable
 {
     use Notifiable;
 
     const ADMIN_TYPE = 'admin';
+
     const DEFAULT_TYPE = 'student';
+
     const ROLES = [
-        'user', 'student', 'instructor', 'admin'
+        'user', 'student', 'instructor', 'admin',
     ];
 
     protected $fillable = [
@@ -24,8 +25,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-
 
     public function students()
     {
@@ -70,7 +69,7 @@ class User extends Authenticatable
     /**
      * Checks actual role against argument, used when iterating over
      * all roles. For checking specific roles, use isStudent, etc.
-     * 
+     *
      * @param string $role
      */
     public function hasRole($role)
@@ -92,7 +91,6 @@ class User extends Authenticatable
     {
         return $this->hasRole('instructor');
     }
-
 
     /**
      * The attributes that should be cast to native types.

@@ -21,7 +21,7 @@ class AuthenticationsTest extends TestCase
             'password' => $user->password,
             'password_confirmation' => $user->password,
             'role' => $user->role,
-            'instructor_id' => '1'
+            'instructor_id' => '1',
         ])->assertRedirect('/');
         $this->assertAuthenticated();
         $this->assertDatabaseHas('users', ['email' => $user->email]);
@@ -38,7 +38,7 @@ class AuthenticationsTest extends TestCase
     public function a_user_can_log_in_with_correct_credentials()
     {
         $user = factory('App\User')->create([
-            'password' => bcrypt($password = 'DONT-look')
+            'password' => bcrypt($password = 'DONT-look'),
         ]);
         $this->from('/login')->post('/login', [
             'email' => $user->email,
@@ -104,7 +104,7 @@ class AuthenticationsTest extends TestCase
         $user = factory('App\User')->create();
         $admin = factory('App\User')->states('admin')->make();
         $this->actingAs($admin)->post('/admin/user/' . $user->id, [
-            'role' => 'admin'
+            'role' => 'admin',
         ])->assertRedirect('/admin');
         $user = \App\User::find($user->id);
         $this->assertTrue($user->hasRole('admin'));

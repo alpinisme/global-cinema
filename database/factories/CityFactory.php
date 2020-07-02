@@ -10,6 +10,6 @@ $factory->define(City::class, function (Faker $faker) {
         'name' => $faker->name(),
         'country' => $faker->name(),
         'lat' => $faker->latitude,
-        'lng' => $faker->longitude
+        'lng' => $faker->longitude,
     ];
 });

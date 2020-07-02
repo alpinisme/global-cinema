@@ -10,16 +10,15 @@ class Screening extends Model
     const QUICKFIELDS = [
         'date' => 'date',
         'theater' => 'theater',
-        'film' => 'film'
+        'film' => 'film',
     ];
-
 
     const ALLFIELDS = Screening::QUICKFIELDS;
 
     const DISPLAYNAME = 'Screenings';
 
     protected $guarded = [
-        'id', 'created_at', 'updated_at', 'createdBy'
+        'id', 'created_at', 'updated_at', 'createdBy',
     ];
 
     public function film()
@@ -38,11 +37,11 @@ class Screening extends Model
     }
 
     /**
-    * Prepare a date for array / JSON serialization.
-    *
-    * @param  \DateTimeInterface  $date
-    * @return string
-    */
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

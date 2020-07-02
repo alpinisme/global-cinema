@@ -17,7 +17,7 @@ class RelationshipsTest extends TestCase
         $student = factory('App\User')->create();
         $assignment = factory('App\Assignment')->create([
             'instructor_id' => $instructor->id,
-            'student_id' => $student->id
+            'student_id' => $student->id,
         ]);
 
         $this->assertTrue($assignment->assignedTo->is($student));

@@ -13,7 +13,9 @@ use Session;
 class StandardResourceController extends Controller
 {
     protected $request;
+
     protected $object;
+
     protected $id = false;
 
     /** The following protected properties are to be used here but declared in child class  */
@@ -22,7 +24,7 @@ class StandardResourceController extends Controller
      *  Eloquent model to which the controller is providing access, e.g. 'App\Product' or Product::class
      */
     protected $model = '';
-    
+
     /**
      * All writable columns in database, given as array of `field_name => validation_rule` pairs
      */
@@ -57,16 +59,15 @@ class StandardResourceController extends Controller
         // return view('/stdResources/index', compact('resource'));
     }
 
-
     /**
      * Handle GET requests for form that, when POSTed, creates new row to DB
      */
     public function create()
     {
         $resource = $this->model;
+
         return view('/stdResources/create', compact('resource'));
     }
-
 
     /**
      * Handle POST requests to create new row in DB
@@ -79,6 +80,7 @@ class StandardResourceController extends Controller
         if ($request->wantsJson()) {
             return $this->object;
         }
+
         return redirect($this->tableName);
     }
 
@@ -95,6 +97,7 @@ class StandardResourceController extends Controller
         if ($request->wantsJson()) {
             return $this->object;
         }
+
         return redirect($this->tableName . '/' . $this->id);
     }
 
@@ -110,6 +113,7 @@ class StandardResourceController extends Controller
         if ($request->wantsJson()) {
             return ['status' => 'success'];
         }
+
         return redirect($this->tableName);
     }
 
@@ -181,10 +185,10 @@ class StandardResourceController extends Controller
      */
     protected function setSuccessMessage($messageType)
     {
-        $messages = array(
+        $messages = [
             'save' => 'The ' . $this->objectName . ' was successfully saved.',
-            'destroy' => 'The ' . $this->objectName . ' was successfully deleted.'
-        );
+            'destroy' => 'The ' . $this->objectName . ' was successfully deleted.',
+        ];
         Session::flash('success', $messages[$messageType]);
     }
 }

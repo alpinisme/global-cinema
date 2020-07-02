@@ -25,7 +25,5 @@ class InstructorController extends Controller
         }
 
         return $results;
-    
-    }   
-        
+    }
 }

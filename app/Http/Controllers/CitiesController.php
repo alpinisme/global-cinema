@@ -7,12 +7,11 @@ use Illuminate\Http\Request;
 
 class CitiesController extends StandardResourceController
 {
-
     /**
      *  Eloquent model to which the controller is providing access, e.g. 'App\Product' or Product::class
      */
     protected $model = City::class;
-    
+
     /**
      * All writable columns in database, given as array of `field_name => validation_rule` pairs
      */
@@ -21,7 +20,7 @@ class CitiesController extends StandardResourceController
         'country' => 'required|max:50',
         'lat' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
         'lng' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
-        'zoom' => 'nullable|integer|between:1,30'
+        'zoom' => 'nullable|integer|between:1,30',
     ];
 
     /**

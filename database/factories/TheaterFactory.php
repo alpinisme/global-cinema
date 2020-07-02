@@ -14,6 +14,6 @@ $factory->define(Theater::class, function (Faker $faker) {
         'close_year' => $faker->year(),
         'city_id' => factory('App\City')->create()->id,
         'lat' => 90.000123,
-        'lng' => 93.759213
+        'lng' => 93.759213,
     ];
 });

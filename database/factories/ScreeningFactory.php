@@ -10,6 +10,6 @@ $factory->define(Screening::class, function (Faker $faker) {
         'date' => $faker->date,
         'theater_id' => factory('App\Theater')->create()->id,
         'film_id' => factory('App\Film')->create()->id,
-        'createdBy' => factory('App\User')->create()->id
+        'createdBy' => factory('App\User')->create()->id,
     ];
 });

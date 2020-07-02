@@ -28,7 +28,6 @@ class ScreeningsTest extends TestCase
         $this->post('/screenings', $screening)->assertRedirect('login');
     }
 
-    
     /** @test */
     public function a_student_can_add_a_screening()
     {

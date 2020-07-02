@@ -39,7 +39,7 @@ class DataResourcesTest extends TestCase
         $film = factory('App\Film')->create();
         $attributes = [
             'title' => 'Some Other Title',
-            'year' => 1987
+            'year' => 1987,
         ];
         $this->actingAs(factory('App\User')->state('admin')->create())
             ->patch('/films/' . $film->id, $attributes)
@@ -64,7 +64,7 @@ class DataResourcesTest extends TestCase
     {
         $attributes = [
             'title' => '',
-            'year' => 'a non-year'
+            'year' => 'a non-year',
         ];
         $this->actingAs(factory('App\User')->state('admin')->make())
             ->post('/films', $attributes)
@@ -80,7 +80,6 @@ class DataResourcesTest extends TestCase
             ->assertRedirect('/theaters');
         $this->assertDatabaseHas('theaters', $theater);
     }
-
 
     /** @test */
     // public function a_user_can_view_screenings_list()

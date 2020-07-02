@@ -29,7 +29,6 @@ class CreateScreeningsTable extends Migration
                 ->references('id')->on('films')
                 ->onDelete('restrict');
 
-
             $table->foreign('createdBy')
                 ->references('id')->on('users');
         });

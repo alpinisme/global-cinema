@@ -70,11 +70,11 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        
+
         Assignment::create([
             'assignment' => Assignment::nextDate(),
             'student_id' => $user->id,
-            'instructor_id' => $data['instructor_id']
+            'instructor_id' => $data['instructor_id'],
         ]);
 
         return $user;

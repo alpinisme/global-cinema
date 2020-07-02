@@ -10,6 +10,7 @@ class PermissionsController extends Controller
     public function index()
     {
         $users = User::all();
+
         return view('admin/index', compact('users'));
     }
 
@@ -18,6 +19,7 @@ class PermissionsController extends Controller
         $user = User::find($id);
         $user->role = request('role');
         $user->save();
+
         return redirect('/admin');
     }
 }

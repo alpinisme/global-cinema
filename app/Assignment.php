@@ -11,6 +11,7 @@ class Assignment extends Model
     const START_YEAR = '1952'; // earliest year to be assigned
 
     public $timestamps = false;
+
     public $guarded = ['id'];
 
     /**
@@ -21,16 +22,16 @@ class Assignment extends Model
     {
         $assignmentsPerMonth = 2;
         $count = self::count();
-        $monthOffset = floor($count/$assignmentsPerMonth);
+        $monthOffset = floor($count / $assignmentsPerMonth);
 
         $date = new DateTime;
         $date->setDate(self::START_YEAR, 1, 1);
         $date->modify($monthOffset . ' Months');
         $dateString = $date->format('Y-m-d');
-        
+
         return $dateString;
     }
-    
+
     public function assignedBy()
     {
         return $this->belongsTo(User::class, 'instructor_id');
