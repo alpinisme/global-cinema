@@ -27,10 +27,10 @@ const bombay: City = {
  * @param {string} url string for url to fetch
  * @param {function} setIsError function that accepts boolean to set error status (as side effect)
  */
-const fetchJSON = async (url, setIsError) => {
+const fetchJSON = async (url: string, setIsError: (isError: boolean) => void) => {
     setIsError(false);
 
-    const handleResponse = response => {
+    const checkIfStatusOk = (response: Response) => {
         if (!response.ok) {
             throw Error(response.statusText);
         }
@@ -39,8 +39,8 @@ const fetchJSON = async (url, setIsError) => {
 
     try {
         const response = await fetch(url);
-        const r = await handleResponse(response);
-        return r.json();
+        const okResponse = checkIfStatusOk(response);
+        return okResponse.json();
     } catch (e) {
         return setIsError(true);
     }
@@ -76,12 +76,12 @@ const Root = () => {
         setCity(cities.find(city => city.id == id) as City);
     };
 
-    // fetch cities
+    // fetch cities on page load
     useEffect(() => {
         fetchJSON('/cities', setIsError).then(setCities).catch(log);
     }, []);
 
-    // fetch theaters if valid date selected
+    // fetch theaters each time city or date changes, if valid date selected (city will always be valid)
     useEffect(() => {
         if (date) {
             const url = `/map/${city.id}/${toDateString(date)}`;
@@ -113,12 +113,14 @@ const Root = () => {
                 {isError && <ErrorDisplay />}
             </div>
 
-            <ScreeningsMap
-                city={city}
-                screenings={mappableScreenings}
-                className={isActiveMap ? MOBILE_VISIBLE : MOBILE_INVISIBLE}
-                handleClick={handleActiveStatusChange}
-            />
+            <div className={isActiveMap ? MOBILE_VISIBLE : MOBILE_INVISIBLE}>
+                {isActiveMap && (
+                    <button className={style.cancelButton} onClick={handleActiveStatusChange}>
+                        Search Again
+                    </button>
+                )}
+                <ScreeningsMap city={city} screenings={mappableScreenings} />
+            </div>
         </>
     );
 };
@@ -137,49 +139,53 @@ const ErrorDisplay = () => (
     <div className="errors">Sorry, we don&apos;t have data for that date</div>
 );
 
-const ScreeningsMap = ({ city, screenings, className, handleClick }: MapProps) => {
+const ScreeningsMap = ({ city, screenings }: MapProps) => {
     const position: [number, number] = [city.lat, city.lng];
 
     return (
-        <div className={className}>
-            <Map center={position} zoom={city.zoom} id="map">
-                <TileLayer
-                    url="https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
-                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    id="mapbox.light"
-                />
-                <LayerGroup>
-                    {screenings?.map(screening => (
-                        <CircleMarker
-                            key={screening.properties.theater}
-                            radius={6}
-                            center={screening.geometry.coordinates.reverse() as [number, number]}
-                            color={'purple'}
-                            opacity={0}
-                            fillOpacity={0.8}
-                            weight={0.6}
-                        >
-                            <Popup>
-                                <dl>
-                                    <dt className={style.label}>theater:</dt>
-                                    <dd className={style.value}>{screening.properties.theater}</dd>
-                                    <dt className={style.label}>title:</dt>
-                                    <dd className={style.value}>{screening.properties.title}</dd>
-                                </dl>
-                            </Popup>
-                        </CircleMarker>
-                    ))}
-                </LayerGroup>
-            </Map>
-        </div>
+        <Map center={position} zoom={city.zoom} id="map">
+            <TileLayer
+                url="https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                id="mapbox.light"
+            />
+            <LayerGroup>
+                {screenings?.map(screening => (
+                    <CircleMarker
+                        key={screening.properties.theater}
+                        radius={6}
+                        center={screening.geometry.coordinates.reverse() as [number, number]}
+                        color={'purple'}
+                        opacity={0}
+                        fillOpacity={0.8}
+                        weight={0.6}
+                    >
+                        <Popup>
+                            <ul className={style.info}>
+                                <li className={style.label}>
+                                    theater:
+                                    <span className={style.value}>
+                                        {screening.properties.theater}
+                                    </span>
+                                </li>
+                                <li className={style.label}>
+                                    title:
+                                    <span className={style.value}>
+                                        {screening.properties.title}
+                                    </span>
+                                </li>
+                            </ul>
+                        </Popup>
+                    </CircleMarker>
+                ))}
+            </LayerGroup>
+        </Map>
     );
 };
 
 interface MapProps {
     city: City;
     screenings: ScreeningsGeoJSONFeature[] | undefined;
-    className: string;
-    handleClick: () => void;
 }
 
 interface CityPickerProps {
