@@ -8,14 +8,12 @@ import Student from './pages/Student';
 import { useGetRequest } from './utils/hooks';
 import { CityContextProvider } from './contexts/CityContext';
 
+const role = (document.getElementById('role') as HTMLInputElement)?.value;
+
 const App = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
 
-    const [userType] = useGetRequest<string>('role', e =>
-        setErrors(addOnce(`Error: unable to verify user type.\nCause: ${e}`))
-    );
-
-    function useStatefulGetRequest<A>(a: string, fn: (s: string) => string) {
+    function useGetOrFail<A>(a: string, fn: (s: string) => string) {
         return useGetRequest<A>(a, b => setErrors(addOnce(fn(b))));
     }
 
@@ -29,25 +27,30 @@ const App = (): ReactElement => {
     /**
      * show appropriate page
      */
-    switch (userType) {
-        case null:
-            return <div>...loading</div>;
-
+    switch (role) {
         case 'user':
             return (
                 <CityContextProvider>
-                    <Student useGetRequest={useStatefulGetRequest} />
+                    <Student useGetRequest={useGetOrFail} />
                 </CityContextProvider>
             );
 
         case 'instructor':
-            return <InstructorPage useGetRequest={useStatefulGetRequest} />;
+            return <InstructorPage useGetRequest={useGetOrFail} />;
 
         case 'admin':
             return (
                 <CityContextProvider>
-                    <AdminPage useGetRequest={useStatefulGetRequest} />
+                    <AdminPage useGetRequest={useGetOrFail} />
                 </CityContextProvider>
+            );
+
+        case undefined:
+            return (
+                <div>
+                    There was a problem locating your user status. Try refreshing the page, and if
+                    the problem persists, contact a site administrator
+                </div>
             );
 
         default:
