@@ -6,7 +6,7 @@ const SavedScreening = ({ data, handleDelete }: Props): ReactElement => {
 
     return (
         <li>
-            {`${screening.name} (${screening.title})`}
+            {`${screening.theater} (${screening.title})`}
             <button className="delete" onClick={handleDelete}>
                 delete
             </button>

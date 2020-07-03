@@ -27,12 +27,13 @@ export interface Theater {
 /**
  * get requests to `screenings/` api return an array of objects with interface `Screening`
  */
-export interface Screening extends Theater, Film {
+export interface Screening {
     id: number;
-    theater_id: number;
-    film_id: number;
+    theater: string;
+    title: string;
     city_id: number;
-    date: string;
+    film_id: number;
+    theater_id: number;
 }
 
 /**
