@@ -33,7 +33,7 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
             .then(res => res.data)
             .then(setScreenings)
             .catch(console.log);
-    }, [films, date]);
+    }, [date]);
 
     return (
         <>

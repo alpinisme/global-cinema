@@ -9,7 +9,7 @@ import { useCityContext } from '../contexts/CityContext';
 import ScreeningsContext from '../contexts/ScreeningsContext';
 
 const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
-    const { films, theaters } = useContext(ScreeningsContext);
+    const { films, theaters, getFilms } = useContext(ScreeningsContext);
     const [city] = useCityContext() as City[];
     const [newTitle, setNewTitle] = useState<string | null>(null);
 
@@ -19,6 +19,8 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
         date: date.toISOString().slice(0, 10),
         city_id: city.id,
     };
+
+    const year = date.toISOString().slice(0, 4);
 
     const [screening, setScreening] = useState<Partial<Screening>>(init);
 
@@ -72,6 +74,7 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
                     config={suggestFilmsConfig}
                     handleSubmit={handleSubmit}
                     handleManualAdd={setNewTitle}
+                    handleInput={input => getFilms(input, year)}
                 />
             )}
 
@@ -86,7 +89,6 @@ const ConfirmYear = ({ date, film, handleSubmit }: ConfirmYearProps) => {
     const [year, setYear] = useState<string>('');
     const [isError, setIsError] = useState(false);
     const [validationErrors, setValidationErrors] = useState<string[]>([]);
-    const { addFilm } = useContext(ScreeningsContext);
 
     const maxYear = date.getUTCFullYear();
 
@@ -111,13 +113,10 @@ const ConfirmYear = ({ date, film, handleSubmit }: ConfirmYearProps) => {
 
         axios
             .post('/films', { title: film, year })
-            .then(res => {
-                addFilm(res.data);
-                return res.data.id;
-            })
+            .then(res => res.data.id)
             .then(handleSubmit)
             .catch(() => setIsError(true));
-    }, [film, year, handleSubmit, setIsError, validate, addFilm]);
+    }, [film, year, handleSubmit, setIsError, validate]);
 
     return (
         <div>

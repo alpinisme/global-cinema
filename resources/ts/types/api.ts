@@ -27,8 +27,8 @@ export interface Theater {
 /**
  * get requests to `screenings/` api return an array of objects with interface `Screening`
  */
-export interface Screening {
-    id?: number;
+export interface Screening extends Theater, Film {
+    id: number;
     theater_id: number;
     film_id: number;
     city_id: number;

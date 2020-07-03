@@ -1,5 +1,5 @@
 import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
-import type { Film, Theater, User, City } from '../../types/api';
+import type { Theater, User, City } from '../../types/api';
 import Month from '../../components/Month';
 import Collapsible from '../../components/Collapsible';
 import styles from './Admin.scss';
@@ -8,6 +8,7 @@ import PasswordReset from '../../components/PasswordReset';
 import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
 import AdminContext from '../../contexts/AdminContext';
 import ScreeningsContext from '../../contexts/ScreeningsContext';
+import { useFilmSearch } from '../../utils/hooks';
 
 type Action = 'edit users' | 'password reset' | 'enter screenings';
 
@@ -45,7 +46,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     //     e => `Films could not be loaded: ${e}`
     // );
 
-    const [films, setFilms] = useState<Film[]>([]);
+    const [films, doFilmsSearch] = useFilmSearch();
 
     const [theaters] = useGetRequest<Theater[]>(
         '/theaters',
@@ -53,14 +54,6 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     );
 
     const [cities] = useGetRequest<City[]>('/cities', e => `Cities could not be loaded: ${e}`);
-
-    /**
-     * add film to list of films in state;
-     * if that list is null, create it with new film as only member
-     * (such a state should be impossible, though)
-     * @param film Film
-     */
-    const addFilm = (film: Film) => setFilms(old => (old ? [film, ...old] : [film]));
 
     /**
      * checks if the clicked on collapsible is already open
@@ -74,9 +67,9 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     };
 
     const screeningsContextData = {
-        films: films ?? [],
+        films: films,
         theaters: theaters ?? [],
-        addFilm,
+        getFilms: doFilmsSearch,
     };
 
     if (month) {

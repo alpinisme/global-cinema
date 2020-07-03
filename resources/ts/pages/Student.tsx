@@ -1,13 +1,11 @@
-import React, { ReactElement, Dispatch, SetStateAction } from 'react';
+import React, { ReactElement, Dispatch, SetStateAction, useState, useCallback } from 'react';
 import Month from '../components/Month';
 import type { Film, Theater } from '../types/api';
 import ScreeningsContext from '../contexts/ScreeningsContext';
+import Axios from 'axios';
 
 const Student = ({ useGetRequest }: Props): ReactElement => {
-    const [films, setFilms] = useGetRequest<Film[]>(
-        '/films',
-        e => `Films could not be loaded: ${e}`
-    );
+    const [films, setFilms] = useState<Film[]>([]);
 
     const [theaters] = useGetRequest<Theater[]>(
         '/theaters',
@@ -19,10 +17,24 @@ const Student = ({ useGetRequest }: Props): ReactElement => {
         e => `Assignment could not be loaded: ${e}`
     );
 
+    const doFilmsSearch = useCallback(
+        (input: string, year?: string) => {
+            if (input.length < 3) {
+                return;
+            }
+
+            Axios.get(`/films/search/${input}?year=${year}`)
+                .then(r => r.data)
+                .then(setFilms)
+                .catch(console.log);
+        },
+        [setFilms]
+    );
+
     const context = {
         theaters: theaters ?? [],
         films: films ?? [],
-        addFilm: film => setFilms(old => (old ? [film, ...old] : [film])),
+        getFilms: doFilmsSearch,
     };
 
     return assignment ? (

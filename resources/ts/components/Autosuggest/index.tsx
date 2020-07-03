@@ -1,7 +1,6 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect, ChangeEvent } from 'react';
 import Fuse from 'fuse.js';
 import styles from './Autosuggest.scss';
-import { log } from '../../../map-script/utils';
 
 interface Identified {
     id: number;
@@ -11,12 +10,14 @@ export interface Props<A> {
     config: { label: string; keys: string[]; options: A[]; displayMatch: (a: A) => string };
     handleSubmit: (id: number) => void;
     handleManualAdd?: (title: string) => void;
+    handleInput?: (input: string) => void;
 }
 
 function Autosuggest<A extends Identified>({
     config,
     handleSubmit,
     handleManualAdd,
+    handleInput,
 }: Props<A>): ReactElement {
     const [value, setValue] = useState('');
     const [matches, setMatches] = useState<A[]>([]);
@@ -41,6 +42,14 @@ function Autosuggest<A extends Identified>({
         setMatches(top4);
     }, [options, value, keys]);
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (handleInput) {
+            handleInput(value);
+        }
+        setValue(value);
+    };
+
     return (
         <>
             <div>
@@ -51,7 +60,7 @@ function Autosuggest<A extends Identified>({
                     type="text"
                     name={label}
                     value={value}
-                    onChange={e => setValue(e.target.value)}
+                    onChange={handleChange}
                     className={styles.input}
                 />
                 {!value && <p>As you begin typing, possible matches will appear below.</p>}
@@ -63,7 +72,11 @@ function Autosuggest<A extends Identified>({
                     <ul className="button-list">
                         {matches.map(match => (
                             <li key={match.id}>
-                                <button type="submit" onClick={() => handleSubmit(match.id)}>
+                                <button
+                                    type="submit"
+                                    className={styles.button}
+                                    onClick={() => handleSubmit(match.id)}
+                                >
                                     {displayMatch(match)}
                                 </button>
                             </li>
