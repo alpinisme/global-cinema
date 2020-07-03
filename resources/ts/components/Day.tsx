@@ -57,15 +57,16 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
                     <h2>Already Saved</h2>
                     <ul className="already-saved">
                         {screenings
-                            .slice()
-                            .reverse()
-                            .map((data, index) => (
-                                <SavedScreening
-                                    key={data.id}
-                                    data={{ screening: data, films, theaters }}
-                                    handleDelete={() => destroy(data.id as number, index)}
-                                />
-                            ))}
+                            .map((screening, index) => {
+                                return (
+                                    <SavedScreening
+                                        key={screening.id}
+                                        screening={screening}
+                                        handleDelete={() => destroy(screening.id as number, index)}
+                                    />
+                                );
+                            })
+                            .reverse()}
                     </ul>
                 </div>
             )}

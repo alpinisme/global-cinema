@@ -37,12 +37,19 @@ class ScreeningsController extends StandardResourceController
         return view('screenings/create', compact('screenings'));
     }
 
+    public function store(Request $request)
+    {
+        $result = parent::store($request);
+
+        return Screening::with(['film', 'theater'])
+                            ->where('id', '=', $result->id)
+                            ->get()
+                            ->first();
+    }
+
     public function date($date)
     {
-        return DB::table('screenings')
-                    ->leftJoin('films', 'film_id', '=', 'films.id')
-                    ->leftJoin('theaters', 'theater_id', '=', 'theaters.id')
-                    ->select('theaters.name as theater', 'films.title as title', 'screenings.id as id')
+        return Screening::with(['film', 'theater'])
                     ->where('date', $date)
                     ->where('screenings.createdBy', auth()->id())
                     ->get();

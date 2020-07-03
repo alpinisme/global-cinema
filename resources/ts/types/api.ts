@@ -29,11 +29,11 @@ export interface Theater {
  */
 export interface Screening {
     id: number;
-    theater: string;
-    title: string;
     city_id: number;
     film_id: number;
     theater_id: number;
+    theater: Theater;
+    film: Film;
 }
 
 /**
