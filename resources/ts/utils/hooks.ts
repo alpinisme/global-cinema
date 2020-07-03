@@ -93,7 +93,6 @@ export function useFilmSearch(): [Film[], (input: string, year?: string | undefi
     const [films, setFilms] = useState<Film[]>([]);
 
     const search = (input: string, year?: string) => {
-        console.log(input);
         if (input.length < 3) {
             return;
         }
