@@ -63,9 +63,10 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
                     .filter(t => t.city_id == city?.id)
                     .map(t => ({ label: t.name, value: t.id }))}
                 value={screening.theater_id?.toString() ?? ''}
-                handleChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                    setScreening(old => ({ ...old, theater_id: parseInt(e.target.value) }))
-                }
+                handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                    e.persist();
+                    setScreening(old => ({ ...old, theater_id: parseInt(e.target.value) }));
+                }}
                 autoFocus={true}
             />
 

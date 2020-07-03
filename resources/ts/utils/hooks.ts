@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Film } from '../types/api';
+import { throttle } from './functions';
 
 export interface PostRequestResponse<A> {
     data: A | null;
@@ -91,7 +92,8 @@ export function useGetRequest<A>(
 export function useFilmSearch(): [Film[], (input: string, year?: string | undefined) => void] {
     const [films, setFilms] = useState<Film[]>([]);
 
-    const doFilmsSearch = (input: string, year?: string) => {
+    const search = (input: string, year?: string) => {
+        console.log(input);
         if (input.length < 3) {
             return;
         }
@@ -120,6 +122,8 @@ export function useFilmSearch(): [Film[], (input: string, year?: string | undefi
             .then(setFilms)
             .catch(console.log);
     };
+
+    const doFilmsSearch = throttle((s, y) => search(s, y), 100);
 
     return [films, doFilmsSearch];
 }

@@ -21,3 +21,16 @@ export function addOnce<A>(a: A): (arr: A[]) => A[] {
 export const toDateString = (date: Date): string => {
     return date.toUTCString().slice(5, 17);
 };
+
+export function throttle(callback: (...args) => void, limit: number): (...args) => void {
+    let wait = false;
+    return function (...args) {
+        if (!wait) {
+            callback(...args);
+            wait = true;
+            setTimeout(function () {
+                wait = false;
+            }, limit);
+        }
+    };
+}
