@@ -1,14 +1,12 @@
-import React, { useEffect, useState, ReactElement, useContext } from 'react';
+import React, { useEffect, useState, ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
 import { toDateString } from '../utils/functions';
 import { Screening } from '../types/api';
-import ScreeningsContext from '../contexts/ScreeningsContext';
 
 const Day = ({ date, cancel }: DayProps): ReactElement => {
     const [screenings, setScreenings] = useState<Screening[]>([]);
-    const { films, theaters } = useContext(ScreeningsContext);
 
     /**
      * sends request to server to destroy record at `id`
