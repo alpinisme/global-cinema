@@ -38,13 +38,20 @@ class FilmsController extends StandardResourceController
         return view('/stdResources/edit', compact('resource'));
     }
 
-    public function search($string)
+    public function search(Request $request, $string)
     {
+        if (strlen($string) < 3) {
+            abort(400, 'Search term must be at least three characters long');
+        }
+
         return DB::table('films')
-            ->where('title', 'LIKE', "%$string%")
-            ->orWhere('title', 'LIKE', "%the $string%")
-            ->orWhere('title', 'LIKE', "%a $string%")
-            ->orWhere('title', 'LIKE', "%an $string%")
+            ->where('year', '<=', $request['year'] ?? 2020)
+            ->where(function ($query) use ($string) {
+                $query->where('title', 'LIKE', "%$string%")
+                ->orWhere('title', 'LIKE', "%the $string%")
+                ->orWhere('title', 'LIKE', "%a $string%")
+                ->orWhere('title', 'LIKE', "%an $string%");
+            })
             ->get();
     }
 

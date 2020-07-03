@@ -61,4 +61,22 @@ class FilmsTest extends TestCase
 
         $response->assertRedirect('login');
     }
+
+    /** @test */
+    public function passing_a_year_as_query_param_will_limit_films_search_to_films_prior_to_that_year()
+    {
+        factory(Film::class)->create(['title' => 'The Favorite Movie', 'year' => 1988]);
+        factory(Film::class)->create(['title' => 'A Favorite Movie', 'year' => 1990]);
+        $response = $this->asUser()->get('/films/search/fav?year=1989');
+
+        $response->assertJsonFragment(['title' => 'The Favorite Movie']);
+        $response->assertJsonMissing(['title' => 'A Favorite Movie']);
+    }
+
+    /** @test */
+    public function search_term_must_be_at_least_three_characters_long()
+    {
+        $response = $this->asUser()->get('/films/search/fa?year=1989');
+        $response->assertStatus(400);
+    }
 }
