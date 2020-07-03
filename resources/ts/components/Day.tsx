@@ -48,7 +48,7 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
 
                 <ScreeningEntry
                     date={date}
-                    handleSuccess={data => setScreenings(old => [data, ...old])}
+                    handleSuccess={data => setScreenings(old => [...old, data])}
                 />
             </div>
 
@@ -56,13 +56,16 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
                 <div className="box">
                     <h2>Already Saved</h2>
                     <ul className="already-saved">
-                        {screenings.reverse().map((data, index) => (
-                            <SavedScreening
-                                key={data.id}
-                                data={{ screening: data, films, theaters }}
-                                handleDelete={() => destroy(data.id as number, index)}
-                            />
-                        ))}
+                        {screenings
+                            .slice()
+                            .reverse()
+                            .map((data, index) => (
+                                <SavedScreening
+                                    key={data.id}
+                                    data={{ screening: data, films, theaters }}
+                                    handleDelete={() => destroy(data.id as number, index)}
+                                />
+                            ))}
                     </ul>
                 </div>
             )}
