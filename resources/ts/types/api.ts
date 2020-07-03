@@ -76,7 +76,7 @@ export interface City {
 export interface ScreeningsGeoJSONFeature {
     type: string;
     geometry: {
-        type: string;
+        type: 'Point';
         coordinates: [number | null, number | null];
     };
     properties: {
@@ -91,13 +91,15 @@ export interface ScreeningsGeoJSONFeature {
  * get request to map/{city}/{date}
  */
 export interface ScreeningsGeoJSON {
-    type: string;
+    type: 'FeatureCollection';
     name: string;
     crs: {
-        type: string;
+        type: 'name';
         properties: {
-            name: string;
+            name: 'urn:ogc:def:crs:OGC:1.3:CRS84';
         };
     };
-    features: Array<ScreeningsGeoJSONFeature>;
+    features: ScreeningsGeoJSONFeature[];
 }
+
+// TODO I think the screenings interface needs to be split, depending on whether we are posting or getting.
