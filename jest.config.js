@@ -1,7 +1,7 @@
 module.exports = {
     preset: 'ts-jest',
-    testEnvironment: 'node',
     moduleNameMapper: {
         '\\.scss$': 'identity-obj-proxy',
     },
+    setupFilesAfterEnv: ['./resources/ts/tests/backend-helpers/setup-env.ts'],
 };
