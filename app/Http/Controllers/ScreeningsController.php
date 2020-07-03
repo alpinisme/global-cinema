@@ -41,10 +41,14 @@ class ScreeningsController extends StandardResourceController
     {
         $result = parent::store($request);
 
-        return Screening::with(['film', 'theater'])
+        if ($request->wantsJson()) {
+            return Screening::with(['film', 'theater'])
                             ->where('id', '=', $result->id)
                             ->get()
                             ->first();
+        }
+
+        return $result;
     }
 
     public function date($date)
