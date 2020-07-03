@@ -39,7 +39,11 @@ class ScreeningsController extends StandardResourceController
 
     public function date($date)
     {
-        return Screening::where('date', $date)->where('createdBy', auth()->id())->get();
+        return Screening::leftJoin('films', 'film_id', '=', 'films.id')
+                            ->leftJoin('theaters', 'theater_id', '=', 'theaters.id')
+                            ->where('date', $date)
+                            ->where('screenings.createdBy', auth()->id())
+                            ->get();
     }
 
     public function map()
