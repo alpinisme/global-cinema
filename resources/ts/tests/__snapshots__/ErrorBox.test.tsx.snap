@@ -6,6 +6,7 @@ exports[`ErrorBox renders correctly 1`] = `
 >
   <li
     className="message"
+    role="alert"
   >
     error
   </li>

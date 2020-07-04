@@ -4,7 +4,9 @@ import styles from './ErrorBox.scss';
 const ErrorBox = ({ errors }: Props): ReactElement => {
     const errList = errors.map(e => (
         <ul key={e} className={styles.box}>
-            <li className={styles.message}>{e}</li>
+            <li className={styles.message} role="alert">
+                {e}
+            </li>
         </ul>
     ));
 
