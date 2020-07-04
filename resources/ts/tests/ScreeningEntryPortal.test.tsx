@@ -1,20 +1,16 @@
 import React from 'react';
-import { CityContextProvider } from '../contexts/CityContext';
-import { cities } from './backend-helpers/mock-backend-data';
-import { render, waitFor, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { value } from './test-utils';
+import userEvent from '@testing-library/user-event';
+
+import { CityContextProvider } from '../contexts/CityContext';
 import ScreeningEntryPortal from '../components/ScreeningEntryPortal';
 import AdminContext from '../contexts/AdminContext';
-
-/*
-    This file tests the Screening Entry Portal component, but it does so from
-    the context of the Admin component to 
-*/
+import { cities } from './backend-helpers/mock-backend-data';
 
 const city = cities[0];
 
-describe('With valid context provider', () => {
+describe('With valid context provider, ScreeningEntryPortal', () => {
     beforeEach(() =>
         render(
             <CityContextProvider>
@@ -26,32 +22,31 @@ describe('With valid context provider', () => {
     );
 
     it('shows cities in select menu', async () => {
-        await waitFor(() => expect(screen.getByText(city.name)).toBeInTheDocument());
+        expect(await screen.findByRole('option', { name: city.name })).toBeInTheDocument();
     });
 
     it('should not display an input for the month before a city is selected', () => {
-        expect(screen.queryByLabelText('Choose a Month:')).toBeNull();
+        expect(screen.queryByRole('textbox')).toBeNull();
     });
 
     it('should display an input for the month only after city is selected', async () => {
-        await waitFor(() => screen.getByText(city.name));
+        await screen.findByRole('option', { name: city.name });
 
-        const select = screen.getByLabelText('Choose a city:') as HTMLSelectElement;
-        fireEvent.change(select, value(city.id));
+        const select = screen.getByRole('combobox') as HTMLSelectElement;
+        userEvent.selectOptions(select, city.id.toString());
 
         expect(select.value).toBe(city.id.toString());
-        expect(screen.getByLabelText('Choose a month:')).toBeInTheDocument();
+        expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
 
     it('should complain if the user submits an invalid month', async () => {
-        await waitFor(() => screen.getByText(city.name));
+        await screen.findByRole('option', { name: city.name });
 
-        const select = screen.getByLabelText('Choose a city:') as HTMLSelectElement;
-        fireEvent.change(select, { target: { value: city.id } });
+        userEvent.selectOptions(screen.getByRole('combobox'), city.id.toString());
 
-        fireEvent.change(screen.getByLabelText('Choose a month:'), value('09/2040'));
-        fireEvent.submit(screen.getByText('Submit'));
+        userEvent.type(screen.getByRole('textbox'), '09/2040');
+        userEvent.click(screen.getByText('Submit'));
 
-        expect(screen.getByText('Month must be from the past')).toBeInTheDocument();
+        expect(screen.getByRole('alert')).toBeInTheDocument();
     });
 });
