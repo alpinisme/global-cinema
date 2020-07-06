@@ -29,7 +29,7 @@ describe('With valid context provider, ScreeningEntryPortal', () => {
         expect(screen.queryByRole('textbox')).toBeNull();
     });
 
-    it('should display an input for the month only after city is selected', async () => {
+    it('should display an input for the month after a city is selected', async () => {
         await screen.findByRole('option', { name: city.name });
 
         const select = screen.getByRole('combobox') as HTMLSelectElement;
