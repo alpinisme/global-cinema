@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "javascript"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "php:composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
