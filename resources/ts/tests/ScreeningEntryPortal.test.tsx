@@ -21,15 +21,15 @@ describe('With valid context provider, ScreeningEntryPortal', () => {
         )
     );
 
-    it('shows cities in select menu', async () => {
+    it('shows cities in a select menu', async () => {
         expect(await screen.findByRole('option', { name: city.name })).toBeInTheDocument();
     });
 
-    it('should not display an input for the month before a city is selected', () => {
+    it('should not display a month input before a city is selected', () => {
         expect(screen.queryByRole('textbox')).toBeNull();
     });
 
-    it('should display an input for the month after a city is selected', async () => {
+    it('should display a month input after a city is selected', async () => {
         await screen.findByRole('option', { name: city.name });
 
         const select = screen.getByRole('combobox') as HTMLSelectElement;
@@ -39,7 +39,7 @@ describe('With valid context provider, ScreeningEntryPortal', () => {
         expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
 
-    it('should complain if the user submits an invalid month', async () => {
+    it('should complain if the user submits an invalid month (from the future)', async () => {
         await screen.findByRole('option', { name: city.name });
 
         userEvent.selectOptions(screen.getByRole('combobox'), city.id.toString());
