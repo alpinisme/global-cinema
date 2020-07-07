@@ -1,10 +1,10 @@
 version: 2
 updates:
-  - package-ecosystem: "javascript"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-  - package-ecosystem: "php:composer"
+  - package-ecosystem: "composer"
     directory: "/"
     schedule:
       interval: "weekly"
