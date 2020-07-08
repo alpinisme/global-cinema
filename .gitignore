@@ -20,3 +20,4 @@ error_log
 local/
 .php_cs.cache
 coverage/
+_ide_helper
