@@ -11,8 +11,6 @@
 |
 */
 
-use App\Http\Controllers\CitiesController;
-
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', function () {
         return view('app');
@@ -61,7 +59,21 @@ Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::post('/assigned_city', 'AssignmentsController@setAssignedCity');
 
     Route::post('/password/reset/{id}', 'Auth\ResetPasswordController@getResetLink');
+    Route::get('/dupes', 'DuplicateFilmsController@index');
+    Route::patch('/dupes', 'DuplicateFilmsController@update');
 });
 
 Auth::routes();
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+/*
+
+Route::get('/city-assignment',              'CityAssignmentController@get');
+Route::post('/city-assignment',             'CityAssignmentController@put');
+
+
+Route::get('/log',                          '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index'); // see github for how to add
+
+// combine users and permissions controllers
+
+*/

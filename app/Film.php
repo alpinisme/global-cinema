@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 
@@ -26,5 +27,10 @@ class Film extends Model
     public function screenings()
     {
         return $this->hasMany('App\Screening');
+    }
+
+    public static function duplicates()
+    {
+        return DB::select('select group_concat(id) ids, title, year, count(*) count from films group by title, year having count(*) > 1');
     }
 }
