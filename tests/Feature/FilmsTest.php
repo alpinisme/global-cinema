@@ -20,27 +20,21 @@ class FilmsTest extends TestCase
     /** @test */
     public function a_request_to_index_is_ok()
     {
-        $response = $this->asUser()->get('/films');
-
-        $response->assertStatus(200);
+        $this->asUser()->get('/films')->assertStatus(200);
     }
 
     /** @test */
     public function an_admin_can_search_films_by_title_fragment()
     {
         factory(Film::class)->create(['title' => 'My Favorite Movie']);
-        $response = $this->asUser()->get('/films/search/my%20');
-
-        $response->assertJsonFragment(['title' => 'My Favorite Movie']);
+        $this->asUser()->get('/films/search/my%20')->assertJsonFragment(['title' => 'My Favorite Movie']);
     }
 
     /** @test */
     public function title_search_results_do_not_include_nonmatches()
     {
         factory(Film::class)->create(['title' => 'My Favorite Movie']);
-        $response = $this->asUser()->get('/films/search/som');
-
-        $response->assertJsonMissing(['title' => 'My Favorite Movie']);
+        $this->asUser()->get('/films/search/som')->assertJsonMissing(['title' => 'My Favorite Movie']);
     }
 
     /** @test */
@@ -48,18 +42,15 @@ class FilmsTest extends TestCase
     {
         factory(Film::class)->create(['title' => 'The Favorite Movie']);
         factory(Film::class)->create(['title' => 'A Favorite Movie']);
-        $response = $this->asUser()->get('/films/search/fav');
-
-        $response->assertJsonFragment(['title' => 'The Favorite Movie']);
-        $response->assertJsonFragment(['title' => 'A Favorite Movie']);
+        $this->asUser()->get('/films/search/fav')
+                        ->assertJsonFragment(['title' => 'The Favorite Movie'])
+                        ->assertJsonFragment(['title' => 'A Favorite Movie']);
     }
 
     /** @test */
     public function a_guest_cannot_search_films()
     {
-        $response = $this->get('/films');
-
-        $response->assertRedirect('login');
+        $this->get('/films')->assertRedirect('login');
     }
 
     /** @test */
@@ -67,16 +58,14 @@ class FilmsTest extends TestCase
     {
         factory(Film::class)->create(['title' => 'The Favorite Movie', 'year' => 1988]);
         factory(Film::class)->create(['title' => 'A Favorite Movie', 'year' => 1990]);
-        $response = $this->asUser()->get('/films/search/fav?year=1989');
-
-        $response->assertJsonFragment(['title' => 'The Favorite Movie']);
-        $response->assertJsonMissing(['title' => 'A Favorite Movie']);
+        $this->asUser()->get('/films/search/fav?year=1989')
+                        ->assertJsonFragment(['title' => 'The Favorite Movie'])
+                        ->assertJsonMissing(['title' => 'A Favorite Movie']);
     }
 
     /** @test */
     public function search_term_must_be_at_least_three_characters_long()
     {
-        $response = $this->asUser()->get('/films/search/fa?year=1989');
-        $response->assertStatus(400);
+        $this->asUser()->get('/films/search/fa?year=1989')->assertStatus(400);
     }
 }
