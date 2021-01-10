@@ -61,6 +61,17 @@ const Root = () => {
     const [cities, setCities] = useState<City[]>([]);
     const [screenings, setScreenings] = useState<ScreeningsGeoJSON | null>(null);
 
+    // added because official typings now allow for [Date, Date] to be passed in,
+    // to account for time when selectsRange is set to true, which it is not here
+    const setTypedDate = (date: Date | [Date, Date] | null) => {
+        if (date instanceof Array) {
+            console.log('date range passed when date expected');
+            setDate(null);
+        } else {
+            setDate(date);
+        }
+    };
+
     /**
      * event handler for toggling map visibility
      */
@@ -103,7 +114,7 @@ const Root = () => {
                     minDate={minDate}
                     maxDate={maxDate}
                     selected={date}
-                    onChange={setDate}
+                    onChange={setTypedDate}
                 />
 
                 <button type="button" className={MOBILE_ONLY} onClick={handleActiveStatusChange}>
