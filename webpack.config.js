@@ -4,7 +4,10 @@ module.exports = env => {
     const isDev = env.NODE_ENV !== 'production';
     return {
         mode: isDev ? 'development' : 'production',
-        devtool: 'cheap-module-eval-source-map',
+        stats: {
+            modules: false,
+        },
+        devtool: isDev ? 'eval-cheap-source-map' : false,
         entry: {
             app: './resources/ts/app.tsx',
             map: './resources/map-script/map.tsx',
