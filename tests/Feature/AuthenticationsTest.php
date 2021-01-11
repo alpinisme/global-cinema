@@ -114,17 +114,6 @@ class AuthenticationsTest extends TestCase
     public function mismatched_password_confirmation_throws_validation_error()
     {
         $user = factory('App\User')->make();
-        dd(
-            $this->post('/register', [
-                'name' => $user->name,
-                'email' => $user->email,
-                'password' => $user->password,
-                'password_confirmation' => $user->password . 'typo',
-                'role' => $user->role,
-                'instructor_id' => '1',
-            ])
-        );
-        $user = factory('App\User')->make();
         $this->post('/register', [
             'name' => $user->name,
             'email' => $user->email,
