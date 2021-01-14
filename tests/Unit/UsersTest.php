@@ -14,7 +14,7 @@ class UsersTest extends TestCase
     /** @test */
     public function a_default_user_is_not_an_admin()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create(['role' => USER::DEFAULT_TYPE]);
         $this->assertFalse($user->hasRole('admin'));
     }
 
