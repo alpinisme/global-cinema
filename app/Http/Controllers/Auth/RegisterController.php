@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use App\Assignment;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -54,6 +55,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'role' => ['required', Rule::in(User::REGISTERABLE_ROLES)],
         ]);
     }
 
@@ -66,16 +68,19 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $user = User::create([
+            'role' => $data['role'],
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
 
-        Assignment::create([
-            'assignment' => Assignment::nextDate(),
-            'student_id' => $user->id,
-            'instructor_id' => $data['instructor_id'],
-        ]);
+        if ($user->role == 'student') {
+            Assignment::create([
+                'assignment' => Assignment::nextDate(),
+                'student_id' => $user->id,
+                'instructor_id' => $data['instructor_id'],
+            ]);
+        }
 
         return $user;
     }
