@@ -1,4 +1,6 @@
-import React, { useState, ReactElement } from 'react';
+import axios from 'axios';
+import React, { useState, ReactElement, FormEvent } from 'react';
+import ErrorBox from '../../components/ErrorBox';
 import Register from '../Register';
 
 export interface User {
@@ -10,24 +12,32 @@ export interface User {
     instructor?: string | null;
 }
 
-const LoginPage = (): ReactElement => {
+const LoginPage = ({ handleSuccess }: Props): ReactElement => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const [isRegistered, setIsRegistered] = useState(true);
 
     if (!isRegistered) {
-        return <Register />;
+        return <Register handleSuccess={handleSuccess} />;
     }
+
+    const login = (e: FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        const errMsg = 'Something went wrong with your login. Contact a site admin.';
+
+        axios
+            .post('login', { password, email, remember })
+            .then(res => res.data.role)
+            .then(role => (role ? handleSuccess(role) : setError(errMsg)))
+            .catch(err => console.log('oops', err.response.data.message));
+    };
 
     return (
         <>
-            <form
-                onSubmit={e => {
-                    e.preventDefault();
-                    console.log(email, password, remember);
-                }}
-            >
+            <form onSubmit={login}>
                 <label htmlFor="email">Email Address</label>
                 <input
                     id="email"
@@ -65,6 +75,8 @@ const LoginPage = (): ReactElement => {
                 <button type="submit">Login</button>
             </form>
 
+            {error && <ErrorBox errors={[error]} />}
+
             <div>
                 Not registered yet?
                 <button type="button" onClick={() => setIsRegistered(false)}>
@@ -76,3 +88,7 @@ const LoginPage = (): ReactElement => {
 };
 
 export default LoginPage;
+
+interface Props {
+    handleSuccess: (role: string) => void;
+}
