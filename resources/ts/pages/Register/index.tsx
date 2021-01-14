@@ -1,27 +1,47 @@
-import React, { ReactElement, useState } from 'react';
+import axios from 'axios';
+import React, { FormEvent, ReactElement, useState } from 'react';
 import { User } from '../../types/api';
 import { useGetRequest } from '../../utils/hooks';
 
-const Register = (): ReactElement => {
+const Register = ({ handleSuccess }: Props): ReactElement => {
     const [role, setRole] = useState('');
     const [instructors] = useGetRequest<User[]>('instructors', e => console.log(e));
     const [instructor, setInstructor] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
+    const [password, setPassword] = useState('');
     const [passConfirm, setPassConfirm] = useState('');
+    const [errors, setErrors] = useState<Form | null>(null);
+
+    const register = (e: FormEvent) => {
+        e.preventDefault();
+        const data = {
+            role,
+            instructor,
+            name,
+            email,
+            password,
+            password_confirmation: passConfirm,
+        } as Form;
+
+        axios
+            .post('register', data)
+            .then(() => handleSuccess(role))
+            .catch(err => setErrors(err.response.data.errors));
+    };
 
     return (
-        <form onSubmit={() => console.log('submitted')}>
+        <form onSubmit={register}>
             <label htmlFor="role">What is your role on this site?</label>
             <select name="role" id="role" value={role} onChange={e => setRole(e.target.value)}>
                 <option value="" disabled>
                     Select one
                 </option>
                 <option value="student">student</option>
-                <option value="instructor">instructor</option>
-                <option value="contributor">contributor</option>
+                <option value="unconfirmed_instructor">instructor</option>
+                <option value="unconfirmed_contributor">contributor</option>
             </select>
+            {errors && errors.role}
 
             {role == 'student' && (
                 <>
@@ -38,6 +58,7 @@ const Register = (): ReactElement => {
                             </option>
                         ))}
                     </select>
+                    {errors && errors.instructor}
                 </>
             )}
 
@@ -51,7 +72,8 @@ const Register = (): ReactElement => {
                         value={name}
                         required
                         onChange={e => setName(e.target.value)}
-                    ></input>
+                    />
+                    {errors && errors.name}
 
                     <label htmlFor="name">Email</label>
                     <input
@@ -61,7 +83,8 @@ const Register = (): ReactElement => {
                         required
                         value={email}
                         onChange={e => setEmail(e.target.value)}
-                    ></input>
+                    />
+                    {errors && errors.email}
 
                     <label htmlFor="password">Password</label>
                     <input
@@ -69,9 +92,10 @@ const Register = (): ReactElement => {
                         id="password"
                         type="password"
                         required
-                        value={pass}
-                        onChange={e => setPass(e.target.value)}
-                    ></input>
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                    {errors && errors.password}
 
                     <label htmlFor="password-confirmation">Confirm Password</label>
                     <input
@@ -81,7 +105,10 @@ const Register = (): ReactElement => {
                         required
                         value={passConfirm}
                         onChange={e => setPassConfirm(e.target.value)}
-                    ></input>
+                    />
+                    {errors && errors['password-confirmation']}
+
+                    <button type="submit">Register</button>
                 </>
             )}
         </form>
@@ -89,3 +116,16 @@ const Register = (): ReactElement => {
 };
 
 export default Register;
+
+interface Props {
+    handleSuccess: (role: string) => void;
+}
+
+interface Form {
+    role: string;
+    instructor: string;
+    name: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+}
