@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,15 +15,22 @@ class AuthenticationsTest extends TestCase
     /** @test */
     public function a_guest_can_register()
     {
-        $user = factory('App\User')->make();
-        $this->post('/register', [
+        $this->withoutExceptionHandling();
+        $user = factory('App\User')->states('just registered')->make();
+        $form = [
             'name' => $user->name,
             'email' => $user->email,
             'password' => $user->password,
             'password_confirmation' => $user->password,
             'role' => $user->role,
-            'instructor_id' => '1',
-        ])->assertRedirect('/');
+        ];
+
+        if ($user->role == 'student') {
+            $instructor = factory(User::class)->states('instructor')->create();
+            $form['instructor_id'] = $instructor->id;
+        }
+
+        $this->post('/register', $form)->assertRedirect('/');
         $this->assertAuthenticated();
         $this->assertDatabaseHas('users', ['email' => $user->email]);
     }
@@ -43,7 +51,7 @@ class AuthenticationsTest extends TestCase
         $this->from('/login')->post('/login', [
             'email' => $user->email,
             'password' => $password,
-        ])->assertRedirect('/');
+        ])->assertStatus(200);
         $this->assertAuthenticated();
     }
 
@@ -95,7 +103,7 @@ class AuthenticationsTest extends TestCase
     public function default_users_cannot_view_users_list()
     {
         $this->get('/admin')->assertStatus(403);
-        $this->actingAs(factory('App\User')->make())->get('/admin')->assertStatus(403);
+        $this->actingAs(factory('App\User')->make(['role' => User::DEFAULT_TYPE]))->get('/admin')->assertStatus(403);
     }
 
     /** @test */
@@ -123,5 +131,12 @@ class AuthenticationsTest extends TestCase
             'instructor_id' => '1',
         ])->assertRedirect('/')->assertSessionHasErrors('password');
         $this->assertGuest();
+    }
+
+    /** @test */
+    public function a_guest_cannot_register_as_an_admin()
+    {
+        $user = factory('App\User')->states('admin')->make();
+        $this->post('/register', $user->toArray())->assertSessionHasErrors('role');
     }
 }
