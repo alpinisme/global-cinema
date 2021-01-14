@@ -15,7 +15,19 @@ class User extends Authenticatable
     const DEFAULT_TYPE = 'student';
 
     const ROLES = [
-        'user', 'student', 'instructor', 'admin',
+        'user',
+        'student',
+        'instructor',
+        'admin',
+        'unconfirmed_contributor',
+        'unconfirmed_instructor',
+        'contributor',
+    ];
+
+    const REGISTERABLE_ROLES = [
+        'unconfirmed_contributor',
+        'unconfirmed_instructor',
+        'student',
     ];
 
     protected $fillable = [
