@@ -1,37 +1,65 @@
+import axios from 'axios';
 import React, { ReactElement, useState } from 'react';
+import { User } from '../../types/api';
 import { useGetRequest } from '../../utils/hooks';
 
-interface Item {
-    name: string;
-    id: number;
-}
+const UserReview = (): ReactElement => {
+    const url = '/review/users';
+    const [users, setUsers] = useGetRequest<User[]>(url, err => console.log(err));
 
-const ItemsToReview = ({ endpoint }: ItemsToReview): ReactElement => {
-    const url = '/review/' + endpoint;
-    const [items] = useGetRequest<Item[]>(url, err => console.log(err));
+    /**
+     * Removes the specified user from list of items in state
+     * @param id id of user to remove
+     */
+    const removeUser = (id: number) =>
+        setUsers(users => {
+            if (!users) throw new Error('tried to remove non-existent user in ItemsToReview');
+            const index = users.findIndex(user => user.id == id);
+            return [...users.slice(0, index), ...users.slice(index + 1)];
+        });
 
-    const approve = (id: number) => console.log('approved: ', id);
-    const reject = (id: number) => console.log('rejected: ', id);
+    /**
+     * Sends PUT request to server to update user role, removing the 'unconfirmed_' prefix
+     * also removes user from state
+     * @param id id of user to approve
+     */
+    const approve = (id: number) => {
+        const user = users?.find(user => user.id == id);
+        const oldRole = user?.role;
+        const newRole = oldRole?.slice('unconfirmed_'.length);
+
+        axios
+            .put(`users/${id}`, { role: newRole })
+            .then(() => removeUser(id))
+            .catch(err => console.log(err));
+    };
+
+    const reject = (id: number) => {
+        axios.delete(`users/${id}`);
+        removeUser(id);
+    };
 
     return (
         <table>
-            {items ? (
-                items.map(item => (
-                    <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>
-                            <button onClick={() => approve(item.id)}>approve</button>
-                        </td>
-                        <td>
-                            <button onClick={() => reject(item.id)}>reject</button>
-                        </td>
+            <tbody>
+                {users ? (
+                    users.map(user => (
+                        <tr key={user.id}>
+                            <td>{user.name}</td>
+                            <td>
+                                <button onClick={() => approve(user.id)}>approve</button>
+                            </td>
+                            <td>
+                                <button onClick={() => reject(user.id)}>reject</button>
+                            </td>
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td>...loading</td>
                     </tr>
-                ))
-            ) : (
-                <tr>
-                    <td>...loading</td>
-                </tr>
-            )}
+                )}
+            </tbody>
         </table>
     );
 };
@@ -47,13 +75,10 @@ const ReviewActivity = (): ReactElement => {
                 <option value="theaters">Theaters</option>
             </select>
 
-            {endpoint && <ItemsToReview endpoint={endpoint} />}
+            {endpoint == 'users' && <UserReview />}
+            {endpoint == ''}
         </>
     );
 };
 
 export default ReviewActivity;
-
-interface ItemsToReview {
-    endpoint: string;
-}
