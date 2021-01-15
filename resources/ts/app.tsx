@@ -48,6 +48,22 @@ const App = (): ReactElement => {
                 </CityContextProvider>
             );
 
+        case 'unconfirmed_instructor':
+            return (
+                <div>
+                    Please wait for an admin to verify your role before using the site. You may want
+                    to email an admin personally to speed up the process.
+                </div>
+            );
+
+        case 'unconfirmed_contributor':
+            return (
+                <div>
+                    Please wait for an admin to verify your role before using the site. You may want
+                    to email an admin personally to speed up the process.
+                </div>
+            );
+
         case undefined:
             return (
                 <div>
