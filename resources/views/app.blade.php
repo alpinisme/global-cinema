@@ -3,7 +3,7 @@
 @section('content')
 
 <main>
-  <input type="hidden" id="role" value="{{auth()->user()->role}}" />
+  @auth<input type="hidden" id="role" value="{{auth()->user()->role}}" />@endauth
   <div id="root"></div>
 </main>
 
