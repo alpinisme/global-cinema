@@ -19,23 +19,17 @@ const App = (): ReactElement => {
         return useGetRequest<A>(a, b => setErrors(addOnce(fn(b))));
     }
 
-    /**
-     * display errors if any
-     */
+    // display login form if not already logged in
     if (!role) {
         return <LoginPage handleSuccess={setRole} />;
     }
 
-    /**
-     * display errors if any
-     */
+    // display errors if any
     if (errors.length > 0) {
         return <ErrorBox errors={errors} />;
     }
 
-    /**
-     * show appropriate page
-     */
+    // show appropriate page
     switch (role) {
         case 'user':
             return (

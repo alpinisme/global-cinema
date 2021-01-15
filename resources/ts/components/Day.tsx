@@ -22,9 +22,7 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
             .catch(console.log);
     };
 
-    /**
-     * loads screenings from api
-     */
+    // load screenings from api
     useEffect(() => {
         axios
             .get('/screenings/' + date.toISOString().slice(0, 10))
