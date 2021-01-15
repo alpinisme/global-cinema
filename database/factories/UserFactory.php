@@ -44,3 +44,9 @@ $factory->state(User::class, 'just registered', function (Faker $faker) {
         'role' => $faker->randomElement(User::REGISTERABLE_ROLES),
     ];
 });
+
+$factory->state(User::class, 'needs verification', function (Faker $faker) {
+    return [
+        'role' => $faker->randomElement(['unconfirmed_instructor', 'unconfirmed_contributor']),
+    ];
+});
