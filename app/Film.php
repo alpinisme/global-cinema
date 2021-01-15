@@ -29,6 +29,14 @@ class Film extends Model
         return $this->hasMany('App\Screening');
     }
 
+    /**
+     * Lists all unverified films that have been added to database
+     */
+    public static function needsReview()
+    {
+        return static::query()->where('verified', false)->get();
+    }
+
     public static function duplicates()
     {
         return DB::select('select group_concat(id) ids, title, year, count(*) count from films group by title, year having count(*) > 1');

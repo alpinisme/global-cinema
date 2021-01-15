@@ -36,4 +36,12 @@ class Theater extends Model
     {
         return $this->belongsTo('App\City');
     }
+
+    /**
+     * Lists all unverified theaters that have been added to database
+     */
+    public static function needsReview()
+    {
+        return static::query()->where('verified', false)->get();
+    }
 }
