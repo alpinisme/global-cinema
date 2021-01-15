@@ -105,6 +105,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Lists all newly registered users whose status needs to be reviewed
+     */
+    public static function needsReview()
+    {
+        return static::query()
+                ->where('role', 'unconfirmed_contributor')
+                ->orWhere('role', 'unconfirmed_instructor')
+                ->get();
+    }
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
