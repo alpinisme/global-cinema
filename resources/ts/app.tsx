@@ -7,14 +7,23 @@ import { addOnce } from './utils/functions';
 import Student from './pages/Student';
 import { useGetRequest } from './utils/hooks';
 import { CityContextProvider } from './contexts/CityContext';
-
-const role = (document.getElementById('role') as HTMLInputElement)?.value;
+import LoginPage from './pages/Login';
 
 const App = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
+    const [role, setRole] = useState<string | null>(
+        (document.getElementById('role') as HTMLInputElement)?.value
+    );
 
     function useGetOrFail<A>(a: string, fn: (s: string) => string) {
         return useGetRequest<A>(a, b => setErrors(addOnce(fn(b))));
+    }
+
+    /**
+     * display errors if any
+     */
+    if (!role) {
+        return <LoginPage handleSuccess={setRole} />;
     }
 
     /**
