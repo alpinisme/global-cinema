@@ -10,12 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', function () {
+    return view('app');
+});
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/', function () {
-        return view('app');
-    });
-
     Route::get('/screenings/{date}', 'ScreeningsController@date');
     Route::resource('/screenings', 'ScreeningsController');
 
@@ -42,12 +41,12 @@ Route::get('/map', 'ScreeningsController@map');
 Route::get('/map/{city}/{date}', 'ScreeningsController@geoJSON');
 Route::get('/cities', 'CitiesController@index');
 
-Route::group(['middleware' => 'auth'], function () {
-    Route::resource('/films', 'FilmsController');
-    Route::resource('/cities', 'CitiesController', ['except' => 'index']);
+// Route::group(['middleware' => 'auth'], function () {
+//     Route::resource('/films', 'FilmsController');
+//     Route::resource('/cities', 'CitiesController', ['except' => 'index']);
 
-    Route::resource('/theaters', 'TheatersController');
-});
+//     Route::resource('/theaters', 'TheatersController');
+// });
 
 Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::get('/admin', 'PermissionsController@index');
@@ -61,6 +60,8 @@ Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::post('/password/reset/{id}', 'Auth\ResetPasswordController@getResetLink');
     Route::get('/dupes', 'DuplicateFilmsController@index');
     Route::patch('/dupes', 'DuplicateFilmsController@update');
+
+    Route::get('/review/{category}', 'ActivityReviewController@index');
 });
 
 Auth::routes();
