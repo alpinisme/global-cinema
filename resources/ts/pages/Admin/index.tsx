@@ -9,8 +9,9 @@ import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
 import AdminContext from '../../contexts/AdminContext';
 import ScreeningsContext from '../../contexts/ScreeningsContext';
 import { useFilmSearch } from '../../utils/hooks';
+import ReviewActivity from '../ReviewActivity';
 
-type Action = 'edit users' | 'password reset' | 'enter screenings';
+type Action = 'edit users' | 'password reset' | 'enter screenings' | 'review activity';
 
 /**
  * Given a `setState` function and an `Action`, this curried function
@@ -92,6 +93,16 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                         label="edit users"
                     >
                         <UserEdit />
+                    </Collapsible>
+                </li>
+
+                <li>
+                    <Collapsible
+                        open={isOpen('review activity')}
+                        handleClick={() => handleClick(setAction, 'review activity')}
+                        label="review activity"
+                    >
+                        <ReviewActivity />
                     </Collapsible>
                 </li>
 
