@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect, useCallback, ChangeEvent } from 'react';
 import axios from 'axios';
 import { Film } from '../types/api';
 import { throttle } from './functions';
@@ -69,12 +69,19 @@ export function useGetRequest<A>(
      * then save promise in state so another effect can handle errors, if any
      */
     useEffect(() => {
+        let isMounted = true; // prevent state update on unmounted component
         const req = axios
             .get(url)
             .then(res => res.data)
             .then(setData);
 
-        setRequest(req);
+        if (isMounted) {
+            setRequest(req);
+        }
+
+        return () => {
+            isMounted = false;
+        };
     }, [url]);
 
     /**
@@ -83,7 +90,15 @@ export function useGetRequest<A>(
      * the setErrors dependency don't cause multiple calls to api
      */
     useEffect(() => {
-        request?.catch(setErrors);
+        let isMounted = true; // prevent state update on unmounted component
+
+        if (isMounted) {
+            request?.catch(setErrors);
+        }
+
+        return () => {
+            isMounted = false;
+        };
     }, [request, setErrors]);
 
     return [data, setData];
@@ -125,4 +140,15 @@ export function useFilmSearch(): [Film[], (input: string, year?: string | undefi
     const doFilmsSearch = throttle((s, y) => search(s, y), 100);
 
     return [films, doFilmsSearch];
+}
+
+export function useFormField(
+    initialValue = ''
+): { value: string; onChange: (e: ChangeEvent<HTMLInputElement>) => void } {
+    const [value, setValue] = useState(initialValue);
+    const onChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value),
+        []
+    );
+    return { value, onChange };
 }
