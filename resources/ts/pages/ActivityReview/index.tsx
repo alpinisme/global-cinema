@@ -90,9 +90,9 @@ export const TheaterReview = (): ReactElement => {
                         {theater.current.name}
                         <button onClick={() => approve(theater.current)}>Approve</button>
                         <button onClick={() => reject(theater.current)}>Reject</button>
-                        {theater.alternates ? (
+                        {theater.alternates.length ? (
                             <div>
-                                Possiblly a duplicate of:
+                                Possibly a duplicate of:
                                 <ul>
                                     {theater.alternates.map(alternate => (
                                         <li key={alternate.id}>
