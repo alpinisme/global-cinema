@@ -1,4 +1,10 @@
-import { ScreeningsGeoJSONFeature, ScreeningsGeoJSON, User, Theater } from '../../types/api';
+import {
+    ScreeningsGeoJSONFeature,
+    ScreeningsGeoJSON,
+    User,
+    Theater,
+    TheaterToReview,
+} from '../../types/api';
 
 const screeningsGeoJSONFeatures: ScreeningsGeoJSONFeature[] = [
     {
@@ -75,4 +81,21 @@ const cities = [
     },
 ];
 
-export { cities, screeningsGeoJSON, users, theaters };
+const theatersToReview: TheaterToReview[] = [
+    {
+        current: {
+            name: 'Neptune',
+            city_id: 1,
+            id: 5,
+        },
+        alternates: [
+            {
+                name: 'Orbit',
+                city_id: 1,
+                id: 6,
+            },
+        ],
+    },
+];
+
+export { cities, screeningsGeoJSON, users, theaters, theatersToReview };

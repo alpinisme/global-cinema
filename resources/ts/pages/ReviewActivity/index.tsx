@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { ReactElement, useState } from 'react';
-import { User } from '../../types/api';
+import { Theater, TheaterToReview, User } from '../../types/api';
 import { useGetRequest } from '../../utils/hooks';
 
 const UserReview = (): ReactElement => {
@@ -64,6 +64,58 @@ const UserReview = (): ReactElement => {
     );
 };
 
+export const TheaterReview = (): ReactElement => {
+    const url = '/review/theaters';
+    const [theaters, setTheaters] = useGetRequest<TheaterToReview[]>(url, err => console.log(err));
+
+    const approve = (theater: Theater) => {
+        console.log('approved', theater);
+        0;
+    };
+
+    const reject = (theater: Theater) => {
+        console.log('rejected', theater);
+        0;
+    };
+
+    const merge = (wrong: Theater, correct: Theater) => {
+        console.log('merged', wrong, correct);
+    };
+
+    if (theaters) {
+        return (
+            <ul>
+                {theaters?.map(theater => (
+                    <li key={theater.current.id}>
+                        {theater.current.name}
+                        <button onClick={() => approve(theater.current)}>Approve</button>
+                        <button onClick={() => reject(theater.current)}>Reject</button>
+                        {theater.alternates ? (
+                            <div>
+                                Possiblly a duplicate of:
+                                <ul>
+                                    {theater.alternates.map(alternate => (
+                                        <li key={alternate.id}>
+                                            <button
+                                                onClick={() => merge(theater.current, alternate)}
+                                            ></button>
+                                            {alternate.name}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ) : (
+                            <div>No likely duplicates found</div>
+                        )}
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+
+    return <div>loading</div>;
+};
+
 const ReviewActivity = (): ReactElement => {
     const [endpoint, setEndpoint] = useState('');
     return (
@@ -76,7 +128,7 @@ const ReviewActivity = (): ReactElement => {
             </select>
 
             {endpoint == 'users' && <UserReview />}
-            {endpoint == ''}
+            {endpoint == 'theaters' && <TheaterReview />}
         </>
     );
 };

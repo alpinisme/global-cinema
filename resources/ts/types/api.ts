@@ -102,4 +102,12 @@ export interface ScreeningsGeoJSON {
     features: ScreeningsGeoJSONFeature[];
 }
 
+/**
+ * get request to review/theaters
+ */
+export interface TheaterToReview {
+    current: Theater;
+    alternates: Theater[];
+}
+
 // TODO I think the screenings interface needs to be split, depending on whether we are posting or getting.
