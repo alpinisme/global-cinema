@@ -91,6 +91,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                         name="password"
                         id="password"
                         type="password"
+                        autoComplete="new-password"
                         required
                         value={password}
                         onChange={e => setPassword(e.target.value)}
@@ -102,6 +103,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                         name="password_confirmation"
                         id="password-confirmation"
                         type="password"
+                        autoComplete="new-password"
                         required
                         value={passConfirm}
                         onChange={e => setPassConfirm(e.target.value)}
