@@ -9,7 +9,7 @@ import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
 import AdminContext from '../../contexts/AdminContext';
 import ScreeningsContext from '../../contexts/ScreeningsContext';
 import { useFilmSearch } from '../../utils/hooks';
-import ReviewActivity from '../ReviewActivity';
+import ReviewActivity from '../ActivityReview';
 
 type Action = 'edit users' | 'password reset' | 'enter screenings' | 'review activity';
 
