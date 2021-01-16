@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { theatersToReview } from './backend-helpers/mock-backend-data';
-import { TheaterReview } from '../pages/ReviewActivity';
+import { TheaterReview } from '../pages/ActivityReview';
 import '@testing-library/jest-dom/extend-expect';
 
 describe('Theater Review', () => {
