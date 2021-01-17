@@ -116,7 +116,7 @@ class AuthenticationsTest extends TestCase
         $admin = factory('App\User')->states('admin')->make();
         $this->actingAs($admin)
             ->get('/admin')
-            ->assertSee(e($user->name))
+            ->assertSee($user->name)
             ->assertSee($user->role);
     }
 
