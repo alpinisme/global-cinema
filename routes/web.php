@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use App\User;
+
 Route::get('/', function () {
     return view('app');
 });
@@ -40,6 +43,9 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('/map', 'ScreeningsController@map');
 Route::get('/map/{city}/{date}', 'ScreeningsController@geoJSON');
 Route::get('/cities', 'CitiesController@index');
+Route::get('/instructors', function () {
+    return User::select('id', 'name')->where('role', 'instructor')->get();
+});
 
 // Route::group(['middleware' => 'auth'], function () {
 //     Route::resource('/films', 'FilmsController');
