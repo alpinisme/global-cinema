@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { users } from './backend-helpers/mock-backend-data';
 import Register from '../pages/Register';
 import '@testing-library/jest-dom/extend-expect';
+import { jest } from '@jest/globals';
 
 const handleSuccess = jest.fn();
 
