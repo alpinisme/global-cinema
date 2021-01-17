@@ -6,6 +6,7 @@ use App\Theater;
 use App\User;
 use DB;
 use Illuminate\Http\Request;
+use App\Helpers\FuzzySearch;
 
 class ActivityReviewController extends Controller
 {
@@ -43,6 +44,18 @@ class ActivityReviewController extends Controller
 
     protected function unverifiedTheaters()
     {
-        return Theater::needsReview(); // TODO: suggest possible existing matches
+        $result = [];
+        $theaters = Theater::needsReview();
+        foreach ($theaters as $theater) {
+            $city = $theater->city_id;
+            $approvedTheaters = Theater::query()->where('city_id', $city)->where('verified', true)->get();
+            $searcher = new FuzzySearch($theater, $approvedTheaters);
+            $matches = $searcher->byKey('name')->sorted()->threshold(0.5)->take(5);
+            $item['current'] = $theater;
+            $item['alternates'] = $matches;
+            $result[] = $item;
+        }
+
+        return $result;
     }
 }
