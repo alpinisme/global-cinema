@@ -11,6 +11,7 @@
 |
 */
 
+use App\Screening;
 use App\User;
 
 Route::get('/', function () {
@@ -72,6 +73,8 @@ Route::group(['middleware' => ['can:see admin tools']], function () {
 
 Auth::routes();
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+Route::get('/completed/{city}', 'ProgressReviewController@index');
 
 /*
 
