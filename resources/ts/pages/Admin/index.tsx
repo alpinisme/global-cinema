@@ -10,8 +10,16 @@ import AdminContext from '../../contexts/AdminContext';
 import ScreeningsContext from '../../contexts/ScreeningsContext';
 import { useFilmSearch } from '../../utils/hooks';
 import ReviewActivity from '../ActivityReview';
+import TreeList from '../../components/TreeList';
 
-type Action = 'edit users' | 'password reset' | 'enter screenings' | 'review activity';
+const sampleData = [];
+
+type Action =
+    | 'edit users'
+    | 'password reset'
+    | 'enter screenings'
+    | 'review activity'
+    | 'check progress';
 
 /**
  * Given a `setState` function and an `Action`, this curried function
@@ -123,6 +131,16 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                         label="enter screenings"
                     >
                         <ScreeningEntryPortal setMonth={setMonth} />
+                    </Collapsible>
+                </li>
+
+                <li>
+                    <Collapsible
+                        open={isOpen('check progress')}
+                        handleClick={() => handleClick(setAction, 'check progress')}
+                        label="check progress"
+                    >
+                        <TreeList data={sampleData} />
                     </Collapsible>
                 </li>
             </ul>
