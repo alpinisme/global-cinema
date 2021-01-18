@@ -1,0 +1,15 @@
+li,
+.canOpen,
+.canClose {
+    list-style-type: none;
+}
+
+.canOpen::before {
+    content: '+  ';
+    font-size: 1.3rem;
+}
+
+.canClose::before {
+    content: '–  ';
+    font-size: 1.3rem;
+}
