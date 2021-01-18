@@ -69,7 +69,7 @@ class FuzzySearch
 
     public function toArray()
     {
-        return $this->removeRatios()->values()->all();
+        return $this->removeRatios()->result->all();
     }
 
     public function sorted()
@@ -86,6 +86,8 @@ class FuzzySearch
         $this->result = $this->result->map(function ($item) {
             return $item['item'];
         });
+
+        $this->result = $this->result->values();
 
         return $this;
     }
