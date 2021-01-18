@@ -12,12 +12,12 @@ const TreeList = ({ data }: Props): ReactElement => {
         }
     };
 
-    const getStyles = item => {
+    const getStyles = (item: Data) => {
         if (item.children.length == 0) {
             return '';
         } else if (item.id == active) {
             return styles.canClose;
-        } else if (item.id != active) {
+        } else {
             return styles.canOpen;
         }
     };
