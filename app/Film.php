@@ -41,4 +41,16 @@ class Film extends Model
     {
         return DB::select('select group_concat(id) ids, title, year, count(*) count from films group by title, year having count(*) > 1');
     }
+
+    public static function similar(Film $film)
+    {
+        $title = $film->title;
+        $substrings = str_split($title, 3);
+        $query = static::select('title', 'year', 'id');
+        foreach ($substrings as $substring) {
+            $query = $query->where('title', 'like', '%' . $substring . '%');
+        }
+
+        return $query->get();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Film;
 use App\Theater;
 use App\User;
 use DB;
@@ -39,7 +40,18 @@ class ActivityReviewController extends Controller
 
     protected function unverifiedFilms()
     {
-        return []; // TODO: implement
+        $result = [];
+        $unverified = Film::needsReview();
+
+        $result = $unverified->map(function ($film) {
+            $item['current'] = $film;
+            $search = new FuzzySearch($film, Film::similar($film));
+            $item['alternates'] = $search->byKey('title')->sorted()->threshold(0.1)->take(5);
+
+            return $item;
+        });
+
+        return $result;
     }
 
     protected function unverifiedTheaters()
