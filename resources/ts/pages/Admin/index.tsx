@@ -10,9 +10,7 @@ import AdminContext from '../../contexts/AdminContext';
 import ScreeningsContext from '../../contexts/ScreeningsContext';
 import { useFilmSearch } from '../../utils/hooks';
 import ReviewActivity from '../ActivityReview';
-import TreeList from '../../components/TreeList';
-
-const sampleData = [];
+import ProgressChecker from '../ProgressChecker/ index';
 
 type Action =
     | 'edit users'
@@ -49,11 +47,6 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     const [action, setAction] = useState<Action | null>(null);
 
     const [users] = useGetRequest<User[]>('/users', e => `Users could not be loaded: ${e}`);
-
-    // const [films, setFilms] = useGetRequest<Film[]>(
-    //     '/films',
-    //     e => `Films could not be loaded: ${e}`
-    // );
 
     const [films, doFilmsSearch] = useFilmSearch();
 
@@ -140,7 +133,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                         handleClick={() => handleClick(setAction, 'check progress')}
                         label="check progress"
                     >
-                        <TreeList data={sampleData} />
+                        <ProgressChecker cities={cities || []} />
                     </Collapsible>
                 </li>
             </ul>
