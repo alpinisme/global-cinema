@@ -19,7 +19,7 @@ class DataResourcesTest extends TestCase
         $this->actingAs(factory('App\User')->state('admin')->make())
             ->get('/films')
             ->assertSuccessful()
-            ->assertSee(e($film->title));
+            ->assertSee($film->title);
     }
 
     /** @test */
