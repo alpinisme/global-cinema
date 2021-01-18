@@ -27,7 +27,9 @@ describe('With happy-path api calls', () => {
         errMsg = '';
     });
     it('shows cities in select menu', async () => {
-        await waitFor(() => expect(screen.getByText(cities[0].name)).toBeInTheDocument());
+        await waitFor(() =>
+            expect(screen.getAllByRole('option', { name: cities[0].name })[0]).toBeInTheDocument()
+        );
     });
 });
 
