@@ -45,8 +45,8 @@ class ActivityReviewController extends Controller
 
         $result = $unverified->map(function ($film) {
             $item['current'] = $film;
-            $search = new FuzzySearch($film, Film::similar($film));
-            $item['alternates'] = $search->byKey('title')->sorted()->threshold(0.1)->take(5);
+            $fuzzy = new FuzzySearch($film, Film::similar($film));
+            $item['alternates'] = $fuzzy->sort('title')->threshold(0.1)->take(5);
 
             return $item;
         });
@@ -62,7 +62,7 @@ class ActivityReviewController extends Controller
             $city = $theater->city_id;
             $approvedTheaters = Theater::query()->where('city_id', $city)->where('verified', true)->get();
             $searcher = new FuzzySearch($theater, $approvedTheaters);
-            $matches = $searcher->byKey('name')->sorted()->threshold(0.5)->take(5);
+            $matches = $searcher->sort('name')->threshold(0.5)->take(5);
             $item['current'] = $theater;
             $item['alternates'] = $matches;
             $result[] = $item;

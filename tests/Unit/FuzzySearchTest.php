@@ -13,7 +13,7 @@ class FuzzySearchTest extends TestCase
         $needle = 'Bravissimo';
         $haystack = ['Bravo', 'Bravisimo', 'Hello', 'Hi', 'Bravissimo'];
         $fuzzy = new FuzzySearch($needle, $haystack);
-        $result = $fuzzy->sorted()->toArray();
+        $result = $fuzzy->sort()->toArray();
         $this->assertEquals(['Bravissimo', 'Bravisimo', 'Bravo', 'Hello', 'Hi'], $result);
     }
 
@@ -24,7 +24,7 @@ class FuzzySearchTest extends TestCase
         $haystack = [['name' => 'Bravo'], ['name' => 'Bravisimo'], ['name' => 'Hello'], ['name' => 'Hi'], ['name' => 'Bravissimo']];
 
         $fuzzy = new FuzzySearch($needle, $haystack);
-        $result = $fuzzy->byKey('name')->sorted()->toArray();
+        $result = $fuzzy->sort('name')->toArray();
         $this->assertEquals([['name' => 'Bravissimo'], ['name' => 'Bravisimo'], ['name' => 'Bravo'], ['name' => 'Hello'], ['name' => 'Hi']], $result);
     }
 
@@ -35,7 +35,7 @@ class FuzzySearchTest extends TestCase
         $haystack = [['name' => 'Bravo'], ['name' => 'Bravisimo'], ['name' => 'Hello'], ['name' => 'Hi'], ['name' => 'Bravissimo']];
 
         $fuzzy = new FuzzySearch($needle, $haystack);
-        $result = $fuzzy->byKey('name')->sorted()->threshold(0.5)->toArray();
+        $result = $fuzzy->sort('name')->threshold(0.5)->toArray();
         $this->assertEquals([['name' => 'Bravissimo'], ['name' => 'Bravisimo'], ['name' => 'Bravo']], $result);
     }
 }

@@ -48,13 +48,6 @@ class FuzzySearch
         });
     }
 
-    public function byKey($key)
-    {
-        $this->key = $key;
-
-        return $this;
-    }
-
     public function all()
     {
         return $this->removeRatios();
@@ -72,8 +65,9 @@ class FuzzySearch
         return $this->removeRatios()->result->all();
     }
 
-    public function sorted()
+    public function sort($key = null)
     {
+        $this->key = $key;
         $this->compareAndAttachRatios();
 
         $this->sortDescByRatio();
