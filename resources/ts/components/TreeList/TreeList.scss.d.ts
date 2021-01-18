@@ -3,6 +3,7 @@
 interface CssExports {
   'canClose': string;
   'canOpen': string;
+  'tree': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

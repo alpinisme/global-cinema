@@ -23,7 +23,7 @@ const TreeList = ({ data }: Props): ReactElement => {
     };
 
     return (
-        <ul>
+        <ul className={styles.tree}>
             {data.map(item => (
                 <li key={item.id} className={getStyles(item)} onClick={handleClick(item.id)}>
                     {item.name}
@@ -36,11 +36,11 @@ const TreeList = ({ data }: Props): ReactElement => {
 
 export default TreeList;
 
-interface Props {
+export interface Props {
     data: Data[];
 }
 
-interface Data {
+export interface Data {
     name: string;
     id: string;
     children: Data[];
