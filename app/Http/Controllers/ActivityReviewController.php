@@ -40,34 +40,30 @@ class ActivityReviewController extends Controller
 
     protected function unverifiedFilms()
     {
-        $result = [];
         $unverified = Film::needsReview();
 
-        $result = $unverified->map(function ($film) {
-            $item['current'] = $film;
+        return $unverified->map(function ($film) {
             $fuzzy = new FuzzySearch($film, Film::similar($film));
+
+            $item['current'] = $film;
             $item['alternates'] = $fuzzy->sort('title')->threshold(0.1)->take(5);
 
             return $item;
         });
-
-        return $result;
     }
 
     protected function unverifiedTheaters()
     {
-        $result = [];
-        $theaters = Theater::needsReview();
-        foreach ($theaters as $theater) {
-            $city = $theater->city_id;
-            $approvedTheaters = Theater::query()->where('city_id', $city)->where('verified', true)->get();
-            $searcher = new FuzzySearch($theater, $approvedTheaters);
-            $matches = $searcher->sort('name')->threshold(0.5)->take(5);
-            $item['current'] = $theater;
-            $item['alternates'] = $matches;
-            $result[] = $item;
-        }
+        $unverified = Theater::needsReview();
 
-        return $result;
+        return $unverified->map(function ($theater) {
+            $verified = Theater::verified($theater->city_id);
+            $fuzzy = new FuzzySearch($theater, $verified);
+
+            $item['current'] = $theater;
+            $item['alternates'] = $fuzzy->sort('name')->threshold(0.5)->take(5);
+
+            return $item;
+        });
     }
 }

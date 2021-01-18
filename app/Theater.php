@@ -44,4 +44,13 @@ class Theater extends Model
     {
         return static::query()->where('verified', false)->get();
     }
+
+    /**
+     * Lists all verified theaters that have been added to database
+     * @param number $city
+     */
+    public static function verified($city)
+    {
+        return static::query()->where('verified', true)->where('city_id', $city)->get();
+    }
 }
