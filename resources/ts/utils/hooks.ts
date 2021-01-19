@@ -46,7 +46,7 @@ export function usePatchRequest<A, B>(): [
     const makePatchRequest = (url: string, postData: A) => {
         setRes(prevState => ({ ...prevState, isLoading: true }));
         axios
-            .put(url, postData)
+            .patch(url, postData)
             .then(res => {
                 setRes({ data: res.data, isLoading: false, error: null });
             })

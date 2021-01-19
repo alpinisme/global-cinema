@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { ReactElement, useEffect, useState } from 'react';
 import { Film, FilmToReview, Theater, TheaterToReview, User } from '../../types/api';
-import { useGetRequest } from '../../utils/hooks';
+import { useGetRequest, usePatchRequest } from '../../utils/hooks';
 import styles from './ActivityReview.scss';
 
 const UserReview = (): ReactElement => {
@@ -120,7 +120,14 @@ export const TheaterReview = (): ReactElement => {
 const FilmReview = () => {
     const url = '/review/films';
     const [films, setFilms] = useGetRequest<FilmToReview[]>(url, err => console.log(err));
+    const [mergeResult, sendMergeRequest] = usePatchRequest();
     const minCount = 5;
+
+    useEffect(() => {
+        if (mergeResult.error) {
+            console.log(mergeResult);
+        }
+    }, [mergeResult]);
 
     useEffect(() => {
         let isMounted = true;
@@ -137,15 +144,24 @@ const FilmReview = () => {
         };
     }, [films, setFilms]);
 
-    const reject = (film: Film) => console.log('rejected', film);
-    const merge = (film: Film, alternate: Film) => console.log('merging', film, 'into', alternate);
+    const reject = (rejected: Film) => {
+        axios.delete('films/' + rejected.id);
+        setFilms(films?.filter(film => film.current != rejected) || []);
+    };
+
+    const merge = (from: Film, to: Film) => {
+        const path = 'merge/films';
+        sendMergeRequest(path, { from: from.id, to: to.id });
+        setFilms(films?.filter(film => film.current != from) || []);
+    };
 
     return (
         <ul>
+            {!films && '...searching the database'}
             {films?.map(film => (
                 <li className={styles.item} key={film.current.id}>
                     <em className={styles.current}>
-                        {film.current.title} ({film.current.year})
+                        {film.current.title} ({film.current.year || 'no year'})
                     </em>
                     <button className={styles.reject} onClick={() => reject(film.current)}>
                         Reject
