@@ -69,6 +69,7 @@ Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::patch('/dupes', 'DuplicateFilmsController@update');
 
     Route::get('/review/{category}', 'ActivityReviewController@index');
+    Route::patch('/merge/films', 'FilmMergeController@update');
 });
 
 Auth::routes();
