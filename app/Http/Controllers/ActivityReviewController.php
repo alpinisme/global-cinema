@@ -38,15 +38,19 @@ class ActivityReviewController extends Controller
         return User::needsReview();
     }
 
+    // unlike with theaters, which are relatively few in number, this query can be quite slow
+    // so it should not be relied on for frequent or public-facing queries, but since it is only
+    // used by admins at the moment, and rarely at that, it is acceptable for the needs
     protected function unverifiedFilms()
     {
         $unverified = Film::needsReview();
 
         return $unverified->map(function ($film) {
-            $fuzzy = new FuzzySearch($film, Film::similar($film));
+            $substrings = $this->substrings($film->title);
+            $fuzzy = new FuzzySearch($film, Film::verifiedLike($substrings));
 
             $item['current'] = $film;
-            $item['alternates'] = $fuzzy->sort('title')->threshold(0.1)->take(5);
+            $item['alternates'] = $fuzzy->sort('title')->threshold(0.3)->take(5);
 
             return $item;
         });
@@ -65,5 +69,27 @@ class ActivityReviewController extends Controller
 
             return $item;
         });
+    }
+
+    /**
+     * Divides a string into all possible substrings of specified length
+     *
+     * @param string $string
+     * @param int $chunkSize
+     * @return array<string>
+     */
+    protected function substrings($string, $chunkSize = 5)
+    {
+        $length = strlen($string);
+        if ($length <= $chunkSize) {
+            return [$string];
+        } elseif ($length) {
+            $result = [];
+            for ($i = 0; $i < $length - $chunkSize; $i++) {
+                $result[] = substr($string, $i, $i + $chunkSize);
+            }
+
+            return $result;
+        }
     }
 }

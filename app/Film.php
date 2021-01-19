@@ -30,11 +30,12 @@ class Film extends Model
     }
 
     /**
-     * Lists all unverified films that have been added to database
+     * Finds first specified number of unverified films that have been added to database
+     * @param int $count
      */
-    public static function needsReview()
+    public static function needsReview($count = 10)
     {
-        return static::query()->where('verified', false)->get();
+        return static::query()->where('verified', false)->limit($count)->get('title', 'year', 'id', 'imdb');
     }
 
     public static function duplicates()
@@ -42,14 +43,30 @@ class Film extends Model
         return DB::select('select group_concat(id) ids, title, year, count(*) count from films group by title, year having count(*) > 1');
     }
 
-    public static function similar(Film $film)
+    /**
+     * Finds all verified films with titles that contain one of the given strings
+     *
+     * Takes an array of strings and returns every verified film with one or more
+     * of those strings in its title.
+     *
+     * @param array $substrings
+     */
+    public static function verifiedLike($substrings)
     {
-        $title = $film->title;
-        $substrings = str_split($title, 3);
-        $query = static::select('title', 'year', 'id');
-        foreach ($substrings as $substring) {
-            $query = $query->where('title', 'like', '%' . $substring . '%');
-        }
+        $query = static::select('title', 'year', 'id', 'imdb')
+            ->where(
+                function ($query) {
+                    $query
+                        ->where('verified', true)
+                        ->orWhereNotNull('imdb');
+                }
+            )->where(
+                function ($query) use ($substrings) {
+                    foreach ($substrings as $substring) {
+                        $query = $query->orWhere('title', 'like', '%' . $substring . '%');
+                    }
+                }
+            );
 
         return $query->get();
     }
