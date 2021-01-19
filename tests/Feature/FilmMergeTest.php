@@ -28,7 +28,7 @@ class FilmMergeTest extends TestCase
         $from = factory(Film::class)->create();
         $to = factory(Film::class)->create();
         factory(Screening::class)->create(['film_id' => $from->id]);
-        $this->asAdmin()->patch('/merge/films/?from=' . $from->id . '&to=' . $to->id);
+        $this->asAdmin()->patch('/merge/films/', ['from' => $from->id, 'to' => $to->id]);
         $this->assertDatabaseHas('screenings', ['film_id' => $to->id]);
         $this->assertDatabaseMissing('screenings', ['film_id' => $from->id]);
     }
@@ -41,7 +41,7 @@ class FilmMergeTest extends TestCase
         $untouched = factory(Film::class)->create();
         factory(Screening::class)->create(['film_id' => $from->id]);
         factory(Screening::class)->create(['film_id' => $untouched->id]);
-        $this->asAdmin()->patch('/merge/films/?from=' . $from->id . '&to=' . $to->id);
+        $this->asAdmin()->patch('/merge/films/', ['from' => $from->id, 'to' => $to->id]);
         $this->assertDatabaseHas('screenings', ['film_id' => $untouched->id]);
     }
 }
