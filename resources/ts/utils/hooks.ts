@@ -33,7 +33,7 @@ export function usePostRequest<A, B>(): [
     return [res, makePostRequest];
 }
 
-export function usePutRequest<A, B>(): [
+export function usePatchRequest<A, B>(): [
     PostRequestResponse<B>,
     (url: string, postData: A) => void
 ] {
@@ -43,7 +43,7 @@ export function usePutRequest<A, B>(): [
         isLoading: false,
     });
 
-    const makePutRequest = (url: string, postData: A) => {
+    const makePatchRequest = (url: string, postData: A) => {
         setRes(prevState => ({ ...prevState, isLoading: true }));
         axios
             .put(url, postData)
@@ -54,7 +54,7 @@ export function usePutRequest<A, B>(): [
                 setRes({ data: null, isLoading: false, error });
             });
     };
-    return [res, makePutRequest];
+    return [res, makePatchRequest];
 }
 
 export function useGetRequest<A>(

@@ -1,7 +1,6 @@
 import React, { ReactElement, useState, useContext } from 'react';
 import { User } from '../types/api';
 import Autosuggest from './Autosuggest';
-import { usePutRequest } from '../utils/hooks';
 import AdminContext from '../contexts/AdminContext';
 
 const UserEdit = (): ReactElement => {
@@ -9,7 +8,6 @@ const UserEdit = (): ReactElement => {
     const [isNewUser, setIsNewUser] = useState(false);
 
     const { users } = useContext(AdminContext);
-    const [userUpdateResult, makeUserUpdateRequest] = usePutRequest<User, string>();
 
     /**
      * finds and sets user in state based on given userID
