@@ -47,7 +47,7 @@ class Theater extends Model
 
     /**
      * Lists all verified theaters that have been added to database
-     * @param number $city
+     * @param int $city
      */
     public static function verified($city)
     {
