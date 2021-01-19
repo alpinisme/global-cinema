@@ -35,7 +35,7 @@ class Film extends Model
      */
     public static function needsReview($count = 10)
     {
-        return static::query()->where('verified', false)->limit($count)->get('title', 'year', 'id', 'imdb');
+        return static::query()->where('verified', false)->limit($count)->get(['title', 'year', 'id']);
     }
 
     public static function duplicates()
