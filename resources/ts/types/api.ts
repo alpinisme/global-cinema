@@ -13,6 +13,7 @@ export interface Film {
     id: number;
     title: string;
     year: number;
+    imdb: string;
 }
 
 /**
@@ -108,6 +109,14 @@ export interface ScreeningsGeoJSON {
 export interface TheaterToReview {
     current: Theater;
     alternates: Theater[];
+}
+
+/**
+ * get request to review/films
+ */
+export interface FilmToReview {
+    current: Film;
+    alternates: Film[];
 }
 
 // TODO I think the screenings interface needs to be split, depending on whether we are posting or getting.

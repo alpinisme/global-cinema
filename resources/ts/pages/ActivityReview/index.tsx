@@ -1,7 +1,8 @@
 import axios from 'axios';
-import React, { ReactElement, useState } from 'react';
-import { Theater, TheaterToReview, User } from '../../types/api';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { Film, FilmToReview, Theater, TheaterToReview, User } from '../../types/api';
 import { useGetRequest } from '../../utils/hooks';
+import styles from './ActivityReview.scss';
 
 const UserReview = (): ReactElement => {
     const url = '/review/users';
@@ -116,10 +117,69 @@ export const TheaterReview = (): ReactElement => {
     return <div>loading</div>;
 };
 
+const FilmReview = () => {
+    const url = '/review/films';
+    const [films, setFilms] = useGetRequest<FilmToReview[]>(url, err => console.log(err));
+    const minCount = 5;
+
+    useEffect(() => {
+        let isMounted = true;
+
+        if (films?.length == minCount) {
+            axios
+                .get(url)
+                .then(res => isMounted && setFilms(res.data))
+                .catch(err => console.log('Oops', err));
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [films, setFilms]);
+
+    const reject = (film: Film) => console.log('rejected', film);
+    const merge = (film: Film, alternate: Film) => console.log('merging', film, 'into', alternate);
+
+    return (
+        <ul>
+            {films?.map(film => (
+                <li className={styles.item} key={film.current.id}>
+                    <em className={styles.current}>
+                        {film.current.title} ({film.current.year})
+                    </em>
+                    <button className={styles.reject} onClick={() => reject(film.current)}>
+                        Reject
+                    </button>
+                    {film.alternates.length ? (
+                        <div>
+                            Possibly a duplicate of:
+                            <ul>
+                                {film.alternates.map(alternate => (
+                                    <li key={alternate.id} title={alternate.imdb}>
+                                        {alternate.title} ({alternate.year})
+                                        <button
+                                            className={styles.merge}
+                                            onClick={() => merge(film.current, alternate)}
+                                        >
+                                            Merge
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ) : (
+                        <div>No likely duplicates found</div>
+                    )}
+                </li>
+            ))}
+        </ul>
+    );
+};
+
 const ActivityReview = (): ReactElement => {
     const [endpoint, setEndpoint] = useState('');
     return (
-        <>
+        <div className={styles.review}>
             <select value={endpoint} onChange={e => setEndpoint(e.target.value)}>
                 <option value="">Select...</option>
                 <option value="users">Users</option>
@@ -129,7 +189,8 @@ const ActivityReview = (): ReactElement => {
 
             {endpoint == 'users' && <UserReview />}
             {endpoint == 'theaters' && <TheaterReview />}
-        </>
+            {endpoint == 'films' && <FilmReview />}
+        </div>
     );
 };
 

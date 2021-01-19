@@ -1,0 +1,37 @@
+.review button {
+    margin-bottom: 0.3rem;
+    border: none;
+    background-color: inherit;
+    padding: initial;
+    margin-left: 0.7rem;
+}
+
+.review ul {
+    text-align: left;
+}
+
+.item {
+    margin-top: 1rem;
+}
+
+.current {
+    font-weight: bold;
+}
+
+.accept,
+.reject,
+.merge {
+    font-weight: bold;
+}
+
+.accept {
+    color: rgb(25, 88, 25);
+}
+
+.reject {
+    color: rgb(107, 2, 2);
+}
+
+.merge {
+    color: cadetblue;
+}
