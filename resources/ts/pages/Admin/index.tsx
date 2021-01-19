@@ -9,7 +9,7 @@ import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
 import AdminContext from '../../contexts/AdminContext';
 import ScreeningsContext from '../../contexts/ScreeningsContext';
 import { useFilmSearch } from '../../utils/hooks';
-import ReviewActivity from '../ActivityReview';
+import ActivityReview from '../ActivityReview';
 import ProgressChecker from '../ProgressChecker/ index';
 
 type Action =
@@ -103,7 +103,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                         handleClick={() => handleClick(setAction, 'review activity')}
                         label="review activity"
                     >
-                        <ReviewActivity />
+                        <ActivityReview />
                     </Collapsible>
                 </li>
 

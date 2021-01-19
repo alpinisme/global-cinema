@@ -116,7 +116,7 @@ export const TheaterReview = (): ReactElement => {
     return <div>loading</div>;
 };
 
-const ReviewActivity = (): ReactElement => {
+const ActivityReview = (): ReactElement => {
     const [endpoint, setEndpoint] = useState('');
     return (
         <>
@@ -133,4 +133,4 @@ const ReviewActivity = (): ReactElement => {
     );
 };
 
-export default ReviewActivity;
+export default ActivityReview;
