@@ -11,17 +11,15 @@ class FuzzySearch
 {
     protected $needle;
 
-    protected $haystack;
-
     protected $key;
 
-    protected $result;
+    protected $values;
 
     public function __construct($needle, $haystack)
     {
         $this->needle = $needle;
 
-        $this->haystack = $haystack instanceof Collection ? $haystack : collect($haystack);
+        $this->values = $haystack instanceof Collection ? $haystack : collect($haystack);
     }
 
     protected function getSearchTerm($item)
@@ -37,7 +35,7 @@ class FuzzySearch
 
     protected function compareAndAttachRatios()
     {
-        $this->result = $this->haystack->map(function ($item) {
+        $this->values = $this->values->map(function ($item) {
             $result['item'] = $item;
             $result['ratio'] = $this->levenshteinRatio(
                 $this->getSearchTerm($item),
@@ -57,12 +55,12 @@ class FuzzySearch
     {
         $this->removeRatios();
 
-        return $this->result->take($count);
+        return $this->values->take($count);
     }
 
     public function toArray()
     {
-        return $this->removeRatios()->result->all();
+        return $this->removeRatios()->values->all();
     }
 
     public function sort($key = null)
@@ -77,23 +75,23 @@ class FuzzySearch
 
     protected function removeRatios()
     {
-        $this->result = $this->result->map(function ($item) {
+        $this->values = $this->values->map(function ($item) {
             return $item['item'];
         });
 
-        $this->result = $this->result->values();
+        $this->values = $this->values->values();
 
         return $this;
     }
 
     protected function sortDescByRatio()
     {
-        $this->result = $this->result->sortByDesc('ratio');
+        $this->values = $this->values->sortByDesc('ratio');
     }
 
     public function threshold($value)
     {
-        $this->result = $this->result->filter(function ($item) use ($value) {
+        $this->values = $this->values->filter(function ($item) use ($value) {
             return $item['ratio'] >= $value ? true : false;
         });
 
@@ -106,6 +104,7 @@ class FuzzySearch
      * Finds ratio of the actual levenshtein distance (number of changes necessary
      * to convert one string to the other) to the highest possible distance
      * between two strings of the supplied lengths. Returns a number between 0 and 1.
+     * 1 is a perfect match. 0 means the strings share nothing in common.
      *
      * @param string $a
      * @param string $b
