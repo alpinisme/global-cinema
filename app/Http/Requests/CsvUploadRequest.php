@@ -25,7 +25,7 @@ class CsvUploadRequest extends FormRequest
     {
         return [
             'city' => 'required|exists:cities,id',
-            'date' => 'required|date',
+            'date' => 'required|date_format:Y-m-d',
             'csv' => 'required|file|mimes:csv',
         ];
     }
