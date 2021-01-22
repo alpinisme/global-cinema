@@ -10,9 +10,8 @@ class FilmMergeController extends Controller
 {
     public function update(FilmMergeRequest $request)
     {
-        $input = $request->validated();
-        $from = $input['from'];
-        $to = $input['to'];
+        $from = $request->input('from');
+        $to = $request->input('to');
 
         Screening::query()->where('film_id', $from)->update(['film_id' => $to]);
         Film::query()->where('id', $from)->delete();
