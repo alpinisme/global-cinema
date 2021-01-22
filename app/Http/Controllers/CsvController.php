@@ -13,14 +13,27 @@ class CsvController extends Controller
         $city = $request->input('city');
         $date = $request->input('date');
         $file = $request->file('csv');
-        $requiredFields = ['title', 'theater'];
+
+        $required = ['title', 'theater'];
+        $optional = ['raw'];
+        $allowed = array_merge($required, $optional);
 
         try {
-            $rows = $csvReader->read($file, $requiredFields);
+            $rows = $csvReader->read($file)->require($required)->only($allowed)->toArray();
         } catch (InvalidCsvException $e) {
             return ['error' => $e->getMessage()];
         }
 
         return response()->json($rows);
+    }
+
+    protected function getTheaterId($name, $city)
+    {
+        // return theater id -- create one if need be
+    }
+
+    protected function getFilmId($title, $year)
+    {
+        // return film id -- create one if need be
     }
 }

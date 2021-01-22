@@ -12,19 +12,85 @@ class CsvReader
     /** @var string[] */
     protected $fields;
 
+    /** @var array */
+    protected $rows;
+
     /**
      * Reads and parses a csv file with headers
      *
      * @param mixed $file
      * @param string[] $requiredFields
-     * @return array[]
+     * @return $this
      */
     public function read($file, $requiredFields = [])
     {
         $this->open($file);
-        $this->validateHeader($requiredFields);
+        $this->readHeader($requiredFields);
+        $this->readBody();
 
-        return $this->parsed();
+        return $this;
+    }
+
+    /**
+     * Asserts that the csv must contain the specified header fields. Throws exception if not.
+     *
+     * @param string[] $requiredFields
+     * @return $this
+     * @throws InvalidCsvException
+     */
+    public function require($requiredFields)
+    {
+        $missing = array_diff($requiredFields, $this->fields);
+
+        if (!empty($missing)) {
+            throw new InvalidCsvException('File missing required header field(s): ' . implode(', ', $missing));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Filters out all fields from the csv except the specified `$desiredFields`
+     *
+     * @param string[] $requiredFields
+     * @return $this
+     */
+    public function only($desiredFields)
+    {
+        $extras = array_diff($this->fields, $desiredFields);
+
+        $this->each(function ($item) use ($extras) {
+            foreach ($extras as $extra) {
+                unset($item[$extra]);
+            }
+
+            return $item;
+        });
+
+        return $this;
+    }
+
+    /**
+     * Performs the specified operation on each row of the csv
+     *
+     * @param callable $callback
+     * @return $this
+     */
+    public function each($callback)
+    {
+        $this->rows = array_map($callback, $this->rows);
+
+        return $this;
+    }
+
+    /**
+     * Returns the finalized data as an array of rows
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->rows;
     }
 
     /**
@@ -50,7 +116,7 @@ class CsvReader
      * @return void
      * @throws InvalidCsvException
      */
-    protected function validateHeader($required)
+    protected function readHeader($required)
     {
         $header = fgetcsv($this->handle);
 
@@ -58,14 +124,7 @@ class CsvReader
             throw new InvalidCsvException('File is empty or in invalid csv format');
         }
 
-        $fields = array_map('mb_strtolower', $header);
-        $missing = array_diff($required, $fields);
-
-        if (!empty($missing)) {
-            throw new InvalidCsvException('File missing required header field(s): ' . implode(', ', $missing));
-        }
-
-        $this->fields = $fields;
+        $this->fields = array_map('mb_strtolower', $header);
     }
 
     /**
@@ -73,7 +132,7 @@ class CsvReader
      * based on the fields in the already-validated header
      * @return void
      */
-    protected function parsed()
+    protected function readBody()
     {
         $result = [];
 
@@ -85,6 +144,6 @@ class CsvReader
             $result[] = $row;
         }
 
-        return $result;
+        $this->rows = $result;
     }
 }
