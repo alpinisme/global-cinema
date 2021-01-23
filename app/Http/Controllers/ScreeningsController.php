@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Screening;
-use App\ScreeningsGeoJSON;
+use App\Helpers\ScreeningsGeoJSON;
 use DB;
 
 class ScreeningsController extends StandardResourceController
@@ -67,8 +67,7 @@ class ScreeningsController extends StandardResourceController
 
     public function geoJSON($city, $date)
     {
-        $screenings = DB::table('screenings')
-                    ->leftJoin('theaters', 'theaters.id', '=', 'screenings.theater_id')
+        $screenings = Screening::leftJoin('theaters', 'theaters.id', '=', 'screenings.theater_id')
                     ->leftJoin('films', 'films.id', '=', 'screenings.film_id')
                     ->select('date', 'name', 'lat', 'lng', 'title', 'language', 'country')
                     ->where('screenings.date', '=', $date)
