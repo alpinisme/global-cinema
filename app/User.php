@@ -10,12 +10,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    const ADMIN_TYPE = 'admin';
-
-    const DEFAULT_TYPE = 'student';
+    const ADMIN_ROLE = 'admin';
 
     const ROLES = [
-        'user',
         'student',
         'instructor',
         'admin',
@@ -29,6 +26,20 @@ class User extends Authenticatable
         'unconfirmed_instructor',
         'student',
     ];
+
+    const DATA_ENTRY_ROLES = [
+        'student',
+        'instructor',
+        'admin',
+        'contributor',
+    ];
+
+    const DATA_EDITING_ROLES = [
+        'admin',
+        'contributor',
+    ];
+
+    // possible registrations, people who can edit, people who can add
 
     protected $fillable = [
         'name', 'email', 'password', 'role',

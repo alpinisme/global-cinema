@@ -28,7 +28,7 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->state(User::class, 'admin', [
-    'role' => User::ADMIN_TYPE,
+    'role' => User::ADMIN_ROLE,
 ]);
 
 $factory->state(User::class, 'student', [
@@ -48,5 +48,17 @@ $factory->state(User::class, 'just registered', function (Faker $faker) {
 $factory->state(User::class, 'needs verification', function (Faker $faker) {
     return [
         'role' => $faker->randomElement(['unconfirmed_instructor', 'unconfirmed_contributor']),
+    ];
+});
+
+$factory->state(User::class, 'editor', function (Faker $faker) {
+    return [
+        'role' => $faker->randomElement(User::DATA_EDITING_ROLES),
+    ];
+});
+
+$factory->state(User::class, 'data entry', function (Faker $faker) {
+    return [
+        'role' => $faker->randomElement(User::DATA_ENTRY_ROLES),
     ];
 });

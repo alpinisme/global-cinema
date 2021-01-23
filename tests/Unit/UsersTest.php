@@ -12,13 +12,6 @@ class UsersTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_default_user_is_not_an_admin()
-    {
-        $user = factory(User::class)->create(['role' => USER::DEFAULT_TYPE]);
-        $this->assertFalse($user->hasRole('admin'));
-    }
-
-    /** @test */
     public function an_admin_user_is_an_admin()
     {
         $admin = factory(User::class)->states('admin')->create();
