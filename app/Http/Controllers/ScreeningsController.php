@@ -8,36 +8,54 @@ use App\Http\Requests\ScreeningsRequest;
 
 class ScreeningsController extends Controller
 {
+    /**
+     * Show all screenings the user is authorized to view
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        return $this->authorizedScreenings();
+        if (auth()->user()->isAdmin()) {
+            return Screening::joined()->get();
+        }
+
+        return Screening::joined()->createdBy(auth()->id())->get();
     }
 
-    public function store(ScreeningsRequest $request)
+    /**
+     * Store a new screening
+     * @param ScreeningsRequest $request
+     * @param Screening $screening
+     * @return \Illuminate\Http\Response
+     */
+    public function store(ScreeningsRequest $request, Screening $screening)
     {
-        $screening = new Screening($request->validated());
+        $screening = $screening->fill($request->validated());
         $screening->createdBy = auth()->id();
         $screening->save();
-
-        $response = Screening::with(['film', 'theater'])
-        ->where('id', '=', $screening->id)
-        ->get()
-        ->first();
+        $response = Screening::joined()->id($screening->id)->first();
 
         return response()->json($response, 201);
     }
 
+    /**
+     * Update the specified screening
+     * @param ScreeningsRequest $request
+     * @param Screening $screening
+     * @return \Illuminate\Http\Response
+     */
     public function update(ScreeningsRequest $request, Screening $screening)
     {
         $screening->fill($request->validated());
         $screening->save();
 
-        return Screening::with(['film', 'theater'])
-                        ->where('id', '=', $screening->id)
-                        ->get()
-                        ->first();
+        return Screening::joined()->id($screening->id)->first();
     }
 
+    /**
+     * Delete the specified screening
+     * @param Screening $screening
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Screening $screening)
     {
         $screening->delete();
@@ -45,44 +63,36 @@ class ScreeningsController extends Controller
         return response('', 204);
     }
 
+    /**
+     * Shows all screenings for the specified date created by the user
+     * @param string $date
+     * @return \Illuminate\Http\Response
+     */
     public function date($date)
     {
-        return Screening::with(['film', 'theater'])
-                    ->where('date', $date)
-                    ->where('screenings.createdBy', auth()->id())
-                    ->get();
+        return Screening::joined()->date($date)->createdBy(auth()->id())->get();
     }
 
+    /**
+     * Show the view for the screenings map
+     * @return \Illuminate\Http\Response
+     */
     public function map()
     {
         return view('map');
     }
 
+    /**
+     * Show all theaters for the specified date and city along with their screenings
+     * @param string $city city id
+     * @param string $date Y-m-d date string
+     * @return \Illuminate\Http\Response
+     */
     public function geoJSON($city, $date)
     {
-        $screenings = Screening::leftJoin('theaters', 'theaters.id', '=', 'screenings.theater_id')
-                    ->leftJoin('films', 'films.id', '=', 'screenings.film_id')
-                    ->select('date', 'name', 'lat', 'lng', 'title', 'language', 'country')
-                    ->where('screenings.date', '=', $date)
-                    ->where('theaters.city_id', '=', $city)
-                    ->get();
+        // TODO: this method belong to Theaters and its controller, not here
+        $screenings = Screening::byCityAndDate($city, $date);
 
-        // format data according to geoJSON standard
-        $geoJSON = new ScreeningsGeoJSON($date, $screenings);
-
-        return response()->json($geoJSON);
-    }
-
-    protected function authorizedScreenings()
-    {
-        $user = auth()->user();
-        if ($user->isStudent()) {
-            return $user->screenings;
-        }
-        if ($user->isAdmin()) {
-            return Screening::all();
-        }
-
-        return 'user type not recognized';
+        return response()->json(new ScreeningsGeoJSON($date, $screenings));
     }
 }
