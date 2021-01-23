@@ -121,10 +121,10 @@ class AuthenticationsTest extends TestCase
     }
 
     /** @test */
-    public function default_users_cannot_view_users_list()
+    public function students_cannot_view_users_list()
     {
         $this->get('/admin')->assertStatus(403);
-        $this->actingAs(factory('App\User')->make(['role' => User::DEFAULT_TYPE]))->get('/admin')->assertStatus(403);
+        $this->actingAs(factory('App\User')->states('student')->make())->get('/admin')->assertStatus(403);
     }
 
     /** @test */
