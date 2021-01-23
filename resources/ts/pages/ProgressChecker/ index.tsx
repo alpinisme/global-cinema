@@ -52,13 +52,13 @@ const ProgressChecker = ({ cities }: Props): ReactElement => {
     const options = cities.map(city => ({ label: city.name, value: city.id }));
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => setCity(e.target.value);
 
-    const data = dates?.reduce(formatDates, []) || [];
+    const data = dates?.reduce(formatDates, []) ?? [];
 
     return (
         <>
             <Select
                 label={'Select a city to review'}
-                value={city || ''}
+                value={city ?? ''}
                 options={options}
                 handleChange={handleChange}
             />

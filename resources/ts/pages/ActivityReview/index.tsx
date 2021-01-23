@@ -146,13 +146,13 @@ const FilmReview = () => {
 
     const reject = (rejected: Film) => {
         axios.delete('films/' + rejected.id);
-        setFilms(films?.filter(film => film.current != rejected) || []);
+        setFilms(films?.filter(film => film.current != rejected) ?? []);
     };
 
     const merge = (from: Film, to: Film) => {
         const path = 'merge/films';
         sendMergeRequest(path, { from: from.id, to: to.id });
-        setFilms(films?.filter(film => film.current != from) || []);
+        setFilms(films?.filter(film => film.current != from) ?? []);
     };
 
     return (
@@ -161,7 +161,7 @@ const FilmReview = () => {
             {films?.map(film => (
                 <li className={styles.item} key={film.current.id}>
                     <em className={styles.current}>
-                        {film.current.title} ({film.current.year || 'no year'})
+                        {film.current.title} ({film.current.year ?? 'no year'})
                     </em>
                     <button className={styles.reject} onClick={() => reject(film.current)}>
                         Reject
