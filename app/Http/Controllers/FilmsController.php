@@ -3,41 +3,66 @@
 namespace App\Http\Controllers;
 
 use App\Film;
+use App\Http\Requests\FilmsRequest;
 use DB;
 use Illuminate\Http\Request;
 
-class FilmsController extends StandardResourceController
+class FilmsController extends Controller
 {
-    protected $model = Film::class;
-
-    protected $fields = [
-        'title' => 'required|max:80',
-        'year' => 'required|integer|between:1900,2030',
-    ];
-
-    protected $objectName = 'film';
-
-    protected $tableName = 'films';
-
-    public function index(Request $request)
+    /**
+     * Return all films, paginated in groups of 50.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
         return Film::paginate(50);
     }
 
-    public function show(Film $film)
+    /**
+     * Create a new film. Return it if successful.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(FilmsRequest $request)
     {
-        $resource = $film;
+        $film = new Film($request->validated());
+        $film->createdBy = auth()->id();
+        $film->save();
 
-        return view('/stdResources/show', compact('resource'));
+        return $film;
     }
 
-    public function edit(Film $film)
+    /**
+     * Update the specified film. Return it if successful.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function update(FilmsRequest $request, Film $film)
     {
-        $resource = $film;
+        $film->fill($request->validated());
+        $film->save();
 
-        return view('/stdResources/edit', compact('resource'));
+        return $film;
     }
 
+    /**
+     * Delete the specified film.
+     *
+     * @param  User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Film $film)
+    {
+        $film->delete();
+
+        return response('', 204);
+    }
+
+    // TODO: probably belongs in a separate controller
     public function search(Request $request, $string)
     {
         if (strlen($string) < 3) {
@@ -53,16 +78,5 @@ class FilmsController extends StandardResourceController
                 ->orWhere('title', 'LIKE', "%an $string%");
             })
             ->get();
-    }
-
-    /**
-     * overwrites parent function to add createdBy field
-     * via the currently authenticated user
-     * (field is not submitted in request)
-     */
-    protected function setObjectData()
-    {
-        $this->object->createdBy = auth()->id();
-        parent::setObjectData();
     }
 }

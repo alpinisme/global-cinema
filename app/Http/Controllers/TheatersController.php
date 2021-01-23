@@ -2,46 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TheatersRequest;
 use Illuminate\Http\Request;
 use App\Theater;
 
-class TheatersController extends StandardResourceController
+class TheatersController extends Controller
 {
-    protected $model = Theater::class;
-
-    protected $fields = [
-        'name' => 'required',
-        'neighborhood' => 'nullable|max:80',
-        'capacity' => 'nullable|integer',
-        'open_year' => 'nullable|integer|between:1900,2030',
-        'close_year' => 'nullable|integer|between:1900,2030',
-        'city_id' => 'integer',
-        'lat' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
-        'lng' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
-    ];
-
-    protected $objectName = 'theater';
-
-    protected $tableName = 'theaters';
-
-    protected $orderBy = 'name';
-
-    // public function index(Request $request)
-    // {
-    //     return Theater::orderBy('name')->get();
-    // }
-
-    public function show(Theater $theater)
+    /**
+     * Return all theaters, ordered alphabetically by name.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
     {
-        $resource = $theater;
-
-        return view('/stdResources/show', compact('resource'));
+        return Theater::orderBy('name')->get();
     }
 
-    public function edit(Theater $theater)
+    /**
+     * Create a new theater. Return it if successful.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(TheatersRequest $request)
     {
-        $resource = $theater;
+        return Theater::create($request->validated());
+    }
 
-        return view('/stdResources/edit', compact('resource'));
+    /**
+     * Update the specified theater. Return it if successful.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function update(TheatersRequest $request, Theater $theater)
+    {
+        $theater->fill($request->validated());
+        $theater->save();
+
+        return $theater;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Theater $theater)
+    {
+        $theater->delete();
+
+        return response('', 204);
     }
 }

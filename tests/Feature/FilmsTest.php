@@ -18,6 +18,76 @@ class FilmsTest extends TestCase
     }
 
     /** @test */
+    public function an_admin_can_see_films_list()
+    {
+        $film = factory('App\Film')->create();
+        $this->actingAs(factory('App\User')->state('admin')->make())
+             ->get('/films')
+             ->assertSuccessful()
+             ->assertSee($film->title);
+    }
+
+    /** @test */
+    public function an_admin_can_add_a_film()
+    {
+        $user = factory('App\User')->state('admin')->create();
+        $film = factory('App\Film')->raw(['createdBy' => $user->id]);
+        $this->actingAs($user)
+             ->post('/films', $film)
+             ->assertStatus(201)
+             ->assertJson(['title' => $film['title']]);
+        $this->assertDatabaseHas('films', $film);
+    }
+
+    /** @test */
+    public function an_admin_can_edit_a_film()
+    {
+        $film = factory('App\Film')->create();
+        $attributes = [
+            'title' => 'Some Other Title',
+            'year' => 1987,
+        ];
+        $this->actingAs(factory('App\User')->state('admin')->create())
+             ->patch('/films/' . $film->id, $attributes)
+             ->assertOk()
+             ->assertJson(['id' => $film->id]);
+        $film = Film::find($film->id);
+        $this->assertEquals($film->title, $attributes['title']);
+        $this->assertEquals($film->year, $attributes['year']);
+    }
+
+    /** @test */
+    public function an_admin_can_delete_a_film()
+    {
+        $film = factory('App\Film')->create();
+        $this->actingAs(factory('App\User')->state('admin')->make())
+             ->delete('/films/' . $film->id)
+             ->assertStatus(204);
+        $this->assertDatabaseMissing('films', ['id' => $film->id]);
+    }
+
+    /** @test */
+    public function a_film_submission_must_be_valid()
+    {
+        $attributes = [
+            'title' => '',
+            'year' => 'a non-year',
+        ];
+        $this->actingAs(factory('App\User')->state('admin')->make())
+             ->post('/films', $attributes)
+             ->assertSessionHasErrors(['title', 'year']);
+    }
+
+    /** @test */
+    public function a_json_request_to_films_returns_json()
+    {
+        factory('App\Theater', 10);
+        $this->actingAs(factory('App\User')->state('admin')->make())
+             ->json('GET', 'films')->assertOk()
+             ->assertJsonFragment(Film::all()->toArray());
+    }
+
+    /** @test */
     public function a_request_to_index_is_ok()
     {
         $this->asUser()->get('/films')->assertStatus(200);
