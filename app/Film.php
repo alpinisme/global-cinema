@@ -53,21 +53,41 @@ class Film extends Model
      */
     public static function verifiedLike($substrings)
     {
-        $query = static::select('title', 'year', 'id', 'imdb')
-            ->where(
-                function ($query) {
-                    $query
+        return static::select('title', 'year', 'id', 'imdb')->verified()->titleLike($substrings)->get();
+    }
+
+    /**
+     * Scope a query to include only titles containing one or more of the specified substrings.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string[] $substrings
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeTitleLike($query, $substrings)
+    {
+        return $query->where(
+            function ($query) use ($substrings) {
+                foreach ($substrings as $substring) {
+                    $query = $query->orWhere('title', 'like', '%' . $substring . '%');
+                }
+            }
+        );
+    }
+
+    /**
+     * Scope a query to include only verified films.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeVerified($query)
+    {
+        return $query->where(
+            function ($query) {
+                $query
                         ->where('verified', true)
                         ->orWhereNotNull('imdb');
-                }
-            )->where(
-                function ($query) use ($substrings) {
-                    foreach ($substrings as $substring) {
-                        $query = $query->orWhere('title', 'like', '%' . $substring . '%');
-                    }
-                }
-            );
-
-        return $query->get();
+            }
+        );
     }
 }
