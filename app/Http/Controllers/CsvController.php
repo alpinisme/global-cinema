@@ -63,7 +63,7 @@ class CsvController extends Controller
         }
 
         if ($directMatches->count() === 1) {
-            return $directMatches->first()->id;
+            return $directMatches->value('id');
         }
 
         $allTheaters = Theater::where('city_id', $this->city)->get(['id', 'name']);
@@ -92,11 +92,11 @@ class CsvController extends Controller
         }
 
         if ($perfectMatches->count() == 1) {
-            return $perfectMatches->first()->id;
+            return $perfectMatches->value('id');
         }
 
         if ($directMatches->count() === 1) {
-            return $directMatches->first()->id;
+            return $directMatches->value('id');
         }
 
         if ($directMatches->count() === 0) {
