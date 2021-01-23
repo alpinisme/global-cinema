@@ -2,54 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Screening;
 use App\Helpers\ScreeningsGeoJSON;
-use DB;
+use App\Http\Requests\ScreeningsRequest;
 
-class ScreeningsController extends StandardResourceController
+class ScreeningsController extends Controller
 {
-    protected $model = Screening::class;
-
-    protected $fields = [
-        'date' => 'required',
-        'theater_id' => 'required',
-        'film_id' => 'required',
-    ];
-
-    protected $objectName = 'screening';
-
-    protected $tableName = 'screenings';
-
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->wantsJson()) {
-            return $this->authorizedScreenings();
-        }
-        $screenings = $this->authorizedScreenings();
-
-        return view('screenings/index', compact('screenings'));
+        return $this->authorizedScreenings();
     }
 
-    public function create()
+    public function store(ScreeningsRequest $request)
     {
-        $screenings = $this->authorizedScreenings();
+        $screening = new Screening($request->validated());
+        $screening->createdBy = auth()->id();
+        $screening->save();
 
-        return view('screenings/create', compact('screenings'));
+        $response = Screening::with(['film', 'theater'])
+        ->where('id', '=', $screening->id)
+        ->get()
+        ->first();
+
+        return response()->json($response, 201);
     }
 
-    public function store(Request $request)
+    public function update(ScreeningsRequest $request, Screening $screening)
     {
-        $result = parent::store($request);
+        $screening->fill($request->validated());
+        $screening->save();
 
-        if ($request->wantsJson()) {
-            return Screening::with(['film', 'theater'])
-                            ->where('id', '=', $result->id)
-                            ->get()
-                            ->first();
-        }
+        return Screening::with(['film', 'theater'])
+                        ->where('id', '=', $screening->id)
+                        ->get()
+                        ->first();
+    }
 
-        return $result;
+    public function destroy(Screening $screening)
+    {
+        $screening->delete();
+
+        return response('', 204);
     }
 
     public function date($date)
@@ -78,17 +71,6 @@ class ScreeningsController extends StandardResourceController
         $geoJSON = new ScreeningsGeoJSON($date, $screenings);
 
         return response()->json($geoJSON);
-    }
-
-    /**
-     * overwrites parent function to add createdBy field
-     * via the currently authenticated user
-     * (field is not submitted in request)
-     */
-    protected function setObjectData()
-    {
-        $this->object->createdBy = auth()->id();
-        parent::setObjectData();
     }
 
     protected function authorizedScreenings()

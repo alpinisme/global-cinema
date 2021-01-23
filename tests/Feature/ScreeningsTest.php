@@ -14,10 +14,11 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function an_admin_can_delete_a_screening()
     {
+        $this->withoutExceptionHandling();
         $screening = factory('App\Screening')->create();
         $this->actingAs(factory('App\User')->state('admin')->make())
             ->delete('/screenings/' . $screening->id)
-            ->assertRedirect('/screenings');
+            ->assertStatus(204);
         $this->assertDatabaseMissing('screenings', ['id' => $screening->id]);
     }
 
@@ -31,13 +32,14 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function a_student_can_add_a_screening()
     {
-        $screening = factory('App\Screening')->create();
-        $attributes = $screening->toArray();
-        $this->actingAs(factory('App\User')->state('student')->create())
-            ->post('/screenings', $attributes)
-            ->assertRedirect('/screenings');
-        $this->assertDatabaseHas('screenings', $attributes);
+        $student = factory('App\User')->state('student')->create();
+        $screening = factory('App\Screening')->raw(['createdBy' => $student->id]);
+        $this->actingAs($student)->post('/screenings', $screening)->assertStatus(201);
+        $this->assertDatabaseHas('screenings', $screening);
     }
+
+    // TODO: the following tests are a bit sloppy and they test the wrong endpoint anyway
+    // They should hit screenings/{date} not screenings/
 
     /** @test */
     public function a_student_can_only_access_their_own_screenings()
@@ -46,12 +48,9 @@ class ScreeningsTest extends TestCase
         $student = factory('App\User')->state('student')->create();
         $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
 
-        // $this->actingAs($student)->json('GET', '/screenings')
-        //     //->assertJsonMissing($notOwnScreening->toArray())
-        //     ->assertJson($ownScreening->toArray());
         $this->actingAs($student)->get('/screenings')
-            ->assertDontSee($notOwnScreening->film->title)
-            ->assertSee($ownScreening->film->title);
+            ->assertJsonMissing([['film_id' => $notOwnScreening->film->id]])
+            ->assertJson([['film_id' => $ownScreening->film->id]]);
     }
 
     /** @test */
@@ -61,7 +60,7 @@ class ScreeningsTest extends TestCase
         $student = factory('App\User')->state('admin')->create();
         $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
         $this->actingAs($student)->get('/screenings')
-            ->assertSee($notOwnScreening->film->title)
-            ->assertSee($ownScreening->film->title);
+            ->assertSee($notOwnScreening->film->id)
+            ->assertSee($ownScreening->film->id);
     }
 }
