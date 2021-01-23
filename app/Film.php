@@ -38,9 +38,13 @@ class Film extends Model
         return static::query()->where('verified', false)->limit($count)->get(['title', 'year', 'id']);
     }
 
+    /**
+     * Finds all duplicate films, returns both of each pair of duplicaated ids concatenated
+     *
+     */
     public static function duplicates()
     {
-        return DB::select('select group_concat(id) ids, title, year, count(*) count from films group by title, year having count(*) > 1');
+        return static::selectRaw('group_concat(id) ids, title, year, count(*) count')->groupBy('title', 'year')->having('count', '>', 1)->get();
     }
 
     /**
@@ -48,8 +52,6 @@ class Film extends Model
      *
      * Takes an array of strings and returns every verified film with one or more
      * of those strings in its title.
-     *
-     * @param array $substrings
      */
     public static function verifiedLike($substrings)
     {
