@@ -11,22 +11,23 @@
 |
 */
 
-use App\Screening;
 use App\User;
 
 Route::get('/', function () {
     return view('app');
 });
+Route::post('/csv', 'CsvController');
+Route::get('/test', 'TempFilmMergeController');
+Route::get('/instructor', 'GradingController@index')->middleware(['can:grade']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/screenings/{date}', 'ScreeningsController@date');
-    Route::resource('/screenings', 'ScreeningsController');
-
     Route::get('/films/search/{string}', 'FilmsController@search');
-    Route::resource('/films', 'FilmsController');
-    Route::resource('/cities', 'CitiesController');
 
-    Route::resource('/theaters', 'TheatersController');
+    Route::apiResource('/screenings', 'ScreeningsController');
+    Route::apiResource('/films', 'FilmsController');
+    Route::apiResource('/cities', 'CitiesController');
+    Route::apiResource('/theaters', 'TheatersController');
 
     Route::get('/assignment', function () {
         return auth()->user()->assignment->assignment;
@@ -35,10 +36,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/role', function () {
         return auth()->user()->role;
     });
-
-    Route::get('/instructor', 'InstructorController@index');
-    Route::get('/map', 'ScreeningsController@map');
-    Route::get('/map/{city}/{date}', 'ScreeningsController@geoJSON');
 });
 
 Route::get('/map', 'ScreeningsController@map');
@@ -48,18 +45,8 @@ Route::get('/instructors', function () {
     return User::select('id', 'name')->where('role', 'instructor')->get();
 });
 
-// Route::group(['middleware' => 'auth'], function () {
-//     Route::resource('/films', 'FilmsController');
-//     Route::resource('/cities', 'CitiesController', ['except' => 'index']);
-
-//     Route::resource('/theaters', 'TheatersController');
-// });
-
 Route::group(['middleware' => ['can:see admin tools']], function () {
-    Route::get('/admin', 'PermissionsController@index');
-    Route::post('/admin/user/{id}', 'PermissionsController@update');
-
-    Route::resource('/users', 'UsersController');
+    Route::apiResource('/users', 'UsersController');
 
     Route::get('/assigned_city', 'AssignmentsController@getAssignedCity');
     Route::post('/assigned_city', 'AssignmentsController@setAssignedCity');
@@ -77,14 +64,4 @@ Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('/completed/{city}', 'ProgressReviewController@index');
 
-/*
-
-Route::get('/city-assignment',              'CityAssignmentController@get');
-Route::post('/city-assignment',             'CityAssignmentController@put');
-
-
-Route::get('/log',                          '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index'); // see github for how to add
-
-// combine users and permissions controllers
-
-*/
+// Route::get('/log',                          '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index'); // see github for how to add

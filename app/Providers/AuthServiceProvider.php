@@ -27,8 +27,11 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $gate->define('see admin tools', function ($user) {
-            return $user->hasRole('admin');
+            return $user->isAdmin();
         });
-        //
+
+        $gate->define('grade', function ($user) {
+            return $user->isInstructor();
+        });
     }
 }
