@@ -6,6 +6,14 @@ use App\Screening;
 
 class ProgressReviewController extends Controller
 {
+    /**
+     * Return all months that the database has screenings for in specified city
+     *
+     * Example: ['1999-September', '1999-October', '2001-April']
+     *
+     * @param int $city city id
+     * @return \Illuminate\Http\Response
+     */
     public function index($city)
     {
         return Screening::selectRaw('DATE_FORMAT(date, "%Y-%M") as month, MAX(date)')
