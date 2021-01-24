@@ -19,7 +19,7 @@ class GradingTest extends TestCase
         $students = factory(User::class, 2)->states('student')->create();
         factory(Assignment::class)->create(['student_id' => $students[0]->id, 'instructor_id' => $instructor->id]);
         $expectedInfo = ['id' => $students[0]->id, 'name' => $students[0]->name, 'email' => $students[0]->email];
-        $this->actingAs($instructor)->getJson('instructor')
+        $this->actingAs($instructor)->get('grading')
             ->assertOk()
             ->assertJsonPath('data.0', ['info' => $expectedInfo, 'datesCompleted' => []]);
     }
@@ -31,7 +31,7 @@ class GradingTest extends TestCase
         $student = factory(User::class)->states('student')->create();
         factory(Assignment::class)->create(['student_id' => $student->id, 'instructor_id' => $instructor->id]);
         $screenings = factory(Screening::class, 2)->create(['createdBy' => $student->id]);
-        $this->actingAs($instructor)->get('instructor')
+        $this->actingAs($instructor)->get('grading')
             ->assertOk()
             ->assertJsonPath('data.0.datesCompleted', [$screenings[0]->date, $screenings[1]->date]);
     }
@@ -43,7 +43,7 @@ class GradingTest extends TestCase
         $student = factory(User::class)->states('student')->create();
         factory(Assignment::class)->create(['student_id' => $student->id, 'instructor_id' => $instructors[0]->id]);
         $screenings = factory(Screening::class, 2)->create(['createdBy' => $student->id]);
-        $this->actingAs($instructors[1])->get('instructor')
+        $this->actingAs($instructors[1])->get('grading')
                 ->assertOk()
                 ->assertJsonPath('data', []);
     }
@@ -51,6 +51,6 @@ class GradingTest extends TestCase
     /** @test */
     public function students_cannot_view_grading_resources()
     {
-        $this->actingAs(factory(User::class)->states('student')->make())->get('/instructor')->assertForbidden();
+        $this->actingAs(factory(User::class)->states('student')->make())->get('/grading')->assertForbidden();
     }
 }

@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 Route::post('/csv', 'CsvController');
 Route::get('/test', 'TempFilmMergeController');
-Route::get('/instructor', 'GradingController@index')->middleware(['can:grade']);
+Route::get('/grading', 'GradingController@index')->middleware(['can:grade']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/screenings/{date}', 'ScreeningsController@date');

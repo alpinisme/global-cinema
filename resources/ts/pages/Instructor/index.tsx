@@ -18,7 +18,7 @@ const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
     };
 
     const [studentData] = useGetRequest<Student[]>(
-        '/instructor',
+        '/grading',
         e => `Student data could not be loaded: ${e}`
     );
 
