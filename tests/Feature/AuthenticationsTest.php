@@ -110,36 +110,6 @@ class AuthenticationsTest extends TestCase
     }
 
     /** @test */
-    public function an_admin_can_view_users_list()
-    {
-        $user = factory('App\User')->create();
-        $admin = factory('App\User')->states('admin')->make();
-        $this->actingAs($admin)
-            ->get('/admin')
-            ->assertSee($user->name)
-            ->assertSee($user->role);
-    }
-
-    /** @test */
-    public function students_cannot_view_users_list()
-    {
-        $this->get('/admin')->assertStatus(403);
-        $this->actingAs(factory('App\User')->states('student')->make())->get('/admin')->assertStatus(403);
-    }
-
-    /** @test */
-    public function an_admin_can_edit_user_roles()
-    {
-        $user = factory('App\User')->create();
-        $admin = factory('App\User')->states('admin')->make();
-        $this->actingAs($admin)->post('/admin/user/' . $user->id, [
-            'role' => 'admin',
-        ])->assertRedirect('/admin');
-        $user = \App\User::find($user->id);
-        $this->assertTrue($user->hasRole('admin'));
-    }
-
-    /** @test */
     public function mismatched_password_confirmation_throws_validation_error()
     {
         $user = factory('App\User')->make();
