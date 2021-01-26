@@ -12,8 +12,8 @@ use App\Helpers\FuzzySearch;
 class ActivityReviewController extends Controller
 {
     /**
-     * Returns all unverified items in specified category
-     * as well as possible matches to already verified items
+     * Returns all unverified items in specified category and possible duplicates among already verified
+     *
      * @param string $category
      */
     public function index($category)

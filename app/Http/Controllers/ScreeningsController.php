@@ -10,6 +10,7 @@ class ScreeningsController extends Controller
 {
     /**
      * Show all screenings the user is authorized to view
+     *
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -23,6 +24,7 @@ class ScreeningsController extends Controller
 
     /**
      * Store a new screening
+     *
      * @param ScreeningsRequest $request
      * @param Screening $screening
      * @return \Illuminate\Http\Response
@@ -39,6 +41,7 @@ class ScreeningsController extends Controller
 
     /**
      * Update the specified screening
+     *
      * @param ScreeningsRequest $request
      * @param Screening $screening
      * @return \Illuminate\Http\Response
@@ -53,6 +56,7 @@ class ScreeningsController extends Controller
 
     /**
      * Delete the specified screening
+     *
      * @param Screening $screening
      * @return \Illuminate\Http\Response
      */
@@ -65,6 +69,7 @@ class ScreeningsController extends Controller
 
     /**
      * Shows all screenings for the specified date created by the user
+     *
      * @param string $date
      * @return \Illuminate\Http\Response
      */

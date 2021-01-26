@@ -8,6 +8,11 @@ use App\Screening;
 
 class FilmMergeController extends Controller
 {
+    /**
+     * Merges two films together in database, cascading the merger to `screenings` table
+     *
+     * @return \Illuminate\Http\Request
+     */
     public function update(FilmMergeRequest $request)
     {
         $from = $request->input('from');
