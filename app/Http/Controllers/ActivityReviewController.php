@@ -25,7 +25,7 @@ class ActivityReviewController extends Controller
      *
      * @param string $category
      */
-    public function index($category)
+    public function __invoke($category)
     {
         switch ($category) {
             case 'films':
@@ -39,20 +39,28 @@ class ActivityReviewController extends Controller
         }
     }
 
-    /*  I've separated the methods so that I can also return suggestions for possible duplicates.
-    The models return just the raw items themselves, then the controller here figures out if there are any possible matchs */
-
+    /**
+     * Returns collection of all users that are unverified
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     protected function unverifiedUsers()
     {
         return User::needsReview();
     }
 
-    // unlike with theaters, which are relatively few in number, this query can be quite slow
-    // so it should not be relied on for frequent or public-facing queries, but since it is only
-    // used by admins at the moment, and rarely at that, it is acceptable for the needs
+    /**
+     * Returns collection of unverified films, each bundled with possible duplicates among verified films
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     protected function unverifiedFilms()
     {
         $unverified = Film::needsReview();
+
+        // unlike with theaters, which are relatively few in number, this query can be quite slow
+        // so it should not be relied on for frequent or public-facing queries, but since it is only
+        // used by admins at the moment, and rarely at that, it is acceptable for the needs
 
         return $unverified->map(function ($film) {
             $substrings = $this->stringHelper->substrings($film->title);
@@ -65,6 +73,11 @@ class ActivityReviewController extends Controller
         });
     }
 
+    /**
+     * Returns collection of unverified theaters, each bundled with possible duplicates among verified theaters
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     protected function unverifiedTheaters()
     {
         $unverified = Theater::needsReview();
