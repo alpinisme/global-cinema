@@ -7,16 +7,6 @@ use DateTimeInterface;
 
 class Screening extends Model
 {
-    const QUICKFIELDS = [
-        'date' => 'date',
-        'theater' => 'theater',
-        'film' => 'film',
-    ];
-
-    const ALLFIELDS = Screening::QUICKFIELDS;
-
-    const DISPLAYNAME = 'Screenings';
-
     protected $guarded = [
         'id', 'created_at', 'updated_at', 'createdBy',
     ];
