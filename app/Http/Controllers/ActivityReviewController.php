@@ -8,9 +8,15 @@ use App\User;
 use DB;
 use Illuminate\Http\Request;
 use App\Helpers\FuzzySearch;
+use App\Helpers\StringHelper;
 
 class ActivityReviewController extends Controller
 {
+    public function __construct(StringHelper $stringHelper)
+    {
+        $this->stringHelper = $stringHelper;
+    }
+
     /**
      * Returns all unverified items in specified category and possible duplicates among already verified
      *
@@ -46,7 +52,7 @@ class ActivityReviewController extends Controller
         $unverified = Film::needsReview();
 
         return $unverified->map(function ($film) {
-            $substrings = $this->substrings($film->title);
+            $substrings = $this->stringHelper->substrings($film->title);
             $fuzzy = new FuzzySearch($film, Film::verifiedLike($substrings));
 
             $item['current'] = $film;
@@ -69,27 +75,5 @@ class ActivityReviewController extends Controller
 
             return $item;
         });
-    }
-
-    /**
-     * Divides a string into all possible substrings of specified length
-     *
-     * @param string $string
-     * @param int $chunkSize
-     * @return array<string>
-     */
-    protected function substrings($string, $chunkSize = 5)
-    {
-        $length = strlen($string);
-        if ($length <= $chunkSize) {
-            return [$string];
-        } elseif ($length) {
-            $result = [];
-            for ($i = 0; $i < $length - $chunkSize; $i++) {
-                $result[] = substr($string, $i, $i + $chunkSize);
-            }
-
-            return $result;
-        }
     }
 }

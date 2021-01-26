@@ -6,6 +6,7 @@ use App\Exceptions\InvalidCsvException;
 use App\Film;
 use App\Helpers\CsvReader;
 use App\Helpers\FuzzySearch;
+use App\Helpers\StringHelper;
 use App\Http\Requests\CsvUploadRequest;
 use App\Theater;
 
@@ -15,10 +16,11 @@ class CsvController extends Controller
 
     protected $date;
 
-    public function __invoke(CsvUploadRequest $request, CsvReader $csvReader)
+    public function __invoke(CsvUploadRequest $request, CsvReader $csvReader, StringHelper $stringHelper)
     {
         $this->city = $request->input('city');
         $this->date = $request->input('date');
+        $this->stringHelper = $stringHelper;
         $file = $request->file('csv');
 
         $required = ['title', 'theater'];
@@ -100,7 +102,7 @@ class CsvController extends Controller
         }
 
         if ($directMatches->count() === 0) {
-            $allTheaters = Film::verifiedLike($this->substrings($title));
+            $allTheaters = Film::verifiedLike($this->stringHelper->substrings($title));
             $searcher = new FuzzySearch(['title' => $title], $allTheaters);
             $fuzzyMatch = $searcher->sort('title')->threshold(0.8)->take(1);
 
@@ -114,21 +116,5 @@ class CsvController extends Controller
         $newTheater->save();
 
         return $newTheater->id; // Cousseum 879
-    }
-
-    // TODO: this is duplicate code from ActivityReviewController. Abstract it away from both and DRY it up.
-    protected function substrings($string, $chunkSize = 5)
-    {
-        $length = strlen($string);
-        if ($length <= $chunkSize) {
-            return [$string];
-        } elseif ($length) {
-            $result = [];
-            for ($i = 0; $i < $length - $chunkSize; $i++) {
-                $result[] = substr($string, $i, $i + $chunkSize);
-            }
-
-            return $result;
-        }
     }
 }
