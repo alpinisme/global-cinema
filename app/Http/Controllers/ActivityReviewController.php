@@ -12,6 +12,9 @@ use App\Helpers\StringHelper;
 
 class ActivityReviewController extends Controller
 {
+    /** @var StringHelper */
+    protected $stringHelper;
+
     public function __construct(StringHelper $stringHelper)
     {
         $this->stringHelper = $stringHelper;
@@ -55,10 +58,10 @@ class ActivityReviewController extends Controller
             $substrings = $this->stringHelper->substrings($film->title);
             $fuzzy = new FuzzySearch($film, Film::verifiedLike($substrings));
 
-            $item['current'] = $film;
-            $item['alternates'] = $fuzzy->sort('title')->threshold(0.3)->take(5);
-
-            return $item;
+            return [
+                'current' => $film,
+                'alternates' => $fuzzy->sort('title')->threshold(0.3)->take(5),
+            ];
         });
     }
 
