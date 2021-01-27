@@ -15,11 +15,8 @@ class FilmMergeController extends Controller
      */
     public function update(FilmMergeRequest $request)
     {
-        $from = $request->input('from');
-        $to = $request->input('to');
-
-        Screening::query()->where('film_id', $from)->update(['film_id' => $to]);
-        Film::query()->where('id', $from)->delete();
+        Screening::where('film_id', $request->from)->update(['film_id' => $request->to]);
+        Film::find($request->from)->delete();
 
         return response('', 204);
     }
