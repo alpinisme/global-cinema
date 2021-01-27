@@ -120,10 +120,7 @@ class User extends Authenticatable
      */
     public static function needsReview()
     {
-        return static::query()
-                ->where('role', 'unconfirmed_contributor')
-                ->orWhere('role', 'unconfirmed_instructor')
-                ->get();
+        return static::where('role', 'unconfirmed_contributor')->orWhere('role', 'unconfirmed_instructor')->get();
     }
 
     /**

@@ -23,7 +23,7 @@ class Film extends Model
      */
     public static function needsReview($count = 10)
     {
-        return static::query()->where('verified', false)->limit($count)->get(['title', 'year', 'id']);
+        return static::where('verified', false)->limit($count)->get(['title', 'year', 'id']);
     }
 
     /**

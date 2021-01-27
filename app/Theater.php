@@ -25,7 +25,7 @@ class Theater extends Model
      */
     public static function needsReview()
     {
-        return static::query()->where('verified', false)->get();
+        return static::where('verified', false)->get();
     }
 
     /**
@@ -34,6 +34,6 @@ class Theater extends Model
      */
     public static function verified($city)
     {
-        return static::query()->where('verified', true)->where('city_id', $city)->get();
+        return static::where('verified', true)->where('city_id', $city)->get();
     }
 }
