@@ -73,7 +73,9 @@ export function useGetRequest<A>(
         const req = axios
             .get(url)
             .then(res => res.data)
-            .then(setData);
+            .then(data => {
+                if (isMounted) setData(data);
+            });
 
         if (isMounted) {
             setRequest(req);
