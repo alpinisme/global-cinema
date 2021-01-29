@@ -15,6 +15,14 @@ class FuzzySearch
 
     protected $values;
 
+    /**
+     * Creates new instance
+     *
+     * $needle and $haystack ought to be the same type
+     *
+     * @param mixed $needle item to search for
+     * @param Collection|array $haystack array or collection to search within
+     */
     public function __construct($needle, $haystack)
     {
         $this->needle = $needle;
@@ -46,11 +54,22 @@ class FuzzySearch
         });
     }
 
+    /**
+     * Get a collection of all underlying values
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function all()
     {
         return $this->removeRatios();
     }
 
+    /**
+     * Get a collection of the first `$count` number of raw values
+     *
+     * @param int $count
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function take($count)
     {
         $this->removeRatios();
@@ -58,11 +77,21 @@ class FuzzySearch
         return $this->values->take($count);
     }
 
+    /**
+     * Get an array of the underlying collection
+     *
+     * @return array
+     */
     public function toArray()
     {
         return $this->removeRatios()->values->all();
     }
 
+    /**
+     * Sort the underlying collection by similarity to the sought value
+     *
+     * @param string $key the key to use when comparing
+     */
     public function sort($key = null)
     {
         $this->key = $key;
@@ -89,6 +118,11 @@ class FuzzySearch
         $this->values = $this->values->sortByDesc('ratio');
     }
 
+    /**
+     * Removes entries from the underlying collection that are less similar than the specified threshold
+     *
+     * @param float $value number between 0 and 1, 1 being a perfect match
+     */
     public function threshold($value)
     {
         $this->values = $this->values->filter(function ($item) use ($value) {
