@@ -75,7 +75,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                     />
                     {errors && errors.name}
 
-                    <label htmlFor="name">Email</label>
+                    <label htmlFor="email">Email</label>
                     <input
                         name="email"
                         id="email"

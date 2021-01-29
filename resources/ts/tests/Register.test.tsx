@@ -19,7 +19,7 @@ describe('Register page with happy-path api calls', () => {
 
     it('should show further options when user selects a role', async () => {
         userEvent.selectOptions(screen.getByRole('combobox'), 'contributor');
-        expect(screen.getAllByRole('textbox')[0]).toBeInTheDocument();
+        expect(screen.getByRole('textbox', { name: 'Name' })).toBeInTheDocument();
     });
 
     it('should not show instructor options when user selects a role other than student', async () => {
