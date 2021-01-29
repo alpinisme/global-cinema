@@ -12,7 +12,7 @@ class TheatersTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function guests_and_unconfirmed_users_access_theaters_endpoint()
+    public function guests_and_unconfirmed_users_cannot_access_theaters_endpoint()
     {
         $this->getJson('/theaters')->assertStatus(401);
 
