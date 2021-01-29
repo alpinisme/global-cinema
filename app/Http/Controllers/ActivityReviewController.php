@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Film;
 use App\Theater;
 use App\User;
-use DB;
-use Illuminate\Http\Request;
 use App\Helpers\FuzzySearch;
 use App\Helpers\StringHelper;
 
@@ -64,7 +62,7 @@ class ActivityReviewController extends Controller
 
         return $unverified->map(function ($film) {
             $substrings = $this->stringHelper->substrings($film->title);
-            $fuzzy = new FuzzySearch($film, Film::verifiedLike($substrings));
+            $fuzzy = new FuzzySearch($film, Film::verifiedLike($substrings, $film->year + 2)); // year threshold plus two just in case entered wrong
 
             return [
                 'current' => $film,
