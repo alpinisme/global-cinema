@@ -11,13 +11,15 @@ import ScreeningsContext from '../../contexts/ScreeningsContext';
 import { useFilmSearch } from '../../utils/hooks';
 import ActivityReview from '../ActivityReview';
 import ProgressChecker from '../ProgressChecker/ index';
+import CsvUploader from '../CsvUploader';
 
 type Action =
     | 'edit users'
     | 'password reset'
     | 'enter screenings'
     | 'review activity'
-    | 'check progress';
+    | 'check progress'
+    | 'upload a csv';
 
 /**
  * Given a `setState` function and an `Action`, this curried function
@@ -84,7 +86,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
 
     return (
         <AdminContext.Provider value={adminContextData}>
-            <h2>What would you like to do?</h2>
+            <h2 className={styles.h2}>What would you like to do?</h2>
 
             <ul className={styles.list}>
                 <li>
@@ -133,7 +135,17 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                         handleClick={() => handleClick(setAction, 'check progress')}
                         label="check progress"
                     >
-                        <ProgressChecker cities={cities || []} />
+                        <ProgressChecker cities={cities ?? []} />
+                    </Collapsible>
+                </li>
+
+                <li>
+                    <Collapsible
+                        open={isOpen('upload a csv')}
+                        handleClick={() => handleClick(setAction, 'upload a csv')}
+                        label="upload a csv"
+                    >
+                        <CsvUploader cities={cities ?? []} />
                     </Collapsible>
                 </li>
             </ul>

@@ -4,6 +4,7 @@ interface CssExports {
   'action': string;
   'active': string;
   'content': string;
+  'h2': string;
   'list': string;
 }
 export const cssExports: CssExports;
