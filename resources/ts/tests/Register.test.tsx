@@ -5,11 +5,16 @@ import { users } from './backend-helpers/mock-backend-data';
 import Register from '../pages/Register';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
+import { AuthProvider } from '../utils/useAuth';
 
 const handleSuccess = jest.fn();
 
 beforeEach(() => {
-    render(<Register handleSuccess={handleSuccess} />);
+    render(
+        <AuthProvider>
+            <Register />
+        </AuthProvider>
+    );
 });
 
 describe('Register page with happy-path api calls', () => {

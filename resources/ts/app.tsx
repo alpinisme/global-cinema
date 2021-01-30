@@ -8,20 +8,25 @@ import Student from './pages/Student';
 import { useGetRequest } from './utils/hooks';
 import { CityContextProvider } from './contexts/CityContext';
 import LoginPage from './pages/Login';
+import { useAuth, AuthProvider } from './utils/useAuth';
+
+const Wrapper = () => (
+    <AuthProvider>
+        <App />
+    </AuthProvider>
+);
 
 const App = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
-    const [role, setRole] = useState<string | null>(
-        (document.getElementById('role') as HTMLInputElement)?.value
-    );
+    const auth = useAuth();
 
     function useGetOrFail<A>(a: string, fn: (s: string) => string) {
         return useGetRequest<A>(a, b => setErrors(addOnce(fn(b))));
     }
 
     // display login form if not already logged in
-    if (!role) {
-        return <LoginPage handleSuccess={setRole} />;
+    if (!auth.user) {
+        return <LoginPage />;
     }
 
     // display errors if any
@@ -30,7 +35,7 @@ const App = (): ReactElement => {
     }
 
     // show appropriate page
-    switch (role) {
+    switch (auth.user.role) {
         case 'user':
             return (
                 <CityContextProvider>
@@ -82,4 +87,4 @@ export default App;
 
 const root = document.getElementById('root');
 
-ReactDOM.render(<App />, root);
+ReactDOM.render(<Wrapper />, root);

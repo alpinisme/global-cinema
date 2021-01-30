@@ -1,9 +1,10 @@
-import axios from 'axios';
 import React, { FormEvent, ReactElement, useState } from 'react';
+import ErrorBox from '../../components/ErrorBox';
 import { User } from '../../types/api';
 import { useGetRequest } from '../../utils/hooks';
+import { useAuth } from '../../utils/useAuth';
 
-const Register = ({ handleSuccess }: Props): ReactElement => {
+const Register = (): ReactElement => {
     const [role, setRole] = useState('');
     const [instructors] = useGetRequest<User[]>('instructors', e => console.log(e));
     const [instructor, setInstructor] = useState('');
@@ -11,23 +12,19 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passConfirm, setPassConfirm] = useState('');
-    const [errors, setErrors] = useState<Form | null>(null);
+    const auth = useAuth();
 
     const register = (e: FormEvent) => {
         e.preventDefault();
-        const data = {
+
+        auth.register({
             role,
             instructor,
             name,
             email,
             password,
             password_confirmation: passConfirm,
-        } as Form;
-
-        axios
-            .post('register', data)
-            .then(() => handleSuccess(role))
-            .catch(err => setErrors(err.response.data.errors));
+        });
     };
 
     return (
@@ -41,7 +38,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                 <option value="unconfirmed_instructor">instructor</option>
                 <option value="unconfirmed_contributor">contributor</option>
             </select>
-            {errors && errors.role}
+            <ErrorBox errors={auth.errors.role} />
 
             {role == 'student' && (
                 <>
@@ -58,7 +55,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                             </option>
                         ))}
                     </select>
-                    {errors && errors.instructor}
+                    <ErrorBox errors={auth.errors.instructor} />
                 </>
             )}
 
@@ -73,7 +70,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                         required
                         onChange={e => setName(e.target.value)}
                     />
-                    {errors && errors.name}
+                    <ErrorBox errors={auth.errors.name} />
 
                     <label htmlFor="email">Email</label>
                     <input
@@ -84,7 +81,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                     />
-                    {errors && errors.email}
+                    <ErrorBox errors={auth.errors.email} />
 
                     <label htmlFor="password">Password</label>
                     <input
@@ -96,7 +93,7 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
-                    {errors && errors.password}
+                    <ErrorBox errors={auth.errors.password} />
 
                     <label htmlFor="password-confirmation">Confirm Password</label>
                     <input
@@ -108,7 +105,6 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
                         value={passConfirm}
                         onChange={e => setPassConfirm(e.target.value)}
                     />
-                    {errors && errors['password-confirmation']}
 
                     <button type="submit">Register</button>
                 </>
@@ -118,16 +114,3 @@ const Register = ({ handleSuccess }: Props): ReactElement => {
 };
 
 export default Register;
-
-interface Props {
-    handleSuccess: (role: string) => void;
-}
-
-interface Form {
-    role: string;
-    instructor: string;
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-}

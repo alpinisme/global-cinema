@@ -1,6 +1,6 @@
-import axios from 'axios';
 import React, { useState, ReactElement, FormEvent } from 'react';
 import ErrorBox from '../../components/ErrorBox';
+import { useAuth } from '../../utils/useAuth';
 import Register from '../Register';
 
 export interface User {
@@ -12,27 +12,20 @@ export interface User {
     instructor?: string | null;
 }
 
-const LoginPage = ({ handleSuccess }: Props): ReactElement => {
+const LoginPage = (): ReactElement => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const [isRegistered, setIsRegistered] = useState(true);
+    const auth = useAuth();
 
     if (!isRegistered) {
-        return <Register handleSuccess={handleSuccess} />;
+        return <Register />;
     }
 
     const login = (e: FormEvent) => {
         e.preventDefault();
-        setError(null);
-        const errMsg = 'Something went wrong with your login. Contact a site admin.';
-
-        axios
-            .post('login', { password, email, remember })
-            .then(res => res.data.role)
-            .then(role => (role ? handleSuccess(role) : setError(errMsg)))
-            .catch(err => console.log('oops', err.response.data.message));
+        auth.login({ password, email, remember });
     };
 
     return (
@@ -75,7 +68,7 @@ const LoginPage = ({ handleSuccess }: Props): ReactElement => {
                 <button type="submit">Login</button>
             </form>
 
-            {error && <ErrorBox errors={[error]} />}
+            {auth.errors.email && <ErrorBox errors={auth.errors.email} />}
 
             <div>
                 Not registered yet?
@@ -88,7 +81,3 @@ const LoginPage = ({ handleSuccess }: Props): ReactElement => {
 };
 
 export default LoginPage;
-
-interface Props {
-    handleSuccess: (role: string) => void;
-}
