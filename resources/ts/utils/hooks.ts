@@ -3,17 +3,14 @@ import axios from 'axios';
 import { Film } from '../types/api';
 import { throttle } from './functions';
 
-export interface PostRequestResponse<A> {
+export interface RequestResponse<A> {
     data: A | null;
     error: string | null;
     isLoading: boolean;
 }
 
-export function usePostRequest<A, B>(): [
-    PostRequestResponse<B>,
-    (url: string, postData: A) => void
-] {
-    const [res, setRes] = useState<PostRequestResponse<B>>({
+export function usePostRequest<A, B>(): [RequestResponse<B>, (url: string, postData: A) => void] {
+    const [res, setRes] = useState<RequestResponse<B>>({
         data: null,
         error: null,
         isLoading: false,
@@ -33,11 +30,8 @@ export function usePostRequest<A, B>(): [
     return [res, makePostRequest];
 }
 
-export function usePatchRequest<A, B>(): [
-    PostRequestResponse<B>,
-    (url: string, postData: A) => void
-] {
-    const [res, setRes] = useState<PostRequestResponse<B>>({
+export function usePatchRequest<A, B>(): [RequestResponse<B>, (url: string, postData: A) => void] {
+    const [res, setRes] = useState<RequestResponse<B>>({
         data: null,
         error: null,
         isLoading: false,
@@ -55,6 +49,39 @@ export function usePatchRequest<A, B>(): [
             });
     };
     return [res, makePatchRequest];
+}
+
+export function useNewGetRequest<A>(url: string): RequestResponse<A> {
+    const [data, setData] = useState<A | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        let isMounted = true; // prevent state update on unmounted component
+        setError(null);
+
+        axios
+            .get(url)
+            .then(res => res.data)
+            .then(data => {
+                if (isMounted) {
+                    setData(data);
+                    setIsLoading(false);
+                }
+            })
+            .catch(res => {
+                if (isMounted) {
+                    setError(res.body.error);
+                    setIsLoading(false);
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [url]);
+
+    return { error, isLoading, data };
 }
 
 export function useGetRequest<A>(
