@@ -33,6 +33,10 @@ Route::group(['middleware' => ['auth']], function () {
         return auth()->user()->assignment->assignment;
     });
 
+    Route::get('/user', function () {
+        return auth()->user();
+    });
+
     Route::get('/role', function () {
         return auth()->user()->role;
     });
