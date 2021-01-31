@@ -62,7 +62,8 @@ class ActivityReviewController extends Controller
 
         return $unverified->map(function ($film) {
             $substrings = $this->stringHelper->substrings($film->title);
-            $fuzzy = new FuzzySearch($film, Film::verifiedLike($substrings, $film->year + 2)); // year threshold plus two just in case entered wrong
+            $similar = Film::verified()->titleLike($substrings)->between($film->year - 1, $film->year + 1)->get();
+            $fuzzy = new FuzzySearch($film, $similar);
 
             return [
                 'current' => $film,
