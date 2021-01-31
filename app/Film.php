@@ -41,9 +41,22 @@ class Film extends Model
      * Takes an array of strings and returns every verified film with one or more
      * of those strings in its title.
      */
-    public static function verifiedLike($substrings)
+    public static function verifiedLike($substrings, $maxYear = 2000) // make scoped instead of static query
     {
-        return static::select('title', 'year', 'id', 'imdb')->verified()->titleLike($substrings)->get();
+        return static::select('title', 'year', 'id', 'imdb')->where('year', '<=', $maxYear)->verified()->titleLike($substrings)->get();
+    }
+
+    /**
+     * Scope a query to include only titles released between the given years (inclusive).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int $minYear
+     * @param  int $miaxYear
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBetween($query, $minYear, $maxYear)
+    {
+        return $query->where('year', '>=', $minYear)->where('year', '<=', $maxYear);
     }
 
     /**
