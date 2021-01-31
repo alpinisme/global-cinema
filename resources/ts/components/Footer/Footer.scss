@@ -1,0 +1,21 @@
+@use '../../../sass/variables';
+
+.footer {
+    display: block;
+    background-color: variables.$main;
+    color: white;
+    padding: 0.2rem 1rem;
+    text-align: center;
+
+    a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+}
+
+@media (max-width: 500px) {
+    .footer {
+        padding: 0.2rem 0.4rem;
+    }
+}

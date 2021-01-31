@@ -1,5 +1,12 @@
 import axios from 'axios';
-import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react';
+import React, {
+    createContext,
+    ReactElement,
+    ReactNode,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import { User } from '../types/api';
 
 const AuthContext = createContext({} as AuthContextData);
@@ -63,7 +70,7 @@ function useAuthProvider() {
 }
 
 interface Props {
-    children: ReactElement;
+    children: ReactNode;
 }
 
 interface RegistrationForm {

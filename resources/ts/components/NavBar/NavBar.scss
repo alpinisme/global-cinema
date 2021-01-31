@@ -1,0 +1,102 @@
+@use '../../../sass/variables';
+
+.nav {
+    padding: 0.1rem 1.5rem 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    background: variables.$main;
+    width: 100vw;
+
+    a {
+        text-decoration: none;
+    }
+
+    // .hamburger-menu {
+    //     $width: 2rem;
+
+    //     display: none;
+    //     cursor: pointer;
+
+    //     span {
+    //         display: block;
+    //         width: $width;
+    //         height: $width/8;
+    //         border-radius: 3px;
+    //         background-color: $main;
+    //         margin: $width/4 0;
+    //         transition: 0.3s;
+    //     }
+    // }
+
+    // &.is-open {
+    //     /* Rotate top bar */
+    //     .top-bar {
+    //         -webkit-transform: rotate(-45deg) translate(-0.55rem, 0.5rem);
+    //         transform: rotate(-45deg) translate(-0.55rem, 0.5rem);
+    //     }
+
+    //     /* Hide middle bar */
+    //     .middle-bar {
+    //         opacity: 0;
+    //     }
+
+    //     /* Rotate bottom bar */
+    //     .bottom-bar {
+    //         -webkit-transform: rotate(45deg) translate(-0.55rem, -0.5rem);
+    //         transform: rotate(45deg) translate(-0.55rem, -0.5rem);
+    //     }
+    // }
+}
+
+.authLinks a {
+    margin-right: 2rem;
+    color: white;
+}
+
+// .nav .nav-links,
+// .nav .admin-links {
+//     display: none;
+// }
+
+// .nav.is-open .nav-links,
+// .nav.is-open .admin-links {
+//     display: flex;
+//     flex-direction: column-reverse;
+// }
+
+// .nav-isopen .navlinks li {
+//     list-style-type: none;
+// }
+
+// .nav {
+//     background: $main;
+//     flex-direction: column;
+//     padding: 1.5rem;
+
+//     .nav-links,
+//     .admin-links {
+//         align-self: center;
+//         justify-content: initial;
+//         text-align: center;
+//     }
+
+//     .nav-links li,
+//     .admin-links li {
+//         margin-bottom: 2rem;
+//     }
+
+//     .admin-links {
+//         order: 2;
+//     }
+
+//     .nav-links li a,
+//     .admin-links li a {
+//         color: white;
+//         font-weight: bold;
+//         font-size: 1.2rem;
+//     }
+// }
+
+// .nav.ul {
+//     flex-direction: column;
+// }
