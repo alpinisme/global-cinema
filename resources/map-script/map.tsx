@@ -156,9 +156,10 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
     return (
         <Map center={position} zoom={city.zoom} id="map">
             <TileLayer
-                url="https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
+                url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                id="mapbox.light"
+                id="mapbox/light-v10"
+                accessToken="pk.eyJ1IjoibWVuZWxzbzIiLCJhIjoiY2tra3A0aGtlMHZ4bDJ3cW5ncGY0M3FucCJ9.P4agnONVKGYVz32aZxP24A"
             />
             <LayerGroup>
                 {screenings?.map(screening => (
