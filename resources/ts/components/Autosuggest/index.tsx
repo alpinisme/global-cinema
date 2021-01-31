@@ -35,7 +35,7 @@ function Autosuggest<A extends Identified>({
             keys: keys,
         };
 
-        const fuse = new Fuse(options as A[], config);
+        const fuse = new Fuse(options, config);
         const all = fuse.search(value);
         const top4 = all.slice(0, 4).map(d => d.item);
 
