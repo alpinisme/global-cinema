@@ -1,7 +1,7 @@
 import React, { useState, useEffect, SyntheticEvent } from 'react';
 import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
-import { Map, TileLayer, Popup, CircleMarker, LayerGroup } from 'react-leaflet';
+import { TileLayer, Popup, CircleMarker, LayerGroup, MapContainer } from 'react-leaflet';
 import { log } from './utils';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'leaflet/dist/leaflet.css';
@@ -154,7 +154,7 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
     const position: [number, number] = [city.lat, city.lng];
 
     return (
-        <Map center={position} zoom={city.zoom} id="map">
+        <MapContainer center={position} zoom={city.zoom} id="map">
             <TileLayer
                 url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -191,7 +191,7 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
                     </CircleMarker>
                 ))}
             </LayerGroup>
-        </Map>
+        </MapContainer>
     );
 };
 
