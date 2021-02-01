@@ -40,7 +40,7 @@
         "identity-obj-proxy": "^3.0.0",
         "jest": "^26.6.3",
         "jest-extended": "^0.11.5",
-        "msw": "^0.25.0",
+        "msw": "^0.26.0",
         "prettier": "^2.2.1",
         "react-test-renderer": "^17.0.1",
         "resolve-url-loader": "^3.1.2",
