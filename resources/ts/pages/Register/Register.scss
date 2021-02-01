@@ -1,0 +1,43 @@
+@use '../../../sass/variables';
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.field {
+    display: grid;
+    grid-template-columns: 33% auto;
+    width: 60%;
+    min-width: 25rem;
+    margin-bottom: 1rem;
+
+    & label {
+        text-align: right;
+        margin-right: 1rem;
+    }
+
+    & input[type='checkbox'] {
+        width: 1rem;
+    }
+}
+
+.textbox {
+    outline: 1px solid variables.$main;
+}
+
+.submit {
+    background-color: variables.$main;
+    color: white;
+    margin: 1rem 0 2rem;
+
+    &:hover {
+        background-color: white;
+        color: variables.$main;
+    }
+}

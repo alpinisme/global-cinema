@@ -3,6 +3,7 @@ import ErrorBox from '../../components/ErrorBox';
 import { User } from '../../types/api';
 import { useGetRequest } from '../../utils/hooks';
 import { useAuth } from '../../utils/useAuth';
+import styles from './Register.scss';
 
 const Register = (): ReactElement => {
     const [role, setRole] = useState('');
@@ -28,20 +29,23 @@ const Register = (): ReactElement => {
     };
 
     return (
-        <form onSubmit={register}>
-            <label htmlFor="role">What is your role on this site?</label>
-            <select name="role" id="role" value={role} onChange={e => setRole(e.target.value)}>
-                <option value="" disabled>
-                    Select one
-                </option>
-                <option value="student">student</option>
-                <option value="unconfirmed_instructor">instructor</option>
-                <option value="unconfirmed_contributor">contributor</option>
-            </select>
+        <form onSubmit={register} className={styles.container}>
+            <h2 className={styles.header}>Register</h2>
+            <div>
+                <label htmlFor="role">What is your role on this site?</label>
+                <select name="role" id="role" value={role} onChange={e => setRole(e.target.value)}>
+                    <option value="" disabled>
+                        Select one
+                    </option>
+                    <option value="student">student</option>
+                    <option value="unconfirmed_instructor">instructor</option>
+                    <option value="unconfirmed_contributor">contributor</option>
+                </select>
+            </div>
             <ErrorBox errors={auth.errors.role} />
 
             {role == 'student' && (
-                <>
+                <div className={styles.field}>
                     <label htmlFor="instructor">Your instructor&apos;s name</label>
                     <select
                         name="instructor"
@@ -56,57 +60,67 @@ const Register = (): ReactElement => {
                         ))}
                     </select>
                     <ErrorBox errors={auth.errors.instructor} />
-                </>
+                </div>
             )}
 
             {role && (
                 <>
-                    <label htmlFor="name">Name</label>
-                    <input
-                        name="name"
-                        id="name"
-                        type="text"
-                        value={name}
-                        required
-                        onChange={e => setName(e.target.value)}
-                    />
+                    <div className={styles.field}>
+                        <label htmlFor="name">Name</label>
+                        <input
+                            name="name"
+                            id="name"
+                            type="text"
+                            className={styles.textbox}
+                            value={name}
+                            required
+                            onChange={e => setName(e.target.value)}
+                        />
+                    </div>
                     <ErrorBox errors={auth.errors.name} />
-
-                    <label htmlFor="email">Email</label>
-                    <input
-                        name="email"
-                        id="email"
-                        type="email"
-                        required
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
+                    <div className={styles.field}>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            name="email"
+                            id="email"
+                            type="email"
+                            className={styles.textbox}
+                            required
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                    </div>
                     <ErrorBox errors={auth.errors.email} />
-
-                    <label htmlFor="password">Password</label>
-                    <input
-                        name="password"
-                        id="password"
-                        type="password"
-                        autoComplete="new-password"
-                        required
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
+                    <div className={styles.field}>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            name="password"
+                            id="password"
+                            type="password"
+                            autoComplete="new-password"
+                            className={styles.textbox}
+                            required
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                    </div>
                     <ErrorBox errors={auth.errors.password} />
-
-                    <label htmlFor="password-confirmation">Confirm Password</label>
-                    <input
-                        name="password_confirmation"
-                        id="password-confirmation"
-                        type="password"
-                        autoComplete="new-password"
-                        required
-                        value={passConfirm}
-                        onChange={e => setPassConfirm(e.target.value)}
-                    />
-
-                    <button type="submit">Register</button>
+                    <div className={styles.field}>
+                        <label htmlFor="password-confirmation">Confirm Password</label>
+                        <input
+                            name="password_confirmation"
+                            id="password-confirmation"
+                            type="password"
+                            autoComplete="new-password"
+                            className={styles.textbox}
+                            required
+                            value={passConfirm}
+                            onChange={e => setPassConfirm(e.target.value)}
+                        />
+                    </div>
+                    <button type="submit" className={styles.submit}>
+                        Register
+                    </button>
                 </>
             )}
         </form>
