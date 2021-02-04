@@ -1,8 +1,9 @@
-import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
+import React, { useState, ReactElement } from 'react';
 import type { Student } from '../../types/api';
+import { useGetRequest } from '../../utils/hooks';
 import styles from './Instructor.scss';
 
-const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
+const InstructorPage = (): ReactElement => {
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 
     const alphabetizeByEmail = (a: Student, b: Student) => {
@@ -17,10 +18,7 @@ const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
         return 0;
     };
 
-    const [studentData] = useGetRequest<Student[]>(
-        '/grading',
-        e => `Student data could not be loaded: ${e}`
-    );
+    const studentData = useGetRequest<Student[]>('/grading');
 
     return studentData ? (
         <>
@@ -43,7 +41,7 @@ const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
                     </tr>
                 </thead>
                 <tbody>
-                    {studentData.sort(alphabetizeByEmail).map(student => (
+                    {studentData.data?.sort(alphabetizeByEmail).map(student => (
                         <tr key={student.info.id} onClick={() => setSelectedStudent(student)}>
                             <td>{student.info.name}</td>
                             <td>{student.info.email}</td>
@@ -67,12 +65,5 @@ const InstructorPage = ({ useGetRequest }: Props): ReactElement => {
         <div>...loading</div>
     );
 };
-
-export interface Props {
-    useGetRequest: <A>(
-        url: string,
-        createErrMsg: (e: string) => string
-    ) => [A | null, Dispatch<SetStateAction<A | null>>];
-}
 
 export default InstructorPage;

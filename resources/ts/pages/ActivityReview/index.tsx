@@ -6,7 +6,20 @@ import styles from './ActivityReview.scss';
 
 const UserReview = (): ReactElement => {
     const url = '/review/users';
-    const [users, setUsers] = useGetRequest<User[]>(url, err => console.log(err));
+    const [users, setUsers] = useState<User[]>([]);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        axios
+            .get(url)
+            .then(res => isMounted && setUsers(res.data))
+            .catch(err => console.log('Oops', err));
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     /**
      * Removes the specified user from list of items in state
@@ -14,7 +27,7 @@ const UserReview = (): ReactElement => {
      */
     const removeUser = (id: number) =>
         setUsers(users => {
-            if (!users) throw new Error('tried to remove non-existent user in ItemsToReview');
+            if (!users) throw new Error('tried to remove non-existent user in UserReview');
             const index = users.findIndex(user => user.id == id);
             return [...users.slice(0, index), ...users.slice(index + 1)];
         });
@@ -67,7 +80,7 @@ const UserReview = (): ReactElement => {
 
 export const TheaterReview = (): ReactElement => {
     const url = '/review/theaters';
-    const [theaters, setTheaters] = useGetRequest<TheaterToReview[]>(url, err => console.log(err));
+    const theaters = useGetRequest<TheaterToReview[]>(url);
 
     const approve = (theater: Theater) => {
         console.log('approved', theater);
@@ -86,7 +99,7 @@ export const TheaterReview = (): ReactElement => {
     if (theaters) {
         return (
             <ul>
-                {theaters?.map(theater => (
+                {theaters.data?.map(theater => (
                     <li key={theater.current.id}>
                         {theater.current.name}
                         <button onClick={() => approve(theater.current)}>Approve</button>
@@ -119,7 +132,7 @@ export const TheaterReview = (): ReactElement => {
 
 const FilmReview = () => {
     const url = '/review/films';
-    const [films, setFilms] = useGetRequest<FilmToReview[]>(url, err => console.log(err));
+    const [films, setFilms] = useState<FilmToReview[]>([]);
     const [mergeResult, sendMergeRequest] = usePatchRequest();
     const minCount = 5;
 
@@ -131,8 +144,9 @@ const FilmReview = () => {
 
     useEffect(() => {
         let isMounted = true;
+        console.log('inside useeffect');
 
-        if (films?.length == minCount) {
+        if (films.length == 0 || films.length == minCount) {
             axios
                 .get(url)
                 .then(res => isMounted && setFilms(res.data))

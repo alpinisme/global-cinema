@@ -8,7 +8,7 @@ import PasswordReset from '../../components/PasswordReset';
 import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
 import AdminContext from '../../contexts/AdminContext';
 import ScreeningsContext from '../../contexts/ScreeningsContext';
-import { useFilmSearch } from '../../utils/hooks';
+import { useFilmSearch, useGetRequest } from '../../utils/hooks';
 import ActivityReview from '../ActivityReview';
 import ProgressChecker from '../ProgressChecker/ index';
 import CsvUploader from '../CsvUploader';
@@ -44,20 +44,14 @@ const handleClick = (fn: Dispatch<SetStateAction<Action | null>>, next: Action) 
  * Homepage for admin users, where they can alter user privileges,
  * manually reset passwords, and input data for any city and date they like.
  */
-const AdminPage = ({ useGetRequest }: Props): ReactElement => {
+const AdminPage = (): ReactElement => {
     const [month, setMonth] = useState<string | null>(null);
     const [action, setAction] = useState<Action | null>(null);
 
-    const [users] = useGetRequest<User[]>('/users', e => `Users could not be loaded: ${e}`);
-
-    const [films, doFilmsSearch] = useFilmSearch();
-
-    const [theaters] = useGetRequest<Theater[]>(
-        '/theaters',
-        e => `Theaters could not be loaded: ${e}`
-    );
-
-    const [cities] = useGetRequest<City[]>('/cities', e => `Cities could not be loaded: ${e}`);
+    const users = useGetRequest<User[]>('/users');
+    const cities = useGetRequest<City[]>('/cities');
+    const theaters = useGetRequest<Theater[]>('/theaters');
+    const [films, getFilms] = useFilmSearch();
 
     /**
      * checks if the clicked on collapsible is already open
@@ -66,14 +60,14 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
     const isOpen = (el: Action) => el == action;
 
     const adminContextData = {
-        users: users ?? [],
-        cities: cities ?? [],
+        users: users.data ?? [],
+        cities: cities.data ?? [],
     };
 
     const screeningsContextData = {
-        films: films,
-        theaters: theaters ?? [],
-        getFilms: doFilmsSearch,
+        films,
+        getFilms,
+        theaters: theaters.data ?? [],
     };
 
     if (month) {
@@ -135,7 +129,7 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                         handleClick={() => handleClick(setAction, 'check progress')}
                         label="check progress"
                     >
-                        <ProgressChecker cities={cities ?? []} />
+                        <ProgressChecker cities={cities.data ?? []} />
                     </Collapsible>
                 </li>
 
@@ -145,19 +139,12 @@ const AdminPage = ({ useGetRequest }: Props): ReactElement => {
                         handleClick={() => handleClick(setAction, 'upload a csv')}
                         label="upload a csv"
                     >
-                        <CsvUploader cities={cities ?? []} />
+                        <CsvUploader cities={cities.data ?? []} />
                     </Collapsible>
                 </li>
             </ul>
         </AdminContext.Provider>
     );
 };
-
-export interface Props {
-    useGetRequest: <A>(
-        url: string,
-        createErrMsg: (e: string) => string
-    ) => [A | null, Dispatch<SetStateAction<A | null>>];
-}
 
 export default AdminPage;

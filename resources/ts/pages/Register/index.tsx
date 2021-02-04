@@ -7,7 +7,7 @@ import styles from './Register.scss';
 
 const Register = (): ReactElement => {
     const [role, setRole] = useState('');
-    const [instructors] = useGetRequest<User[]>('instructors', e => console.log(e));
+    const instructors = useGetRequest<User[]>('instructors');
     const [instructor, setInstructor] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -53,7 +53,7 @@ const Register = (): ReactElement => {
                         value={instructor}
                         onChange={e => setInstructor(e.target.value)}
                     >
-                        {instructors?.map(instructor => (
+                        {instructors.data?.map(instructor => (
                             <option key={instructor.id} value={instructor.id}>
                                 {instructor.name}
                             </option>

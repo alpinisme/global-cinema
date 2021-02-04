@@ -6,16 +6,11 @@ import InstructorPage from './Instructor';
 import AdminPage from './Admin';
 import { addOnce } from '../utils/functions';
 import Student from './Student';
-import { useGetRequest } from '../utils/hooks';
 import { CityContextProvider } from '../contexts/CityContext';
 
 const Home = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
     const auth = useAuth();
-
-    function useGetOrFail<A>(a: string, fn: (s: string) => string) {
-        return useGetRequest<A>(a, b => setErrors(addOnce(fn(b))));
-    }
 
     // display login form if not already logged in
     if (!auth.user) {
@@ -32,17 +27,17 @@ const Home = (): ReactElement => {
         case 'user':
             return (
                 <CityContextProvider>
-                    <Student useGetRequest={useGetOrFail} />
+                    <Student />
                 </CityContextProvider>
             );
 
         case 'instructor':
-            return <InstructorPage useGetRequest={useGetOrFail} />;
+            return <InstructorPage />;
 
         case 'admin':
             return (
                 <CityContextProvider>
-                    <AdminPage useGetRequest={useGetOrFail} />
+                    <AdminPage />
                 </CityContextProvider>
             );
 

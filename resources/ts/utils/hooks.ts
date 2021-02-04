@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import axios from 'axios';
 import { Film } from '../types/api';
 import { throttle } from './functions';
@@ -51,7 +51,7 @@ export function usePatchRequest<A, B>(): [RequestResponse<B>, (url: string, post
     return [res, makePatchRequest];
 }
 
-export function useNewGetRequest<A>(url: string): RequestResponse<A> {
+export function useGetRequest<A>(url: string): RequestResponse<A> {
     const [data, setData] = useState<A | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -82,55 +82,6 @@ export function useNewGetRequest<A>(url: string): RequestResponse<A> {
     }, [url]);
 
     return { error, isLoading, data };
-}
-
-export function useGetRequest<A>(
-    url: string,
-    setErrors: (err: string) => void
-): [A | null, Dispatch<SetStateAction<A | null>>] {
-    const [data, setData] = useState<A | null>(null);
-    const [request, setRequest] = useState<Promise<void> | null>(null);
-
-    /**
-     * make request and handle success
-     * then save promise in state so another effect can handle errors, if any
-     */
-    useEffect(() => {
-        let isMounted = true; // prevent state update on unmounted component
-        const req = axios
-            .get(url)
-            .then(res => res.data)
-            .then(data => {
-                if (isMounted) setData(data);
-            });
-
-        if (isMounted) {
-            setRequest(req);
-        }
-
-        return () => {
-            isMounted = false;
-        };
-    }, [url]);
-
-    /**
-     * handle errors, if any
-     * this must be done in a separate effect so that changes to
-     * the setErrors dependency don't cause multiple calls to api
-     */
-    useEffect(() => {
-        let isMounted = true; // prevent state update on unmounted component
-
-        if (isMounted) {
-            request?.catch(setErrors);
-        }
-
-        return () => {
-            isMounted = false;
-        };
-    }, [request, setErrors]);
-
-    return [data, setData];
 }
 
 export function useFilmSearch(): [Film[], (input: string, year?: string | undefined) => void] {

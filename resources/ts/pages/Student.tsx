@@ -1,23 +1,16 @@
-import React, { ReactElement, Dispatch, SetStateAction, useState, useCallback } from 'react';
+import React, { ReactElement, useState, useCallback } from 'react';
 import Month from '../components/Month';
 import type { Film, Theater } from '../types/api';
 import ScreeningsContext from '../contexts/ScreeningsContext';
 import Axios from 'axios';
+import { useGetRequest } from '../utils/hooks';
 
-const Student = ({ useGetRequest }: Props): ReactElement => {
+const Student = (): ReactElement => {
     const [films, setFilms] = useState<Film[]>([]);
+    const theaters = useGetRequest<Theater[]>('/theaters');
+    const assignment = useGetRequest<string>('/users');
 
-    const [theaters] = useGetRequest<Theater[]>(
-        '/theaters',
-        e => `Theaters could not be loaded: ${e}`
-    );
-
-    const [assignment] = useGetRequest<string>(
-        '/users',
-        e => `Assignment could not be loaded: ${e}`
-    );
-
-    const doFilmsSearch = useCallback(
+    const getFilms = useCallback(
         (input: string, year?: string) => {
             if (input.length < 3) {
                 return;
@@ -32,25 +25,22 @@ const Student = ({ useGetRequest }: Props): ReactElement => {
     );
 
     const context = {
-        theaters: theaters ?? [],
-        films: films ?? [],
-        getFilms: doFilmsSearch,
+        theaters: theaters.data ?? [],
+        films,
+        getFilms,
     };
 
-    return assignment ? (
+    if (assignment.isLoading) {
+        return <div> ...loading</div>;
+    }
+
+    return assignment.data ? (
         <ScreeningsContext.Provider value={context}>
-            <Month month={assignment} />
+            <Month month={assignment.data} />
         </ScreeningsContext.Provider>
     ) : (
         <div> ...loading</div>
     );
 };
-
-export interface Props {
-    useGetRequest: <A>(
-        url: string,
-        createErrMsg: (e: string) => string
-    ) => [A | null, Dispatch<SetStateAction<A | null>>];
-}
 
 export default Student;
