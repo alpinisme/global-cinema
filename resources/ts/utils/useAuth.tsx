@@ -94,6 +94,7 @@ interface AuthContextData {
     register: (form: RegistrationForm) => void;
     user: User | null;
     errors: Errors;
+    isLoading: boolean;
 }
 
 interface Errors {

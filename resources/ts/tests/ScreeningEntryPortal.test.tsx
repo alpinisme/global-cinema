@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 
 import { CityContextProvider } from '../contexts/CityContext';
 import ScreeningEntryPortal from '../components/ScreeningEntryPortal';
-import AdminContext from '../contexts/AdminContext';
+import { AdminContext } from '../contexts/AdminContext';
 import { cities } from './backend-helpers/mock-backend-data';
 
 const city = cities[0];

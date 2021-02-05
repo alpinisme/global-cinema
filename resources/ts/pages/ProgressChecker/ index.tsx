@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { ChangeEvent, ReactElement, useEffect, useState } from 'react';
-import { City } from '../../types/api';
 import TreeList, { Data as TreeListData } from '../../components/TreeList';
 import Select from '../../components/Select';
 import styles from './ProgressChecker.scss';
+import { useAdminContext } from '../../contexts/AdminContext';
 
 /**
  * Callback for reduce function. Transforms a list of formatted date strings (YYYY-month, ex: 1987-May)
@@ -31,9 +31,10 @@ const formatDates = (accumulator: TreeListData[], date: string): TreeListData[] 
  * Component that allows users to review which months the project
  * has gathered data for. It displays years and months in a collapsible tree
  */
-const ProgressChecker = ({ cities }: Props): ReactElement => {
+const ProgressChecker = (): ReactElement => {
     const [dates, setDates] = useState<string[] | null>(null);
     const [city, setCity] = useState<string | null>(null);
+    const { cities } = useAdminContext();
 
     // retreive list of completed months for selected city
     useEffect(() => {
@@ -77,7 +78,3 @@ const ProgressChecker = ({ cities }: Props): ReactElement => {
 };
 
 export default ProgressChecker;
-
-interface Props {
-    cities: City[];
-}

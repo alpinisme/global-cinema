@@ -2,7 +2,7 @@ import React, { ReactElement, ChangeEvent, useContext } from 'react';
 import Select from './Select';
 import MonthPicker from './MonthPicker';
 import { useCityContext } from '../contexts/CityContext';
-import AdminContext from '../contexts/AdminContext';
+import { AdminContext } from '../contexts/AdminContext';
 
 const ScreeningEntryPortal = ({ setMonth }: Props): ReactElement => {
     const [city, setCity] = useCityContext();

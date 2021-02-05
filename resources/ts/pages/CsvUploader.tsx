@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
-import { City } from '../types/api';
 
-const CsvUploader = ({ cities }: Props): ReactElement => {
+const CsvUploader = (): ReactElement => {
     return (
         <form>
             <input type="file" />
@@ -10,7 +9,3 @@ const CsvUploader = ({ cities }: Props): ReactElement => {
 };
 
 export default CsvUploader;
-
-interface Props {
-    cities: City[];
-}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { create, act, ReactTestRenderer } from 'react-test-renderer';
 import PasswordReset from '../components/PasswordReset';
-import AdminContext from '../contexts/AdminContext';
+import { AdminContext } from '../contexts/AdminContext';
 import { City } from '../types/api';
 
 let el: ReactTestRenderer;

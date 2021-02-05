@@ -1,14 +1,12 @@
 import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
-import type { Theater, User, City } from '../../types/api';
 import Month from '../../components/Month';
 import Collapsible from '../../components/Collapsible';
 import styles from './Admin.scss';
 import UserEdit from '../../components/UserEdit';
 import PasswordReset from '../../components/PasswordReset';
 import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
-import AdminContext from '../../contexts/AdminContext';
-import ScreeningsContext from '../../contexts/ScreeningsContext';
-import { useFilmSearch, useGetRequest } from '../../utils/hooks';
+import AdminProvider from '../../contexts/AdminContext';
+import ScreeningsProvider from '../../contexts/ScreeningsContext';
 import ActivityReview from '../ActivityReview';
 import ProgressChecker from '../ProgressChecker/ index';
 import CsvUploader from '../CsvUploader';
@@ -48,38 +46,22 @@ const AdminPage = (): ReactElement => {
     const [month, setMonth] = useState<string | null>(null);
     const [action, setAction] = useState<Action | null>(null);
 
-    const users = useGetRequest<User[]>('/users');
-    const cities = useGetRequest<City[]>('/cities');
-    const theaters = useGetRequest<Theater[]>('/theaters');
-    const [films, getFilms] = useFilmSearch();
-
     /**
      * checks if the clicked on collapsible is already open
      * @param el Action assigned to the collapsible element
      */
     const isOpen = (el: Action) => el == action;
 
-    const adminContextData = {
-        users: users.data ?? [],
-        cities: cities.data ?? [],
-    };
-
-    const screeningsContextData = {
-        films,
-        getFilms,
-        theaters: theaters.data ?? [],
-    };
-
     if (month) {
         return (
-            <ScreeningsContext.Provider value={screeningsContextData}>
+            <ScreeningsProvider>
                 <Month month={month} cancel={() => setMonth(null)} />
-            </ScreeningsContext.Provider>
+            </ScreeningsProvider>
         );
     }
 
     return (
-        <AdminContext.Provider value={adminContextData}>
+        <AdminProvider>
             <h2 className={styles.h2}>What would you like to do?</h2>
 
             <ul className={styles.list}>
@@ -129,7 +111,7 @@ const AdminPage = (): ReactElement => {
                         handleClick={() => handleClick(setAction, 'check progress')}
                         label="check progress"
                     >
-                        <ProgressChecker cities={cities.data ?? []} />
+                        <ProgressChecker />
                     </Collapsible>
                 </li>
 
@@ -139,11 +121,11 @@ const AdminPage = (): ReactElement => {
                         handleClick={() => handleClick(setAction, 'upload a csv')}
                         label="upload a csv"
                     >
-                        <CsvUploader cities={cities.data ?? []} />
+                        <CsvUploader />
                     </Collapsible>
                 </li>
             </ul>
-        </AdminContext.Provider>
+        </AdminProvider>
     );
 };
 

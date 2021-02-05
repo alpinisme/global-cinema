@@ -3,7 +3,7 @@ import { User } from '../../types/api';
 import Autosuggest from '../Autosuggest';
 import Clipboard from '../Clipboard';
 import { usePostRequest } from '../../utils/hooks';
-import AdminContext from '../../contexts/AdminContext';
+import { AdminContext } from '../../contexts/AdminContext';
 import styles from './PasswordReset.scss';
 
 // TODO: allow more than one password reset (add action to button)

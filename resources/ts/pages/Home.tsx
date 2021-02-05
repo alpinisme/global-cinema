@@ -12,6 +12,10 @@ const Home = (): ReactElement => {
     const [errors, setErrors] = useState<string[]>([]);
     const auth = useAuth();
 
+    if (auth.isLoading) {
+        return <div>...loading</div>;
+    }
+
     // display login form if not already logged in
     if (!auth.user) {
         return <LoginPage />;
