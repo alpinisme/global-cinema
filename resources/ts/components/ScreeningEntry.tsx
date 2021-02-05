@@ -6,7 +6,7 @@ import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
 import type { Film, Screening, City } from '../types/api';
 import { useCityContext } from '../contexts/CityContext';
-import ScreeningsContext from '../contexts/ScreeningsContext';
+import { ScreeningsContext } from '../contexts/ScreeningsContext';
 
 const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
     const { films, theaters, getFilms } = useContext(ScreeningsContext);

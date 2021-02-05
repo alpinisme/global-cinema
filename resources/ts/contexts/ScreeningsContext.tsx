@@ -2,7 +2,7 @@ import React, { createContext, ReactElement, ReactNode } from 'react';
 import type { Theater, Film } from '../types/api';
 import { useFilmSearch, useGetRequest } from '../utils/hooks';
 
-const ScreeningsContext = createContext({} as ScreeningsContextData);
+export const ScreeningsContext = createContext({} as ScreeningsContextData);
 
 const ScreeningsProvider = ({ children }: ScreeningsProviderProps): ReactElement => {
     const theaters = useGetRequest<Theater[]>('/theaters');

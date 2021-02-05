@@ -1,7 +1,7 @@
 import React, { ReactElement, useState, useCallback } from 'react';
 import Month from '../components/Month';
 import type { Film, Theater } from '../types/api';
-import ScreeningsContext from '../contexts/ScreeningsContext';
+import { ScreeningsContext } from '../contexts/ScreeningsContext';
 import Axios from 'axios';
 import { useGetRequest } from '../utils/hooks';
 

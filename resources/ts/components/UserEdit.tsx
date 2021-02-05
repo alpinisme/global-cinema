@@ -1,13 +1,13 @@
-import React, { ReactElement, useState, useContext } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { User } from '../types/api';
 import Autosuggest from './Autosuggest';
-import { AdminContext } from '../contexts/AdminContext';
+import { useAdminContext } from '../contexts/AdminContext';
 
 const UserEdit = (): ReactElement => {
     const [user, setUser] = useState<User | null>(null);
     const [isNewUser, setIsNewUser] = useState(false);
 
-    const { users } = useContext(AdminContext);
+    const { users } = useAdminContext();
 
     /**
      * finds and sets user in state based on given userID
