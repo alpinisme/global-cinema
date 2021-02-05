@@ -4,13 +4,16 @@ import Home from './pages/Home';
 import { AuthProvider } from './utils/useAuth';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
+import { ModalProvider } from './contexts/ModalContext';
 
 const App = (): ReactElement => (
     <ErrorBoundary>
         <AuthProvider>
-            <Layout>
-                <Home />
-            </Layout>
+            <ModalProvider>
+                <Layout>
+                    <Home />
+                </Layout>
+            </ModalProvider>
         </AuthProvider>
     </ErrorBoundary>
 );
