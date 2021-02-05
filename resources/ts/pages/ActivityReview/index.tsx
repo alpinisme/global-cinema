@@ -53,26 +53,24 @@ const UserReview = (): ReactElement => {
         removeUser(id);
     };
 
+    if (!users) {
+        return <div>...loading</div>; // TODO: Create loading compontent
+    }
+
     return (
         <table>
             <tbody>
-                {users ? (
-                    users.map(user => (
-                        <tr key={user.id}>
-                            <td>{user.name}</td>
-                            <td>
-                                <button onClick={() => approve(user.id)}>approve</button>
-                            </td>
-                            <td>
-                                <button onClick={() => reject(user.id)}>reject</button>
-                            </td>
-                        </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td>...loading</td>
+                {users.map(user => (
+                    <tr key={user.id}>
+                        <td>{user.name}</td>
+                        <td>
+                            <button onClick={() => approve(user.id)}>approve</button>
+                        </td>
+                        <td>
+                            <button onClick={() => reject(user.id)}>reject</button>
+                        </td>
                     </tr>
-                )}
+                ))}
             </tbody>
         </table>
     );
@@ -96,10 +94,10 @@ export const TheaterReview = (): ReactElement => {
         console.log('merged', wrong, correct);
     };
 
-    if (theaters) {
+    if (theaters.data) {
         return (
             <ul>
-                {theaters.data?.map(theater => (
+                {theaters.data.map(theater => (
                     <li key={theater.current.id}>
                         {theater.current.name}
                         <button onClick={() => approve(theater.current)}>Approve</button>
@@ -169,10 +167,13 @@ const FilmReview = () => {
         setFilms(films?.filter(film => film.current != from) ?? []);
     };
 
+    if (!films) {
+        return <div>...searching the database</div>;
+    }
+
     return (
         <ul>
-            {!films && '...searching the database'}
-            {films?.map(film => (
+            {films.map(film => (
                 <li className={styles.item} key={film.current.id}>
                     <em className={styles.current}>
                         {film.current.title} ({film.current.year ?? 'no year'})
@@ -180,7 +181,7 @@ const FilmReview = () => {
                     <button className={styles.reject} onClick={() => reject(film.current)}>
                         Reject
                     </button>
-                    {film.alternates.length ? (
+                    {film.alternates.length ? ( // TODO: consider making an MergeAlternates component
                         <div>
                             Possibly a duplicate of:
                             <ul>
