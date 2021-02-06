@@ -1,12 +1,19 @@
-import { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { useState, useEffect, useCallback, ChangeEvent, useReducer, Reducer } from 'react';
 import axios from 'axios';
 import { Film } from '../types/api';
 import { throttle } from './functions';
 
-export interface RequestResponse<A> {
-    data: A | null;
-    error: string | null;
-    isLoading: boolean;
+function reducer<A>(state: RequestResponse<A>, action: ReducerAction<A>) {
+    switch (action.type) {
+        case 'new request':
+            return { ...state, error: null, isLoading: true };
+        case 'error':
+            return { ...state, isLoading: false, error: action.error };
+        case 'success':
+            return { ...state, isLoading: false, data: action.data };
+        default:
+            throw new Error();
+    }
 }
 
 export function usePostRequest<A, B>(): [RequestResponse<B>, (url: string, postData: A) => void] {
@@ -52,27 +59,29 @@ export function usePatchRequest<A, B>(): [RequestResponse<B>, (url: string, post
 }
 
 export function useGetRequest<A>(url: string): RequestResponse<A> {
-    const [data, setData] = useState<A | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const initialState = {
+        data: null,
+        error: null,
+        isLoading: true,
+    };
+
+    const [state, dispatch] = useReducer<RequestReducer<A>>(reducer, initialState);
 
     useEffect(() => {
         let isMounted = true; // prevent state update on unmounted component
-        setError(null);
+        dispatch({ type: 'new request' });
 
         axios
             .get(url)
             .then(res => res.data)
             .then(data => {
                 if (isMounted) {
-                    setData(data);
-                    setIsLoading(false);
+                    dispatch({ type: 'success', data });
                 }
             })
             .catch(res => {
                 if (isMounted) {
-                    setError(res.body.error);
-                    setIsLoading(false);
+                    dispatch({ type: 'error', error: res.body.error });
                 }
             });
 
@@ -81,7 +90,7 @@ export function useGetRequest<A>(url: string): RequestResponse<A> {
         };
     }, [url]);
 
-    return { error, isLoading, data };
+    return state;
 }
 
 export function useFilmSearch(): [Film[], (input: string, year?: string | undefined) => void] {
@@ -132,3 +141,16 @@ export function useFormField(
     );
     return { value, onChange };
 }
+
+export interface RequestResponse<A> {
+    data: A | null;
+    error: string | null;
+    isLoading: boolean;
+}
+
+type ReducerAction<A> =
+    | { type: 'new request' }
+    | { type: 'error'; error: string }
+    | { type: 'success'; data: A };
+
+type RequestReducer<A> = Reducer<RequestResponse<A>, ReducerAction<A>>;
