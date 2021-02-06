@@ -5,6 +5,7 @@ import { ScreeningsContext } from '../contexts/ScreeningsContext';
 import Axios from 'axios';
 import { useGetRequest } from '../utils/hooks';
 import LoadingIndicator from '../components/LoadingIndicator';
+import ErrorBox from '../components/ErrorBox';
 
 const Student = (): ReactElement => {
     const [films, setFilms] = useState<Film[]>([]);
@@ -35,12 +36,14 @@ const Student = (): ReactElement => {
         return <LoadingIndicator />;
     }
 
-    return assignment.data ? (
+    if (assignment.error != null) {
+        return <ErrorBox errors={["Couldn't load assignment"]} />;
+    }
+
+    return (
         <ScreeningsContext.Provider value={context}>
             <Month month={assignment.data} />
         </ScreeningsContext.Provider>
-    ) : (
-        <div> ...loading</div>
     );
 };
 
