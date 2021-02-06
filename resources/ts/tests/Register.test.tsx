@@ -5,7 +5,7 @@ import { users } from './backend-helpers/mock-backend-data';
 import Register from '../pages/Register';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
-import { AuthProvider } from '../utils/useAuth';
+import { AuthProvider } from '../hooks/useAuth';
 
 const handleSuccess = jest.fn();
 

@@ -1,6 +1,7 @@
 import React, { createContext, ReactElement, ReactNode } from 'react';
 import type { Theater, Film } from '../types/api';
-import { useFilmSearch, useGetRequest } from '../utils/hooks';
+import { useGetRequest } from '../hooks/requestHooks';
+import useFilmSearch from '../hooks/useFilmSearch';
 
 export const ScreeningsContext = createContext({} as ScreeningsContextData);
 

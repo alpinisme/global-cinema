@@ -4,7 +4,7 @@ import ItemToReview from '../components/ItemToReview';
 import LoadingIndicator from '../components/LoadingIndicator';
 import TextButton from '../components/TextButton';
 import { Theater, TheaterToReview } from '../types/api';
-import { useGetRequest } from '../utils/hooks';
+import { useGetRequest } from '../hooks/requestHooks';
 
 const TheaterReview = (): ReactElement => {
     const url = '/review/theaters';

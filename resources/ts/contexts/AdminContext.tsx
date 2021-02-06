@@ -1,6 +1,6 @@
 import React, { createContext, ReactElement, ReactNode, useContext } from 'react';
 import type { User, City } from '../types/api';
-import { useGetRequest } from '../utils/hooks';
+import { useGetRequest } from '../hooks/requestHooks';
 
 export const AdminContext = createContext({} as AdminContextData);
 

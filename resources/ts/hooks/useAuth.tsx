@@ -22,6 +22,10 @@ export function AuthProvider({ children }: Props): ReactElement {
 }
 
 function useAuthProvider() {
+    // TODO: switch to useReducer so that the number of final states is three:
+    // isLoading: true; isLoading: false and user: User; isLoading: false and errors: Errors
+    // throw error if isLoading: true and user is something other than User
+    // perhaps make the user param in the success case "unknown" and then use a type guard to check
     const [user, setUser] = useState<User | null>(null);
     const [errors, setErrors] = useState<Errors>({});
     const [isLoading, setIsLoading] = useState(true);

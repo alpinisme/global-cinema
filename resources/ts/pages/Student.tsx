@@ -3,7 +3,7 @@ import Month from '../components/Month';
 import type { Film, Theater } from '../types/api';
 import { ScreeningsContext } from '../contexts/ScreeningsContext';
 import Axios from 'axios';
-import { useGetRequest } from '../utils/hooks';
+import { useGetRequest } from '../hooks/requestHooks';
 import LoadingIndicator from '../components/LoadingIndicator';
 import ErrorBox from '../components/ErrorBox';
 

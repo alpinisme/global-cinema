@@ -1,8 +1,8 @@
 import React, { FormEvent, ReactElement, useState } from 'react';
 import ErrorBox from '../../components/ErrorBox';
 import { User } from '../../types/api';
-import { useGetRequest } from '../../utils/hooks';
-import { useAuth } from '../../utils/useAuth';
+import { useGetRequest } from '../../hooks/requestHooks';
+import { useAuth } from '../../hooks/useAuth';
 import styles from './Register.scss';
 
 const Register = (): ReactElement => {

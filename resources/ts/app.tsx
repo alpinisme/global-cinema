@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import Home from './pages/Home';
-import { AuthProvider } from './utils/useAuth';
+import { AuthProvider } from './hooks/useAuth';
 import ErrorBoundary from './components/ErrorBoundary';
 import Layout from './components/Layout';
 import { ModalProvider } from './contexts/ModalContext';

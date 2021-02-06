@@ -2,7 +2,7 @@ import React, { ReactElement, useContext } from 'react';
 import { User } from '../../types/api';
 import Autosuggest from '../Autosuggest';
 import Clipboard from '../Clipboard';
-import { usePostRequest } from '../../utils/hooks';
+import { usePostRequest } from '../../hooks/requestHooks';
 import { AdminContext } from '../../contexts/AdminContext';
 import styles from './PasswordReset.scss';
 

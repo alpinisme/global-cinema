@@ -4,7 +4,7 @@ import DuplicatesDisplay from '../components/DuplicatesDisplay';
 import ItemToReview from '../components/ItemToReview';
 import TextButton from '../components/TextButton';
 import { Film, FilmToReview } from '../types/api';
-import { usePatchRequest } from '../utils/hooks';
+import { usePatchRequest } from '../hooks/requestHooks';
 
 const FilmReview = (): ReactElement => {
     const url = '/review/films';
