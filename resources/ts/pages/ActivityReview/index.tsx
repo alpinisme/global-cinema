@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { ReactElement, useEffect, useState } from 'react';
+import DuplicatesDisplay from '../../components/DuplicatesDisplay';
 import { Film, FilmToReview, Theater, TheaterToReview, User } from '../../types/api';
 import { useGetRequest, usePatchRequest } from '../../utils/hooks';
 import styles from './ActivityReview.scss';
@@ -102,23 +103,11 @@ export const TheaterReview = (): ReactElement => {
                         {theater.current.name}
                         <button onClick={() => approve(theater.current)}>Approve</button>
                         <button onClick={() => reject(theater.current)}>Reject</button>
-                        {theater.alternates.length ? (
-                            <div>
-                                Possibly a duplicate of:
-                                <ul>
-                                    {theater.alternates.map(alternate => (
-                                        <li key={alternate.id}>
-                                            <button
-                                                onClick={() => merge(theater.current, alternate)}
-                                            ></button>
-                                            {alternate.name}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ) : (
-                            <div>No likely duplicates found</div>
-                        )}
+                        <DuplicatesDisplay
+                            duplicates={theater.alternates}
+                            displayAlternate={theater => theater.name}
+                            handleMerge={alternate => merge(theater.current, alternate)}
+                        />
                     </li>
                 ))}
             </ul>
@@ -181,26 +170,12 @@ const FilmReview = () => {
                     <button className={styles.reject} onClick={() => reject(film.current)}>
                         Reject
                     </button>
-                    {film.alternates.length ? ( // TODO: consider making an MergeAlternates component
-                        <div>
-                            Possibly a duplicate of:
-                            <ul>
-                                {film.alternates.map(alternate => (
-                                    <li key={alternate.id} title={alternate.imdb}>
-                                        {alternate.title} ({alternate.year})
-                                        <button
-                                            className={styles.merge}
-                                            onClick={() => merge(film.current, alternate)}
-                                        >
-                                            Merge
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ) : (
-                        <div>No likely duplicates found</div>
-                    )}
+                    <DuplicatesDisplay
+                        duplicates={film.alternates}
+                        displayAlternate={film => `${film.title} (${film.year})`}
+                        displayTitle={film => film.imdb}
+                        handleMerge={alternate => merge(film.current, alternate)}
+                    />
                 </li>
             ))}
         </ul>

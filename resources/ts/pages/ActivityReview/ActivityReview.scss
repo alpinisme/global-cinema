@@ -19,8 +19,7 @@
 }
 
 .accept,
-.reject,
-.merge {
+.reject {
     font-weight: bold;
 }
 
@@ -30,8 +29,4 @@
 
 .reject {
     color: rgb(107, 2, 2);
-}
-
-.merge {
-    color: cadetblue;
 }
