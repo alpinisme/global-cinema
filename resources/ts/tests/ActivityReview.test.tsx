@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import { theatersToReview } from './backend-helpers/mock-backend-data';
-import { TheaterReview } from '../pages/ActivityReview';
+import TheaterReview from '../pages/TheaterReview';
 import '@testing-library/jest-dom/extend-expect';
 import { rest, server } from './backend-helpers/server';
 
