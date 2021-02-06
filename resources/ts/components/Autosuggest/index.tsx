@@ -1,8 +1,9 @@
 import React, { ReactElement, useState, useEffect, ChangeEvent } from 'react';
 import Fuse from 'fuse.js';
 import styles from './Autosuggest.scss';
+import { Identifiable } from '../../types/utilityInterfaces';
 
-function Autosuggest<A extends Identified>({
+function Autosuggest<A extends Identifiable>({
     config,
     handleSubmit,
     handleManualAdd,
@@ -90,10 +91,6 @@ function Autosuggest<A extends Identified>({
 }
 
 export default Autosuggest;
-
-interface Identified {
-    id: number;
-}
 
 export interface Props<A> {
     config: { label: string; keys: string[]; options: A[]; displayMatch: (a: A) => string };
