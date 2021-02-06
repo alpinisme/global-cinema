@@ -7,8 +7,6 @@ import '@testing-library/jest-dom/extend-expect';
 import 'jest-extended';
 import { server, rest } from './backend-helpers/server';
 
-let errMsg = '';
-
 describe('With happy-path api calls', () => {
     beforeEach(() => {
         render(
@@ -27,8 +25,6 @@ describe('With happy-path api calls', () => {
 
 describe('With problematic api calls', () => {
     it('handles failure gracefully', async () => {
-        errMsg = '';
-
         server.use(
             rest.get('/cities', async (req, res, ctx) => {
                 return res(ctx.status(500), ctx.json({ message: 'server error' }));
