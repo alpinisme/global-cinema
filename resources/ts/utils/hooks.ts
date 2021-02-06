@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Film } from '../types/api';
 import { throttle } from './functions';
 
-function reducer<A>(state: RequestResponse<A>, action: ReducerAction<A>) {
+function reducer<A>(state: RequestResponseQ<A>, action: ReducerAction<A>): RequestResponseQ<A> {
     switch (action.type) {
         case 'new request':
             return { ...state, error: null, isLoading: true };
@@ -16,56 +16,57 @@ function reducer<A>(state: RequestResponse<A>, action: ReducerAction<A>) {
     }
 }
 
+const initialState = {
+    data: null,
+    error: null,
+    isLoading: true,
+};
+
 export function usePostRequest<A, B>(): [RequestResponse<B>, (url: string, postData: A) => void] {
-    const [res, setRes] = useState<RequestResponse<B>>({
-        data: null,
-        error: null,
-        isLoading: false,
-    });
+    const [state, dispatch] = useReducer<RequestReducer<B>>(
+        reducer,
+        initialState as RequestResponseQ<B>
+    );
 
     const makePostRequest = (url: string, postData: A) => {
-        setRes(prevState => ({ ...prevState, isLoading: true }));
+        dispatch({ type: 'new request' });
         axios
             .post(url, postData)
             .then(res => {
-                setRes({ data: res.data, isLoading: false, error: null });
+                dispatch({ type: 'success', data: res.data });
             })
             .catch(error => {
-                setRes({ data: null, isLoading: false, error });
+                dispatch({ type: 'error', error });
             });
     };
-    return [res, makePostRequest];
+    return [state, makePostRequest];
 }
 
 export function usePatchRequest<A, B>(): [RequestResponse<B>, (url: string, postData: A) => void] {
-    const [res, setRes] = useState<RequestResponse<B>>({
-        data: null,
-        error: null,
-        isLoading: false,
-    });
+    const [state, dispatch] = useReducer<RequestReducer<B>>(
+        reducer,
+        initialState as RequestResponseQ<B>
+    );
 
-    const makePatchRequest = (url: string, postData: A) => {
-        setRes(prevState => ({ ...prevState, isLoading: true }));
+    const makePatchRequest = (url: string, patchData: A) => {
+        dispatch({ type: 'new request' });
         axios
-            .patch(url, postData)
+            .patch(url, patchData)
             .then(res => {
-                setRes({ data: res.data, isLoading: false, error: null });
+                dispatch({ type: 'success', data: res.data });
             })
             .catch(error => {
-                setRes({ data: null, isLoading: false, error });
+                dispatch({ type: 'error', error });
             });
     };
-    return [res, makePatchRequest];
+    return [state, makePatchRequest];
 }
 
-export function useGetRequest<A>(url: string): RequestResponse<A> {
-    const initialState = {
-        data: null,
-        error: null,
-        isLoading: true,
-    };
-
-    const [state, dispatch] = useReducer<RequestReducer<A>>(reducer, initialState);
+export function useGetRequest<A>(url: string): RequestResponseQ<A> {
+    const [state, dispatch] = useReducer<RequestReducer<A>>(
+        reducer,
+        initialState as RequestResponseQ<A>
+    );
 
     useEffect(() => {
         let isMounted = true; // prevent state update on unmounted component
@@ -148,9 +149,29 @@ export interface RequestResponse<A> {
     isLoading: boolean;
 }
 
+export type RequestResponseQ<A> = SuccessResponse<A> | ErrorResponse<A> | PendingResponse<A>;
+
+type SuccessResponse<A> = {
+    data: A;
+    error: null;
+    isLoading: false;
+};
+
+type ErrorResponse<A> = {
+    data: A | null;
+    error: string;
+    isLoading: false;
+};
+
+type PendingResponse<A> = {
+    data: A | null;
+    error: string | null;
+    isLoading: true;
+};
+
 type ReducerAction<A> =
     | { type: 'new request' }
     | { type: 'error'; error: string }
     | { type: 'success'; data: A };
 
-type RequestReducer<A> = Reducer<RequestResponse<A>, ReducerAction<A>>;
+type RequestReducer<A> = Reducer<RequestResponseQ<A>, ReducerAction<A>>;
