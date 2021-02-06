@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import DuplicatesDisplay from '../components/DuplicatesDisplay';
 import ItemToReview from '../components/ItemToReview';
+import LoadingIndicator from '../components/LoadingIndicator';
 import TextButton from '../components/TextButton';
 import { Theater, TheaterToReview } from '../types/api';
 import { useGetRequest } from '../utils/hooks';
@@ -45,7 +46,7 @@ const TheaterReview = (): ReactElement => {
         );
     }
 
-    return <div>loading</div>;
+    return <LoadingIndicator />;
 };
 
 export default TheaterReview;

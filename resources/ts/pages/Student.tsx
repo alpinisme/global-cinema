@@ -4,6 +4,7 @@ import type { Film, Theater } from '../types/api';
 import { ScreeningsContext } from '../contexts/ScreeningsContext';
 import Axios from 'axios';
 import { useGetRequest } from '../utils/hooks';
+import LoadingIndicator from '../components/LoadingIndicator';
 
 const Student = (): ReactElement => {
     const [films, setFilms] = useState<Film[]>([]);
@@ -31,7 +32,7 @@ const Student = (): ReactElement => {
     };
 
     if (assignment.isLoading) {
-        return <div> ...loading</div>;
+        return <LoadingIndicator />;
     }
 
     return assignment.data ? (

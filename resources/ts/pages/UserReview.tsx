@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { ReactElement, useEffect, useState } from 'react';
+import LoadingIndicator from '../components/LoadingIndicator';
 import { User } from '../types/api';
 
 const UserReview = (): ReactElement => {
@@ -52,7 +53,7 @@ const UserReview = (): ReactElement => {
     };
 
     if (!users) {
-        return <div>...loading</div>; // TODO: Create loading compontent
+        return <LoadingIndicator />; // TODO: Create loading compontent
     }
 
     return (

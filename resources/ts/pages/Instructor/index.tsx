@@ -1,4 +1,5 @@
 import React, { useState, ReactElement } from 'react';
+import LoadingIndicator from '../../components/LoadingIndicator';
 import type { Student } from '../../types/api';
 import { useGetRequest } from '../../utils/hooks';
 import styles from './Instructor.scss';
@@ -62,7 +63,7 @@ const InstructorPage = (): ReactElement => {
             )}
         </>
     ) : (
-        <div>...loading</div>
+        <LoadingIndicator />
     );
 };
 
