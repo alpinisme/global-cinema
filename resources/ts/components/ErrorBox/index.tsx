@@ -6,6 +6,14 @@ const ErrorBox = ({ errors }: Props): ReactElement => {
         return <></>;
     }
 
+    if (typeof errors == 'string') {
+        return (
+            <div className={styles.message} role="alert">
+                {errors}
+            </div>
+        );
+    }
+
     return (
         <ul className={styles.box}>
             {errors.map(e => (
@@ -20,5 +28,5 @@ const ErrorBox = ({ errors }: Props): ReactElement => {
 export default ErrorBox;
 
 export interface Props {
-    errors?: string[];
+    errors?: string[] | string;
 }

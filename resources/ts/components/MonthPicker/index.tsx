@@ -45,7 +45,7 @@ const MonthPicker = ({ setMonth }: Props): ReactElement => {
                     title={'MM/YYYY'}
                 />
             </label>
-            {isSubmitted && !isValid && <ErrorBox errors={['Month must be from the past']} />}
+            {isSubmitted && !isValid && <ErrorBox errors={'Month must be from the past'} />}
             <button type="submit" className={styles.submit}>
                 Submit
             </button>

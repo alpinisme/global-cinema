@@ -1,6 +1,6 @@
 import React, { useState, ReactElement, FormEvent } from 'react';
 import ErrorBox from '../../components/ErrorBox';
-import { useAuth } from '../../utils/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import Register from '../Register';
 import styles from './Login.scss';
 

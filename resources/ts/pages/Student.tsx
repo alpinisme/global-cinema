@@ -37,7 +37,7 @@ const Student = (): ReactElement => {
     }
 
     if (assignment.error != null) {
-        return <ErrorBox errors={["Couldn't load assignment"]} />;
+        return <ErrorBox errors={"Couldn't load assignment"} />;
     }
 
     return (
