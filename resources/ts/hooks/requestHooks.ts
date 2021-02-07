@@ -9,8 +9,10 @@ function reducer<A>(state: RequestResponse<A>, action: ReducerAction<A>): Reques
             return { ...state, isLoading: false, error: action.error };
         case 'success':
             return { ...state, isLoading: false, data: action.data };
+        case 'state update':
+            return state.data ? { ...state, data: action.update(state.data) } : state;
         default:
-            throw new Error();
+            throw new Error('Unknown action type');
     }
 }
 
@@ -55,6 +57,8 @@ export function useGetRequest<A>(url: string): RequestResponse<A> {
         initialState as RequestResponse<A>
     );
 
+    const update = (fn: UpdateFunction<A>) => dispatch({ type: 'state update', update: fn });
+
     useEffect(() => {
         let isMounted = true; // prevent state update on unmounted component
         dispatch({ type: 'new request' });
@@ -78,32 +82,38 @@ export function useGetRequest<A>(url: string): RequestResponse<A> {
         };
     }, [url]);
 
-    return state;
+    return { ...state, update };
 }
 
 export type RequestResponse<A> = SuccessResponse<A> | ErrorResponse<A> | PendingResponse<A>;
 
-type SuccessResponse<A> = {
+type UpdateFunction<A> = (old: A) => A;
+
+interface SuccessResponse<A> {
     data: A;
     error: null;
     isLoading: false;
-};
+    update: (fn: UpdateFunction<A>) => void;
+}
 
-type ErrorResponse<A> = {
+interface ErrorResponse<A> {
     data: A | null;
     error: string;
     isLoading: false;
-};
+    update: (fn: UpdateFunction<A>) => void;
+}
 
-type PendingResponse<A> = {
+interface PendingResponse<A> {
     data: A | null;
     error: string | null;
     isLoading: true;
-};
+    update: (fn: UpdateFunction<A>) => void;
+}
 
 type ReducerAction<A> =
     | { type: 'new request' }
     | { type: 'error'; error: string }
-    | { type: 'success'; data: A };
+    | { type: 'success'; data: A }
+    | { type: 'state update'; update: UpdateFunction<A> };
 
 type RequestReducer<A> = Reducer<RequestResponse<A>, ReducerAction<A>>;
