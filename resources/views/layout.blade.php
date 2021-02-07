@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <nav class="nav">
+  {{-- <nav class="nav">
 
     <div class="user-links">
       @can('see admin tools')
@@ -31,14 +31,14 @@
       @endauth
     </div>
 
-  </nav>
+  </nav> --}}
 
   @yield('content', '...just some boilerplate')
 
-  <footer>
+  {{-- <footer>
     <p>project funded by <a href="http://ncsa.illinois.edu">NCSA</a> at the <a href="http://www.illinois.edu">University
         of Illinois</a></p>
-  </footer>
+  </footer> --}}
 </body>
 
 </html>
