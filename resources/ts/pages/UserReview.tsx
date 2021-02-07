@@ -1,34 +1,31 @@
 import axios from 'axios';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement } from 'react';
+import ErrorBox from '../components/ErrorBox';
 import LoadingIndicator from '../components/LoadingIndicator';
+import { useGetRequest } from '../hooks/requestHooks';
 import { User } from '../types/api';
 
 const UserReview = (): ReactElement => {
     const url = '/review/users';
-    const [users, setUsers] = useState<User[]>([]);
+    const users = useGetRequest<User[]>(url);
 
-    useEffect(() => {
-        let isMounted = true;
+    if (users.isLoading) {
+        return <LoadingIndicator />;
+    }
 
-        axios
-            .get(url)
-            .then(res => isMounted && setUsers(res.data))
-            .catch(err => console.log('Oops', err));
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
+    if (users.error != null) {
+        return <ErrorBox errors={users.error} />;
+    }
 
     /**
      * Removes the specified user from list of items in state
      * @param id id of user to remove
      */
     const removeUser = (id: number) =>
-        setUsers(users => {
-            if (!users) throw new Error('tried to remove non-existent user in UserReview');
-            const index = users.findIndex(user => user.id == id);
-            return [...users.slice(0, index), ...users.slice(index + 1)];
+        users.update(oldUsers => {
+            if (!oldUsers) throw new Error('tried to remove non-existent user in UserReview');
+            const index = oldUsers.findIndex(user => user.id == id);
+            return [...oldUsers.slice(0, index), ...oldUsers.slice(index + 1)];
         });
 
     /**
@@ -37,7 +34,7 @@ const UserReview = (): ReactElement => {
      * @param id id of user to approve
      */
     const approve = (id: number) => {
-        const user = users?.find(user => user.id == id);
+        const user = users.data.find(user => user.id == id);
         const oldRole = user?.role;
         const newRole = oldRole?.slice('unconfirmed_'.length);
 
@@ -52,14 +49,10 @@ const UserReview = (): ReactElement => {
         removeUser(id);
     };
 
-    if (!users) {
-        return <LoadingIndicator />; // TODO: Create loading compontent
-    }
-
     return (
         <table>
             <tbody>
-                {users.map(user => (
+                {users.data.map(user => (
                     <tr key={user.id}>
                         <td>{user.name}</td>
                         <td>
