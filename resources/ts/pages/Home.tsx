@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import ErrorBox from '../components/ErrorBox';
-import { useAuth } from '../utils/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import LoginPage from './Login';
 import InstructorPage from './Instructor';
 import AdminPage from './Admin';

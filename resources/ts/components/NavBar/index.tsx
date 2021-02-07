@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { useAuth } from '../../utils/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import styles from './NavBar.scss';
 
 const NavBar = (): ReactElement => {
