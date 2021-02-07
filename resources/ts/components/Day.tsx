@@ -1,12 +1,16 @@
-import React, { useEffect, useState, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
 import { toDateString } from '../utils/functions';
 import { Screening } from '../types/api';
+import { useGetRequest } from '../hooks/requestHooks';
+import LoadingIndicator from './LoadingIndicator';
+import ErrorBox from './ErrorBox';
 
 const Day = ({ date, cancel }: DayProps): ReactElement => {
-    const [screenings, setScreenings] = useState<Screening[]>([]);
+    const endpoint = '/screenings/' + date.toISOString().slice(0, 10);
+    const screenings = useGetRequest<Screening[]>(endpoint);
 
     /**
      * sends request to server to destroy record at `id`
@@ -18,18 +22,17 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
     const destroy = (id: number, index: number) => {
         axios
             .delete(`/screenings/${id}`)
-            .then(() => setScreenings(old => [...old.slice(0, index), ...old.slice(index + 1)]))
+            .then(() => screenings.update(old => [...old.slice(0, index), ...old.slice(index + 1)]))
             .catch(console.log);
     };
 
-    // load screenings from api
-    useEffect(() => {
-        axios
-            .get('/screenings/' + date.toISOString().slice(0, 10))
-            .then(res => res.data)
-            .then(setScreenings)
-            .catch(console.log);
-    }, [date]);
+    if (screenings.isLoading) {
+        return <LoadingIndicator />;
+    }
+
+    if (screenings.error != null) {
+        return <ErrorBox errors={screenings.error} />;
+    }
 
     return (
         <>
@@ -44,15 +47,15 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
 
                 <ScreeningEntry
                     date={date}
-                    handleSuccess={data => setScreenings(old => [...old, data])}
+                    handleSuccess={data => screenings.update(old => [...old, data])}
                 />
             </div>
 
-            {screenings.length > 0 && (
+            {screenings.data.length > 0 && (
                 <div className="box">
                     <h2>Already Saved</h2>
                     <ul className="already-saved">
-                        {screenings
+                        {screenings.data
                             .map((screening, index) => {
                                 return (
                                     <SavedScreening
