@@ -4,6 +4,7 @@ import ErrorBox from '../components/ErrorBox';
 import LoadingIndicator from '../components/LoadingIndicator';
 import { useGetRequest } from '../hooks/requestHooks';
 import { User } from '../types/api';
+import { removeFrom } from '../utils/functions';
 
 const UserReview = (): ReactElement => {
     const url = '/review/users';
@@ -19,13 +20,13 @@ const UserReview = (): ReactElement => {
 
     /**
      * Removes the specified user from list of items in state
+     *
      * @param id id of user to remove
      */
     const removeUser = (id: number) =>
         users.update(oldUsers => {
-            if (!oldUsers) throw new Error('tried to remove non-existent user in UserReview');
             const index = oldUsers.findIndex(user => user.id == id);
-            return [...oldUsers.slice(0, index), ...oldUsers.slice(index + 1)];
+            return removeFrom(oldUsers, index);
         });
 
     /**

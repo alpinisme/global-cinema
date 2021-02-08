@@ -34,3 +34,16 @@ export function throttle(callback: (...args) => void, limit: number): (...args) 
         }
     };
 }
+
+/**
+ * Immutably remove item from array
+ *
+ * @param array array to remove item from
+ * @param index index of item to be removed
+ */
+export function removeFrom<A>(array: A[], index: number): A[] {
+    if (index < 0) {
+        throw new Error('Tried to remove an item from an array at a negative index');
+    }
+    return [...array.slice(0, index), ...array.slice(index + 1)];
+}

@@ -2,14 +2,14 @@ import React, { ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
-import { toDateString } from '../utils/functions';
+import { removeFrom, toDateString } from '../utils/functions';
 import { Screening } from '../types/api';
 import { useGetRequest } from '../hooks/requestHooks';
 import LoadingIndicator from './LoadingIndicator';
 import ErrorBox from './ErrorBox';
 
-const Day = ({ date, cancel }: DayProps): ReactElement => {
-    const endpoint = '/screenings/' + date.toISOString().slice(0, 10);
+const Day = (props: DayProps): ReactElement => {
+    const endpoint = '/screenings/' + props.date.toISOString().slice(0, 10);
     const screenings = useGetRequest<Screening[]>(endpoint);
 
     /**
@@ -22,7 +22,7 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
     const destroy = (id: number, index: number) => {
         axios
             .delete(`/screenings/${id}`)
-            .then(() => screenings.update(old => [...old.slice(0, index), ...old.slice(index + 1)]))
+            .then(() => screenings.update(old => removeFrom(old, index)))
             .catch(console.log);
     };
 
@@ -34,38 +34,35 @@ const Day = ({ date, cancel }: DayProps): ReactElement => {
         return <ErrorBox errors={screenings.error} />;
     }
 
+    const date = toDateString(props.date);
+    const handleSuccess = (screening: Screening) => screenings.update(old => [...old, screening]);
+    // slice to avoid mutating array, and hence toggling order on each render
+    const savedScreenings = screenings.data.slice().reverse();
+
     return (
         <>
-            <h1>{toDateString(date)}</h1>
+            <h1>{date}</h1>
 
-            <button className="cancel-btn" onClick={cancel}>
+            <button className="cancel-btn" onClick={props.cancel}>
                 Back to all dates
             </button>
 
             <div className="box">
                 <h2>Save new screening</h2>
-
-                <ScreeningEntry
-                    date={date}
-                    handleSuccess={data => screenings.update(old => [...old, data])}
-                />
+                <ScreeningEntry date={props.date} handleSuccess={handleSuccess} />
             </div>
 
-            {screenings.data.length > 0 && (
+            {savedScreenings.length > 0 && (
                 <div className="box">
                     <h2>Already Saved</h2>
                     <ul className="already-saved">
-                        {screenings.data
-                            .map((screening, index) => {
-                                return (
-                                    <SavedScreening
-                                        key={screening.id}
-                                        screening={screening}
-                                        handleDelete={() => destroy(screening.id as number, index)}
-                                    />
-                                );
-                            })
-                            .reverse()}
+                        {savedScreenings.map((screening, index) => (
+                            <SavedScreening
+                                key={screening.id}
+                                screening={screening}
+                                handleDelete={() => destroy(screening.id, index)}
+                            />
+                        ))}
                     </ul>
                 </div>
             )}
