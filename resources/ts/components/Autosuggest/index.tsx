@@ -40,6 +40,7 @@ function Autosuggest<A extends Identifiable>({
         setValue(value);
     };
 
+    // TODO: add third display option (not: "no options found") when less than 3 characters
     return (
         <>
             <div>

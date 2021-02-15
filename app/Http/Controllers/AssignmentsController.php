@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class AssignmentsController extends Controller
 {
+    // TODO: implement ability for admin to assign or re-assign dates for students
+
     public function getAssignedCity()
     {
         $query = DB::select("Select column_default from information_schema.columns where table_name='theaters' and column_name='city_id'");

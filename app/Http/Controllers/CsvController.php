@@ -89,7 +89,7 @@ class CsvController extends Controller
         $directMatches = Film::where('year', '<=', $year)->where('title', $title)->get(['id']);
         $perfectMatches = $directMatches->where('year', $year);
 
-        if ($perfectMatches->count() > 1) {
+        if ($perfectMatches->count() > 1) { // I'm not sure this should be an error. Theaters, yes, but films should fail quietly
             throw new InvalidCsvException('The film named "' . $title . '" matches more than one film in the year ' . $year);
         }
 
