@@ -81,7 +81,7 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
 
             {newTitle && <ConfirmYear film={newTitle} handleSubmit={handleSubmit} date={date} />}
 
-            {submissionError && <ErrorBox errors={[submissionError]} />}
+            <ErrorBox errors={submissionError} />
         </>
     );
 };
