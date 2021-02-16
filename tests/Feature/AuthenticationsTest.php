@@ -97,19 +97,6 @@ class AuthenticationsTest extends TestCase
     }
 
     /** @test */
-    public function nonadmins_cannot_see_admin_links()
-    {
-        $this->get('/')->assertDontSee('admin-link');
-    }
-
-    /** @test */
-    public function an_admin_can_see_admin_links()
-    {
-        $admin = factory('App\User')->states('admin')->create();
-        $this->actingAs($admin)->get('/')->assertSee('admin-link');
-    }
-
-    /** @test */
     public function mismatched_password_confirmation_throws_validation_error()
     {
         $user = factory('App\User')->make();
