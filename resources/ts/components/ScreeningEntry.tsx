@@ -1,4 +1,4 @@
-import React, { useState, useCallback, ReactElement, useContext } from 'react';
+import React, { useState, useCallback, ReactElement, useContext, useMemo } from 'react';
 import axios from 'axios';
 import ErrorBox from './ErrorBox';
 import Select from './Select';
@@ -15,10 +15,13 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
 
     const [submissionError, setSubmissionError] = useState('');
 
-    const init = {
-        date: date.toISOString().slice(0, 10),
-        city_id: city.id,
-    };
+    const init = useMemo(
+        () => ({
+            date: date.toISOString().slice(0, 10),
+            city_id: city.id,
+        }),
+        [city.id, date]
+    );
 
     const year = date.toISOString().slice(0, 4);
 
