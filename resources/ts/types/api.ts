@@ -17,7 +17,7 @@ export interface Film {
 }
 
 /**
- * get requests to `theaters/` api return an array of objects with interface `Film`
+ * get requests to `theaters/` api return an array of objects with interface `Theater`
  */
 export interface Theater {
     name: string;
