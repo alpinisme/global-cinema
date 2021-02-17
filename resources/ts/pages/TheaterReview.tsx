@@ -12,12 +12,10 @@ const TheaterReview = (): ReactElement => {
 
     const approve = (theater: Theater) => {
         console.log('approved', theater);
-        0;
     };
 
     const reject = (theater: Theater) => {
         console.log('rejected', theater);
-        0;
     };
 
     const merge = (wrong: Theater, correct: Theater) => {
