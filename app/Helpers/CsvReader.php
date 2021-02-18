@@ -118,13 +118,27 @@ class CsvReader
      */
     protected function readHeader($required)
     {
+        // byte order mark, which may be at start of file
+        $bom = "\xef\xbb\xbf";
+
+        // Progress file pointer and get first 3 characters to compare to the BOM string.
+        if (fgets($this->handle, 4) !== $bom) {
+            // BOM not found - rewind pointer to start of file.
+            rewind($this->handle);
+        }
+
+        // read first line for header
         $header = fgetcsv($this->handle);
 
         if (!$header) {
             throw new InvalidCsvException('File is empty or in invalid csv format');
         }
 
-        $this->fields = array_map('mb_strtolower', $header);
+        $format = function ($field) {
+            return (mb_strtolower(trim($field)));
+        };
+
+        $this->fields = array_map($format, $header);
     }
 
     /**
