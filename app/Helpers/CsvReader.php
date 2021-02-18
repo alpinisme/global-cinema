@@ -100,7 +100,12 @@ class CsvReader
      */
     protected function open($file)
     {
+        if (!file_exists($file)) {
+            throw new InvalidCsvException('File does not exist');
+        }
+
         $this->handle = fopen($file, 'r');
+
         if (!$this->handle) {
             throw new InvalidCsvException('Could not open file');
         }
