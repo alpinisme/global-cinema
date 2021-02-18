@@ -32,8 +32,8 @@ class CsvController extends Controller
                         ->read($file)
                         ->require($required)
                         ->only($allowed)
-                        ->each([$this, 'replaceTheaterNamesWithIds'])
-                        ->each([$this, 'replaceFilmTitlesWithIds'])
+                        ->map([$this, 'replaceTheaterNamesWithIds'])
+                        ->map([$this, 'replaceFilmTitlesWithIds'])
                         ->toArray();
         } catch (InvalidCsvException $e) {
             return ['error' => $e->getMessage() . "\nFix this and then reupload."];

@@ -54,7 +54,7 @@ class CsvReaderTest extends TestCase
         $phrase = 'testing testing testing';
         $cb = function ($row) use ($phrase) { return $phrase; };
         $reader = new CsvReader;
-        $csv = $reader->read(dirname(__FILE__) . '/../test-data/theaters.csv')->each($cb)->toArray();
+        $csv = $reader->read(dirname(__FILE__) . '/../test-data/theaters.csv')->map($cb)->toArray();
         $this->assertEquals($phrase, $csv[0]);
     }
 }

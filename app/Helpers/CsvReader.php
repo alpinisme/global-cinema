@@ -59,7 +59,7 @@ class CsvReader
     {
         $extras = array_diff($this->fields, $desiredFields);
 
-        $this->each(function ($item) use ($extras) {
+        $this->map(function ($item) use ($extras) {
             foreach ($extras as $extra) {
                 unset($item[$extra]);
             }
@@ -76,7 +76,7 @@ class CsvReader
      * @param callable $callback
      * @return $this
      */
-    public function each($callback)
+    public function map($callback)
     {
         $this->rows = array_map($callback, $this->rows);
 
