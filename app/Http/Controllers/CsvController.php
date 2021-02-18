@@ -112,9 +112,10 @@ class CsvController extends Controller
         }
 
         $title = substr($title, 0, 150); // database column is varchar(150)
-        $newTheater = new Film(['title' => $title, 'year' => $year, 'verified' => false]);
-        $newTheater->save();
+        $newFilm = new Film(['title' => $title, 'year' => $year, 'verified' => false]);
+        $newFilm->createdBy = auth()->id();
+        $newFilm->save();
 
-        return $newTheater->id; // Cousseum 879
+        return $newFilm->id;
     }
 }

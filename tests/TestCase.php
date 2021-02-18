@@ -10,6 +10,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function asAdmin()
     {
-        return $this->actingAs(factory('App\User')->state('admin')->make());
+        return $this->actingAs(factory('App\User')->state('admin')->create());
     }
 }
