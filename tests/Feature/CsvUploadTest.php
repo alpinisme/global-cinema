@@ -14,7 +14,7 @@ class CsvUploadTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function posting_without_required_fields_gives_validation_errors()
+    public function request_must_have_required_fields()
     {
         $this->asAdmin()->post($this->uri, [])->assertSessionHasErrors(['csv', 'city', 'date']);
     }
@@ -32,13 +32,13 @@ class CsvUploadTest extends TestCase
     }
 
     /** @test */
-    public function file_must_have_a_csv_extension()
+    public function file_must_have_be_a_csv()
     {
         $this->asAdmin()->post($this->uri, ['file' => __FILE__])->assertSessionHasErrors('csv');
     }
 
     /** @test */
-    public function valid_request_receives_ok_status()
+    public function request_with_valid_fields_receives_ok_status()
     {
         $path = dirname(__FILE__) . '/../test-data/screenings.csv';
         $csv = UploadedFile::fake()->createWithContent('screenings.csv', file_get_contents($path));
