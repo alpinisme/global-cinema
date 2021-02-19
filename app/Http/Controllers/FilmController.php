@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Film;
-use App\Http\Requests\FilmsRequest;
+use App\Http\Requests\FilmRequest;
 use DB;
 use Illuminate\Http\Request;
 
-class FilmsController extends Controller
+class FilmController extends Controller
 {
     /**
      * Return all films, paginated in groups of 50.
@@ -22,10 +22,10 @@ class FilmsController extends Controller
     /**
      * Create a new film. Return it if successful.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\FilmRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FilmsRequest $request)
+    public function store(FilmRequest $request)
     {
         $film = new Film($request->validated());
         $film->createdBy = auth()->id();
@@ -37,11 +37,11 @@ class FilmsController extends Controller
     /**
      * Update the specified film. Return it if successful.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\FilmRequest  $request
      * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(FilmsRequest $request, Film $film)
+    public function update(FilmRequest $request, Film $film)
     {
         $film->fill($request->validated());
         $film->save();

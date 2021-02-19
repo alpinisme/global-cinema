@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Screening;
 use App\Helpers\ScreeningsGeoJSON;
-use App\Http\Requests\ScreeningsRequest;
+use App\Http\Requests\ScreeningRequest;
 
-class ScreeningsController extends Controller
+class ScreeningController extends Controller
 {
     /**
      * Show all screenings the user is authorized to view
@@ -25,11 +25,11 @@ class ScreeningsController extends Controller
     /**
      * Store a new screening
      *
-     * @param ScreeningsRequest $request
+     * @param ScreeningRequest $request
      * @param Screening $screening
      * @return \Illuminate\Http\Response
      */
-    public function store(ScreeningsRequest $request, Screening $screening)
+    public function store(ScreeningRequest $request, Screening $screening)
     {
         $screening = $screening->fill($request->validated());
         $screening->createdBy = auth()->id();
@@ -42,11 +42,11 @@ class ScreeningsController extends Controller
     /**
      * Update the specified screening
      *
-     * @param ScreeningsRequest $request
+     * @param ScreeningRequest $request
      * @param Screening $screening
      * @return \Illuminate\Http\Response
      */
-    public function update(ScreeningsRequest $request, Screening $screening)
+    public function update(ScreeningRequest $request, Screening $screening)
     {
         $screening->fill($request->validated());
         $screening->save();

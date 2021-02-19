@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\City;
-use App\Http\Requests\CitiesRequest;
+use App\Http\Requests\CityRequest;
 
-class CitiesController extends Controller
+class CityController extends Controller
 {
     /**
      * Return all cities, ordered alphabetically by name.
@@ -20,10 +20,10 @@ class CitiesController extends Controller
     /**
      * Create a new city. Return it if successful.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\CityRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CitiesRequest $request)
+    public function store(CityRequest $request)
     {
         return City::create($request->validated());
     }
@@ -31,11 +31,11 @@ class CitiesController extends Controller
     /**
      * Update the specified city. Return it if successful.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\CityRequest  $request
      * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(CitiesRequest $request, City $city)
+    public function update(CityRequest $request, City $city)
     {
         $city->fill($request->validated());
         $city->save();

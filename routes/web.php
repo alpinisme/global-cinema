@@ -16,18 +16,18 @@ use App\User;
 Route::get('/', function () {
     return view('app');
 });
-Route::post('/csv/screenings', 'ScreeningsCsvUploadController');
+Route::post('/csv/screenings', 'ScreeningCsvUploadController');
 Route::get('/test', 'TempFilmMergeController');
 Route::get('/grading', 'GradingController@index')->middleware(['can:grade']);
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/screenings/{date}', 'ScreeningsController@date');
-    Route::get('/films/search/{string}', 'FilmsController@search');
+    Route::get('/screenings/{date}', 'ScreeningController@date');
+    Route::get('/films/search/{string}', 'FilmController@search');
 
-    Route::apiResource('/screenings', 'ScreeningsController');
-    Route::apiResource('/films', 'FilmsController');
-    Route::apiResource('/cities', 'CitiesController');
-    Route::apiResource('/theaters', 'TheatersController');
+    Route::apiResource('/screenings', 'ScreeningController');
+    Route::apiResource('/films', 'FilmController');
+    Route::apiResource('/cities', 'CityController');
+    Route::apiResource('/theaters', 'TheaterController');
 
     Route::get('/assignment', function () {
         return auth()->user()->assignment->assignment;
@@ -42,22 +42,20 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
-Route::get('/map', 'ScreeningsController@map');
-Route::get('/map/{city}/{date}', 'ScreeningsController@geoJSON');
-Route::get('/cities', 'CitiesController@index');
+Route::get('/map', 'ScreeningController@map');
+Route::get('/map/{city}/{date}', 'ScreeningController@geoJSON');
+Route::get('/cities', 'CityController@index');
 Route::get('/instructors', function () {
     return User::select('id', 'name')->where('role', 'instructor')->get();
 });
 
 Route::group(['middleware' => ['can:see admin tools']], function () {
-    Route::apiResource('/users', 'UsersController');
+    Route::apiResource('/users', 'UserController');
 
-    Route::get('/assigned_city', 'AssignmentsController@getAssignedCity');
-    Route::post('/assigned_city', 'AssignmentsController@setAssignedCity');
+    Route::get('/assigned_city', 'AssignmentController@getAssignedCity');
+    Route::post('/assigned_city', 'AssignmentController@setAssignedCity');
 
     Route::post('/password/reset/{id}', 'Auth\ResetPasswordController@getResetLink');
-    Route::get('/dupes', 'DuplicateFilmsController@index');
-    Route::patch('/dupes', 'DuplicateFilmsController@update');
 
     Route::get('/review/{category}', 'ActivityReviewController');
     Route::patch('/merge/films', 'FilmMergeController@update');

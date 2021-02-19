@@ -11,7 +11,7 @@ use App\Http\Requests\CsvUploadRequest;
 use App\Screening;
 use App\Theater;
 
-class ScreeningsCsvUploadController extends Controller
+class ScreeningCsvUploadController extends Controller
 {
     protected $city;
 

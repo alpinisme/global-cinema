@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 
-class AssignmentsController extends Controller
+class AssignmentController extends Controller
 {
     // TODO: implement ability for admin to assign or re-assign dates for students
 

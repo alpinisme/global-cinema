@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TheatersRequest;
+use App\Http\Requests\TheaterRequest;
 use Illuminate\Http\Request;
 use App\Theater;
 
-class TheatersController extends Controller
+class TheaterController extends Controller
 {
     /**
      * Return all theaters, ordered alphabetically by name.
@@ -21,10 +21,10 @@ class TheatersController extends Controller
     /**
      * Create a new theater. Return it if successful.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\TheaterRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TheatersRequest $request)
+    public function store(TheaterRequest $request)
     {
         return Theater::create($request->validated());
     }
@@ -32,11 +32,11 @@ class TheatersController extends Controller
     /**
      * Update the specified theater. Return it if successful.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\TheaterRequest  $request
      * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(TheatersRequest $request, Theater $theater)
+    public function update(TheaterRequest $request, Theater $theater)
     {
         $theater->fill($request->validated());
         $theater->save();
