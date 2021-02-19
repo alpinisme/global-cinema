@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class CsvUploadTest extends TestCase
 {
-    private $uri = '/csv';
+    private $uri = '/csv/screenings';
 
     use RefreshDatabase;
     use WithFaker;
@@ -182,7 +182,6 @@ class CsvUploadTest extends TestCase
     /** @test */
     public function new_screenings_use_approximate_matching_theaters_and_films_when_no_exact_match()
     {
-        $this->withoutExceptionHandling();
         $city = factory(City::class)->create()->id;
         $year = $this->faker->year;
         $film = factory(Film::class)->create(['id' => 32, 'year' => $year, 'verified' => true]);

@@ -16,7 +16,7 @@ use App\User;
 Route::get('/', function () {
     return view('app');
 });
-Route::post('/csv', 'CsvController');
+Route::post('/csv/screenings', 'ScreeningsCsvUploadController');
 Route::get('/test', 'TempFilmMergeController');
 Route::get('/grading', 'GradingController@index')->middleware(['can:grade']);
 
