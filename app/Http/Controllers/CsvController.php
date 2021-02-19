@@ -77,15 +77,15 @@ class CsvController extends Controller
         }
 
         if ($directMatches->count() === 1) {
-            return $directMatches->value('id');
+            return $directMatches->first()->id;
         }
 
         $allTheaters = Theater::where('city_id', $this->city)->get(['id', 'name']);
         $searcher = new FuzzySearch(['name' => $name], $allTheaters);
         $fuzzyMatch = $searcher->sort('name')->threshold(0.8)->take(1);
 
-        if (!$fuzzyMatch->empty()) {
-            return $fuzzyMatch->id;
+        if ($fuzzyMatch->count() === 1) {
+            return $fuzzyMatch->first()->id;
         }
 
         $name = substr($name, 0, 35); // database column is varchar(35)
@@ -106,20 +106,21 @@ class CsvController extends Controller
         }
 
         if ($perfectMatches->count() == 1) {
-            return $perfectMatches->value('id');
+            return $perfectMatches->first()->id;
         }
 
         if ($directMatches->count() === 1) {
-            return $directMatches->value('id');
+            return $directMatches->first()->id;
         }
 
         if ($directMatches->count() === 0) {
-            $allTheaters = Film::verifiedLike($this->stringHelper->substrings($title));
-            $searcher = new FuzzySearch(['title' => $title], $allTheaters);
-            $fuzzyMatch = $searcher->sort('title')->threshold(0.8)->take(1);
+            $allTheaters = Film::verifiedLike($this->stringHelper->substrings($title), substr($this->date, 0, 4));
 
-            if (!$fuzzyMatch->empty()) {
-                return $fuzzyMatch->id;
+            $searcher = new FuzzySearch(['title' => $title], $allTheaters);
+            $fuzzyMatch = $searcher->sort('title')->threshold(0.7)->take(1);
+
+            if ($fuzzyMatch->count() === 1) {
+                return $fuzzyMatch->first()->id;
             }
         }
 
