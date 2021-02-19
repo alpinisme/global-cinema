@@ -8,6 +8,7 @@ use App\Helpers\CsvReader;
 use App\Helpers\FuzzySearch;
 use App\Helpers\StringHelper;
 use App\Http\Requests\CsvUploadRequest;
+use App\Screening;
 use App\Theater;
 
 class CsvController extends Controller
@@ -27,19 +28,27 @@ class CsvController extends Controller
         $optional = ['raw'];
         $allowed = array_merge($required, $optional);
 
+        $count = 0;
+
         try {
-            $rows = $csvReader
-                        ->read($file)
-                        ->require($required)
-                        ->only($allowed)
-                        ->map([$this, 'replaceTheaterNamesWithIds'])
-                        ->map([$this, 'replaceFilmTitlesWithIds'])
-                        ->toArray();
+            $rows = $csvReader->read($file)->require($required)->only($allowed);
+            $rowsWithIds = $rows->map([$this, 'replaceTheaterNamesWithIds'])->map([$this, 'replaceFilmTitlesWithIds']);
+            foreach ($rowsWithIds->toArray() as $row) {
+                // each row is a screening, so save it to db
+                $screening = new Screening([
+                    'date' => $this->date,
+                    'theater_id' => $row['theater'],
+                    'film_id' => $row['title'],
+                ]);
+                $screening->createdBy = auth()->id();
+                $screening->save();
+                $count += 1;
+            };
         } catch (InvalidCsvException $e) {
             return ['error' => $e->getMessage() . "\nFix this and then reupload."];
         }
 
-        return response()->json($rows);
+        return response()->json($count);
     }
 
     public function replaceTheaterNamesWithIds($row)
