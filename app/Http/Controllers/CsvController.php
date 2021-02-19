@@ -41,8 +41,11 @@ class CsvController extends Controller
                     'film_id' => $row['title'],
                 ]);
                 $screening->createdBy = auth()->id();
-                $screening->save();
-                $count += 1;
+                $isSuccess = $screening->save();
+
+                if ($isSuccess) {
+                    $count += 1;
+                }
             };
         } catch (InvalidCsvException $e) {
             return ['error' => $e->getMessage() . "\nFix this and then reupload."];
