@@ -15,5 +15,6 @@ $factory->define(Theater::class, function (Faker $faker) {
         'city_id' => factory('App\City')->create()->id,
         'lat' => 90.000123,
         'lng' => 93.759213,
+        'verified' => $faker->boolean(),
     ];
 });
