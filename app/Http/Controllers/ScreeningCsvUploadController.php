@@ -7,7 +7,7 @@ use App\Film;
 use App\Helpers\CsvReader;
 use App\Helpers\FuzzySearch;
 use App\Helpers\StringHelper;
-use App\Http\Requests\CsvUploadRequest;
+use App\Http\Requests\ScreeningCsvUploadRequest;
 use App\Screening;
 use App\Theater;
 
@@ -17,7 +17,7 @@ class ScreeningCsvUploadController extends Controller
 
     protected $date;
 
-    public function __invoke(CsvUploadRequest $request, CsvReader $csvReader, StringHelper $stringHelper)
+    public function __invoke(ScreeningCsvUploadRequest $request, CsvReader $csvReader, StringHelper $stringHelper)
     {
         $this->city = $request->input('city');
         $this->date = $request->input('date');
