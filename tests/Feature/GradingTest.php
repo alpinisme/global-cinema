@@ -42,7 +42,7 @@ class GradingTest extends TestCase
         $instructors = factory(User::class, 2)->states('instructor')->create();
         $student = factory(User::class)->states('student')->create();
         factory(Assignment::class)->create(['student_id' => $student->id, 'instructor_id' => $instructors[0]->id]);
-        $screenings = factory(Screening::class, 2)->create(['created_by' => $student->id]);
+        factory(Screening::class, 2)->create(['created_by' => $student->id]);
         $this->actingAs($instructors[1])->get('grading')
                 ->assertOk()
                 ->assertJsonPath('data', []);

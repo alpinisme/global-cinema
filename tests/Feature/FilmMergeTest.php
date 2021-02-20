@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Film;
 use App\Screening;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class FilmMergeTest extends TestCase
