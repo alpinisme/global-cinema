@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\Http\Traits\Blameable;
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Screening extends Model
 {
-    use HasFactory;
+    use HasFactory, Blameable;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',

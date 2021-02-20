@@ -2,12 +2,13 @@
 
 namespace App;
 
+use App\Http\Traits\Blameable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
-    use HasFactory;
+    use HasFactory, Blameable;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',

@@ -14,8 +14,6 @@ class AssignmentSettingController extends Controller
 
     public function create(AssignmentSettingRequest $request)
     {
-        $setting = new AssignmentSetting($request->validated());
-        $setting->created_by = auth()->id();
-        $setting->save();
+        return AssignmentSetting::create($request->validated());
     }
 }
