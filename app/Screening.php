@@ -50,6 +50,12 @@ class Screening extends Model
         return $query->where('id', $id);
     }
 
+    /**
+     * Find all screenings for a given city on a given date
+     *
+     * @param int $city id of city
+     * @param string $date date in Y-m-d format
+     */
     public static function byCityAndDate($city, $date)
     {
         return static::leftJoin('theaters', 'theaters.id', 'screenings.theater_id')
