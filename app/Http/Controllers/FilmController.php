@@ -4,18 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Film;
 use App\Http\Requests\FilmRequest;
-use DB;
-use Illuminate\Http\Request;
+use App\Http\Requests\FilmSearchRequest;
 
 class FilmController extends Controller
 {
     /**
-     * Return all films, paginated in groups of 50.
+     * Return all films, paginated in groups of 50 and narrowed by conditions in query parameters.
      *
+     * @param App\Http\Requests\FilmSearchRequest
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(FilmSearchRequest $request)
     {
+        if ($request->search_term) {
+            return Film::before($request->up_to_year ?? 2020)
+                        ->titleLike([
+                            $request->search_term,
+                            "the $request->search_term",
+                            "a $request->search_term",
+                            "an $request->search_term",
+                        ])->get();
+        }
+
         return Film::paginate(50);
     }
 
@@ -56,23 +66,5 @@ class FilmController extends Controller
         $film->delete();
 
         return response('', 204);
-    }
-
-    // TODO: probably belongs in a separate controller
-    public function search(Request $request, $string)
-    {
-        if (strlen($string) < 3) {
-            abort(400, 'Search term must be at least three characters long');
-        }
-
-        return DB::table('films')
-            ->where('year', '<=', $request['year'] ?? 2020)
-            ->where(function ($query) use ($string) {
-                $query->where('title', 'LIKE', "%$string%")
-                ->orWhere('title', 'LIKE', "%the $string%")
-                ->orWhere('title', 'LIKE', "%a $string%")
-                ->orWhere('title', 'LIKE', "%an $string%");
-            })
-            ->get();
     }
 }

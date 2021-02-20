@@ -36,7 +36,6 @@ Route::get('/grading', [GradingController::class, 'index'])->middleware(['can:gr
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/screenings/{date}', [ScreeningController::class, 'date']);
-    Route::get('/films/search/{string}', [FilmController::class, 'search']);
 
     Route::apiResource('/screenings', ScreeningController::class);
     Route::apiResource('/films', FilmController::class);

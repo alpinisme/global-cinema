@@ -20,7 +20,7 @@ function useFilmSearch(): [Film[], (input: string, year?: string | undefined) =>
 
         let query: string;
         if (input.length > 3) {
-            query = stripArticles(input);
+            query = stripArticles(input).trim();
         } else {
             query = input;
         }
@@ -30,7 +30,7 @@ function useFilmSearch(): [Film[], (input: string, year?: string | undefined) =>
         }
 
         axios
-            .get(`/films/search/${query}?year=${year}`)
+            .get(`/films?search_term=${query}&up_to_year=${year}`)
             .then(r => r.data)
             .then(setFilms)
             .catch(console.log);

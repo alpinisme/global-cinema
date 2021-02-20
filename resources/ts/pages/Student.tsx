@@ -18,7 +18,7 @@ const Student = (): ReactElement => {
                 return;
             }
 
-            Axios.get(`/films/search/${input}?year=${year}`)
+            Axios.get(`/films?search_term=${input}&up_to_year=${year}`)
                 .then(r => r.data)
                 .then(setFilms)
                 .catch(console.log);

@@ -99,14 +99,14 @@ class FilmsTest extends TestCase
     public function an_admin_can_search_films_by_title_fragment()
     {
         Film::factory()->create(['title' => 'My Favorite Movie']);
-        $this->asUser()->get('/films/search/my%20')->assertJsonFragment(['title' => 'My Favorite Movie']);
+        $this->asUser()->get('/films?search_term=my%20F')->assertJsonFragment(['title' => 'My Favorite Movie']);
     }
 
     /** @test */
     public function title_search_results_do_not_include_nonmatches()
     {
         Film::factory()->create(['title' => 'My Favorite Movie']);
-        $this->asUser()->get('/films/search/som')->assertJsonMissing(['title' => 'My Favorite Movie']);
+        $this->asUser()->get('/films?search_term=som')->assertJsonMissing(['title' => 'My Favorite Movie']);
     }
 
     /** @test */
@@ -114,7 +114,7 @@ class FilmsTest extends TestCase
     {
         Film::factory()->create(['title' => 'The Favorite Movie']);
         Film::factory()->create(['title' => 'A Favorite Movie']);
-        $this->asUser()->get('/films/search/fav')
+        $this->asUser()->get('/films?search_term=fav')
                         ->assertJsonFragment(['title' => 'The Favorite Movie'])
                         ->assertJsonFragment(['title' => 'A Favorite Movie']);
     }
@@ -130,7 +130,7 @@ class FilmsTest extends TestCase
     {
         Film::factory()->create(['title' => 'The Favorite Movie', 'year' => 1988]);
         Film::factory()->create(['title' => 'A Favorite Movie', 'year' => 1990]);
-        $this->asUser()->get('/films/search/fav?year=1989')
+        $this->asUser()->get('/films?search_term=fav&up_to_year=1989')
                         ->assertJsonFragment(['title' => 'The Favorite Movie'])
                         ->assertJsonMissing(['title' => 'A Favorite Movie']);
     }
@@ -138,6 +138,6 @@ class FilmsTest extends TestCase
     /** @test */
     public function search_term_must_be_at_least_three_characters_long()
     {
-        $this->asUser()->get('/films/search/fa?year=1989')->assertStatus(400);
+        $this->asUser()->get('/films?search_term=fa&up_to_year=1989')->assertSessionHasErrors('search_term');
     }
 }
