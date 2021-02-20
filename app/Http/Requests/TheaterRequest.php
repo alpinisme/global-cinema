@@ -36,6 +36,7 @@ class TheaterRequest extends FormRequest
             'lat' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
             'lng' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
             'verified' => 'nullable|boolean',
+            'address' => 'nullable|string|max:191',
         ];
     }
 }
