@@ -26,14 +26,13 @@ class TheaterCsvUploadController extends Controller
 
         try {
             $rows = $csvReader->read($request->file('csv'))->require($required)->only($allowed)->toArray();
-
             foreach ($rows as $theater) {
                 // each row is a screening, so save it to db
                 $theater['city_id'] = $request->city;
                 $theater['created_by'] = auth()->id();
-                $isSuccess = Theater::create($theater);
+                $theater = Theater::create($theater);
 
-                if ($isSuccess) {
+                if ($theater->id) {
                     $count += 1;
                 }
             };
