@@ -1,4 +1,4 @@
-import React, { FormEvent, ReactElement, useState } from 'react';
+import React, { FormEvent, ReactElement, useEffect, useState } from 'react';
 import ErrorBox from '../../components/ErrorBox';
 import { User } from '../../types/api';
 import { useGetRequest } from '../../hooks/requestHooks';
@@ -15,12 +15,19 @@ const Register = (): ReactElement => {
     const [passConfirm, setPassConfirm] = useState('');
     const auth = useAuth();
 
+    useEffect(() => {
+        if (instructors.data) {
+            const id = instructors.data[0].id.toString();
+            setInstructor(id);
+        }
+    }, [instructors]);
+
     const register = (e: FormEvent) => {
         e.preventDefault();
 
         auth.register({
             role,
-            instructor,
+            instructor_id: instructor,
             name,
             email,
             password,
@@ -51,7 +58,10 @@ const Register = (): ReactElement => {
                         name="instructor"
                         id="instructor"
                         value={instructor}
-                        onChange={e => setInstructor(e.target.value)}
+                        onChange={e => {
+                            console.log('setting to', instructor);
+                            setInstructor(e.target.value);
+                        }}
                     >
                         {instructors.data?.map(instructor => (
                             <option key={instructor.id} value={instructor.id}>

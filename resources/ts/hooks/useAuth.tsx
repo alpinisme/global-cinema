@@ -79,7 +79,7 @@ interface Props {
 
 interface RegistrationForm {
     role: string;
-    instructor: string;
+    instructor_id: string;
     name: string;
     email: string;
     password: string;

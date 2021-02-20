@@ -10,7 +10,7 @@ export interface User {
     passwordConfirm?: string;
     remember?: boolean;
     role?: 'student' | 'instructor' | 'contributor';
-    instructor?: string | null;
+    instructor_id?: string | null;
 }
 
 const LoginPage = (): ReactElement => {
