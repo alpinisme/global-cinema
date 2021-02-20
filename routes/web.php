@@ -16,6 +16,7 @@ use App\Http\Controllers\AssignmentSettingController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CurrentUserController;
 use App\Http\Controllers\FilmController;
 use App\Http\Controllers\FilmMergeController;
 use App\Http\Controllers\GradingController;
@@ -47,13 +48,7 @@ Route::group(['middleware' => ['auth']], function () {
         return auth()->user()->assignment->assignment; // TODO: switch to controller
     });
 
-    Route::get('/user', function () {
-        return auth()->user(); // TODO: switch to controller
-    });
-
-    Route::get('/role', function () {
-        return auth()->user()->role; // TODO: switch to controller
-    });
+    Route::get('/user', [CurrentUserController::class, 'show']);
     Route::post('/csv/screenings', ScreeningCsvUploadController::class);
     Route::post('/csv/theaters', TheaterCsvUploadController::class);
 });

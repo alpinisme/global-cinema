@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\User;
+
+class CurrentUserController extends Controller
+{
+    public function show()
+    {
+        $user = auth()->user();
+
+        if ($user->isStudent()) {
+            User::with('assignment')->find($user->id);
+        }
+
+        return $user;
+    }
+}
