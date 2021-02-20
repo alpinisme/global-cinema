@@ -17,6 +17,7 @@ Route::get('/', function () {
     return view('app');
 });
 Route::post('/csv/screenings', 'ScreeningCsvUploadController');
+Route::post('/csv/theaters', 'TheaterCsvUploadController');
 Route::get('/test', 'TempFilmMergeController');
 Route::get('/grading', 'GradingController@index')->middleware(['can:grade']);
 

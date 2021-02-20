@@ -40,7 +40,7 @@ class ScreeningCsvUploadController extends Controller
                     'theater_id' => $row['theater'],
                     'film_id' => $row['title'],
                 ]);
-                $screening->createdBy = auth()->id();
+                $screening->created_by = auth()->id();
                 $isSuccess = $screening->save();
 
                 if ($isSuccess) {
@@ -126,7 +126,7 @@ class ScreeningCsvUploadController extends Controller
 
         $title = substr($title, 0, 150); // database column is varchar(150)
         $newFilm = new Film(['title' => $title, 'year' => $year, 'verified' => false]);
-        $newFilm->createdBy = auth()->id();
+        $newFilm->created_by = auth()->id();
         $newFilm->save();
 
         return $newFilm->id;

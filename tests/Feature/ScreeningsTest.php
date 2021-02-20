@@ -33,7 +33,7 @@ class ScreeningsTest extends TestCase
     public function a_student_can_add_a_screening()
     {
         $student = factory('App\User')->state('student')->create();
-        $screening = factory('App\Screening')->raw(['createdBy' => $student->id]);
+        $screening = factory('App\Screening')->raw(['created_by' => $student->id]);
         $this->actingAs($student)->post('/screenings', $screening)->assertStatus(201);
         $this->assertDatabaseHas('screenings', $screening);
     }
@@ -46,7 +46,7 @@ class ScreeningsTest extends TestCase
     {
         $notOwnScreening = factory('App\Screening')->create();
         $student = factory('App\User')->state('student')->create();
-        $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
+        $ownScreening = factory('App\Screening')->create(['created_by' => $student->id]);
 
         $this->actingAs($student)->get('/screenings')
             ->assertJsonMissing([['film_id' => $notOwnScreening->film->id]])
@@ -58,7 +58,7 @@ class ScreeningsTest extends TestCase
     {
         $notOwnScreening = factory('App\Screening')->create();
         $student = factory('App\User')->state('admin')->create();
-        $ownScreening = factory('App\Screening')->create(['createdBy' => $student->id]);
+        $ownScreening = factory('App\Screening')->create(['created_by' => $student->id]);
         $this->actingAs($student)->get('/screenings')
             ->assertSee($notOwnScreening->film->id)
             ->assertSee($ownScreening->film->id);

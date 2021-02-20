@@ -32,7 +32,7 @@ class ScreeningController extends Controller
     public function store(ScreeningRequest $request, Screening $screening)
     {
         $screening = $screening->fill($request->validated());
-        $screening->createdBy = auth()->id();
+        $screening->created_by = auth()->id();
         $screening->save();
         $response = Screening::joined()->id($screening->id)->first();
 

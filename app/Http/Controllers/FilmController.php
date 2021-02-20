@@ -28,7 +28,7 @@ class FilmController extends Controller
     public function store(FilmRequest $request)
     {
         $film = new Film($request->validated());
-        $film->createdBy = auth()->id();
+        $film->created_by = auth()->id();
         $film->save();
 
         return $film;

@@ -30,7 +30,7 @@ class GradingTest extends TestCase
         $instructor = factory(User::class)->states('instructor')->create();
         $student = factory(User::class)->states('student')->create();
         factory(Assignment::class)->create(['student_id' => $student->id, 'instructor_id' => $instructor->id]);
-        $screenings = factory(Screening::class, 2)->create(['createdBy' => $student->id]);
+        $screenings = factory(Screening::class, 2)->create(['created_by' => $student->id]);
         $this->actingAs($instructor)->get('grading')
             ->assertOk()
             ->assertJsonPath('data.0.datesCompleted', [$screenings[0]->date, $screenings[1]->date]);
@@ -42,7 +42,7 @@ class GradingTest extends TestCase
         $instructors = factory(User::class, 2)->states('instructor')->create();
         $student = factory(User::class)->states('student')->create();
         factory(Assignment::class)->create(['student_id' => $student->id, 'instructor_id' => $instructors[0]->id]);
-        $screenings = factory(Screening::class, 2)->create(['createdBy' => $student->id]);
+        $screenings = factory(Screening::class, 2)->create(['created_by' => $student->id]);
         $this->actingAs($instructors[1])->get('grading')
                 ->assertOk()
                 ->assertJsonPath('data', []);

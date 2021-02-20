@@ -8,7 +8,7 @@ use DateTimeInterface;
 class Screening extends Model
 {
     protected $guarded = [
-        'id', 'created_at', 'updated_at', 'createdBy',
+        'id', 'created_at', 'updated_at', 'created_by',
     ];
 
     public function film()
@@ -28,7 +28,7 @@ class Screening extends Model
 
     public function scopeCreatedBy($query)
     {
-        return $query->where('screenings.createdBy', auth()->id());
+        return $query->where('screenings.created_by', auth()->id());
     }
 
     public function scopeJoined($query)

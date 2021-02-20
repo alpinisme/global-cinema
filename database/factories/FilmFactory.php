@@ -9,7 +9,7 @@ $factory->define(Film::class, function (Faker $faker) {
     return [
         'title' => $faker->name(),
         'year' => $faker->year(),
-        'createdBy' => factory('App\User')->create()->id,
+        'created_by' => factory('App\User')->create()->id,
         'verified' => $faker->boolean(),
     ];
 });

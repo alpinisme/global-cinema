@@ -19,7 +19,7 @@
       <td><a href="/screenings/{{$screening->id}}">{{$screening->date}}</a></td>
       <td>{{$screening->theater->name}}</td>
       <td>{{$screening->film->title}}</td>
-      <td>{{$screening->createdBy}}</td>
+      <td>{{$screening->created_by}}</td>
       <td>
         <form method="POST" action="/screenings/{{$screening->id}}">
           @csrf @method('DELETE')

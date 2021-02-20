@@ -71,7 +71,7 @@ class User extends Authenticatable
 
     public function screenings()
     {
-        return $this->hasMany(Screening::class, 'createdBy');
+        return $this->hasMany(Screening::class, 'created_by');
     }
 
     public function datesCompleted()

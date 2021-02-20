@@ -31,7 +31,7 @@ class FilmsTest extends TestCase
     public function an_admin_can_add_a_film()
     {
         $user = factory('App\User')->state('admin')->create();
-        $film = factory('App\Film')->raw(['createdBy' => $user->id]);
+        $film = factory('App\Film')->raw(['created_by' => $user->id]);
         $this->actingAs($user)
              ->post('/films', $film)
              ->assertStatus(201)
