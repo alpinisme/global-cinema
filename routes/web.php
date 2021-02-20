@@ -53,8 +53,8 @@ Route::get('/instructors', function () {
 Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::apiResource('/users', 'UserController');
 
-    Route::get('/assigned_city', 'AssignmentController@getAssignedCity');
-    Route::post('/assigned_city', 'AssignmentController@setAssignedCity');
+    Route::get('/assigned_city', 'AssignmentSettingController@show');
+    Route::post('/assigned_city', 'AssignmentSettingController@create');
 
     Route::post('/password/reset/{id}', 'Auth\ResetPasswordController@getResetLink');
 
