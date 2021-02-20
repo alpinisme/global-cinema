@@ -50,7 +50,7 @@ class TheaterCsvUploadTest extends TestCase
     {
         $cityId = factory(City::class)->create()->id;
         $theater = factory(Theater::class)->make(['city_id' => $cityId]);
-        $csv = "Name,Address,Capacity\n$theater->name,$theater->address,$theater->capacity";
+        $csv = "Name,Address,Capacity\n$theater->name,\"$theater->address\",$theater->capacity";
         $data = [
             'csv' => UploadedFile::fake()->createWithContent('theaters.csv', $csv),
             'city' => $cityId,
