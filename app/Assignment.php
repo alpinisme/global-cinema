@@ -44,7 +44,7 @@ class Assignment extends Model
 
     public function scopeAfter($query, $date)
     {
-        return $query->where('date', '>=', $date);
+        return $query->where('assignment', '>=', $date);
     }
 
     public function assignedBy()
