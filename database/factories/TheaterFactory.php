@@ -16,5 +16,6 @@ $factory->define(Theater::class, function (Faker $faker) {
         'lat' => 90.000123,
         'lng' => 93.759213,
         'verified' => $faker->boolean(),
+        'address' => $faker->address(),
     ];
 });
