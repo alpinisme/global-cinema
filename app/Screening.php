@@ -8,7 +8,7 @@ use DateTimeInterface;
 class Screening extends Model
 {
     protected $guarded = [
-        'id', 'created_at', 'updated_at', 'created_by',
+        'id', 'created_at', 'updated_at',
     ];
 
     public function film()

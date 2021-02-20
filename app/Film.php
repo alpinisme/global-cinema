@@ -11,7 +11,7 @@ class Film extends Model
     // TODO: consider removing guard on createdBy to allow mass assignment; ditto for other classes
     // instead, rely on resource request classes and validation to avoid malicious assignment
     protected $guarded = [
-        'id', 'created_at', 'updated_at', 'created_by',
+        'id', 'created_at', 'updated_at',
     ];
 
     public function screenings()

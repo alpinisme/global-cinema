@@ -34,16 +34,14 @@ class ScreeningCsvUploadController extends Controller
             $rows = $csvReader->read($file)->require($required)->only($allowed);
             $rowsWithIds = $rows->map([$this, 'replaceTheaterNamesWithIds'])->map([$this, 'replaceFilmTitlesWithIds']);
             foreach ($rowsWithIds->toArray() as $row) {
-                // each row is a screening, so save it to db
-                $screening = new Screening([
+                $screening = Screening::create([
                     'date' => $this->date,
                     'theater_id' => $row['theater'],
                     'film_id' => $row['title'],
+                    'created_by' => auth()->id(),
                 ]);
-                $screening->created_by = auth()->id();
-                $isSuccess = $screening->save();
 
-                if ($isSuccess) {
+                if ($screening->id) {
                     $count += 1;
                 }
             };
@@ -89,8 +87,7 @@ class ScreeningCsvUploadController extends Controller
         }
 
         $name = substr($name, 0, 35); // database column is varchar(35)
-        $newTheater = new Theater(['city_id' => $this->city, 'name' => $name, 'verified' => false]);
-        $newTheater->save();
+        $newTheater = Theater::create(['city_id' => $this->city, 'name' => $name, 'verified' => false]);
 
         return $newTheater->id;
     }
@@ -125,10 +122,10 @@ class ScreeningCsvUploadController extends Controller
         }
 
         $title = substr($title, 0, 150); // database column is varchar(150)
-        $newFilm = new Film(['title' => $title, 'year' => $year, 'verified' => false]);
-        $newFilm->created_by = auth()->id();
-        $newFilm->save();
+        $film = Film::create(
+            ['title' => $title, 'year' => $year, 'verified' => false, 'created_by' => auth()->id()]
+        );
 
-        return $newFilm->id;
+        return $film->id;
     }
 }
