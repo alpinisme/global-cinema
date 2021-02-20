@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Screening;
 use Tests\TestCase;
+use App\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -14,8 +16,8 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function an_admin_can_delete_a_screening()
     {
-        $screening = factory('App\Screening')->create();
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        $screening = Screening::factory()->create();
+        $this->actingAs(User::factory()->admin()->make())
             ->delete('/screenings/' . $screening->id)
             ->assertStatus(204);
         $this->assertDatabaseMissing('screenings', ['id' => $screening->id]);
@@ -24,15 +26,15 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function only_authenticated_users_can_add_a_screening()
     {
-        $screening = factory('App\Screening')->raw();
+        $screening = Screening::factory()->raw();
         $this->post('/screenings', $screening)->assertRedirect('login');
     }
 
     /** @test */
     public function a_student_can_add_a_screening()
     {
-        $student = factory('App\User')->state('student')->create();
-        $screening = factory('App\Screening')->raw(['created_by' => $student->id]);
+        $student = User::factory()->student()->create();
+        $screening = Screening::factory()->raw(['created_by' => $student->id]);
         $this->actingAs($student)->post('/screenings', $screening)->assertStatus(201);
         $this->assertDatabaseHas('screenings', $screening);
     }
@@ -43,9 +45,9 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function a_student_can_only_access_their_own_screenings()
     {
-        $notOwnScreening = factory('App\Screening')->create();
-        $student = factory('App\User')->state('student')->create();
-        $ownScreening = factory('App\Screening')->create(['created_by' => $student->id]);
+        $notOwnScreening = Screening::factory()->create();
+        $student = User::factory()->student()->create();
+        $ownScreening = Screening::factory()->create(['created_by' => $student->id]);
 
         $this->actingAs($student)->get('/screenings')
             ->assertJsonMissing([['film_id' => $notOwnScreening->film->id]])
@@ -55,9 +57,9 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function an_admin_can_access_all_screenings()
     {
-        $notOwnScreening = factory('App\Screening')->create();
-        $student = factory('App\User')->state('admin')->create();
-        $ownScreening = factory('App\Screening')->create(['created_by' => $student->id]);
+        $notOwnScreening = Screening::factory()->create();
+        $student = User::factory()->admin()->create();
+        $ownScreening = Screening::factory()->create(['created_by' => $student->id]);
         $this->actingAs($student)->get('/screenings')
             ->assertSee($notOwnScreening->film->id)
             ->assertSee($ownScreening->film->id);

@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use App\User;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -10,6 +11,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function asAdmin()
     {
-        return $this->actingAs(factory('App\User')->state('admin')->create());
+        return $this->actingAs(User::factory()->admin()->create());
     }
 }

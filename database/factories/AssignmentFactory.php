@@ -1,14 +1,31 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+namespace Database\Factories;
 
 use App\Assignment;
-use Faker\Generator as Faker;
+use App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Assignment::class, function (Faker $faker) {
-    return [
-        'Assignment' => $faker->sentence(),
-        'student_id' => factory('App\User')->create(),
-        'instructor_id' => factory('App\User')->create(),
-    ];
-});
+class AssignmentFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Assignment::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'Assignment' => $this->faker->sentence(),
+            'student_id' => User::factory()->create(),
+            'instructor_id' => User::factory()->create(),
+        ];
+    }
+}

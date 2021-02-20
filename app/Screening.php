@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Screening extends Model
 {
+    use HasFactory;
+
     protected $guarded = [
         'id', 'created_at', 'updated_at',
     ];

@@ -39,7 +39,7 @@ class TheaterCsvUploadTest extends TestCase
     {
         $data = [
             'csv' => UploadedFile::fake()->create('theaters.csv'),
-            'city' => factory(City::class)->create()->id,
+            'city' => City::factory()->create()->id,
         ];
 
         $this->asAdmin()->post($this->uri, $data)->assertSessionDoesntHaveErrors()->assertOk();
@@ -48,8 +48,8 @@ class TheaterCsvUploadTest extends TestCase
     /** @test */
     public function admins_can_save_theaters_via_csv()
     {
-        $cityId = factory(City::class)->create()->id;
-        $theater = factory(Theater::class)->make(['city_id' => $cityId]);
+        $cityId = City::factory()->create()->id;
+        $theater = Theater::factory()->make(['city_id' => $cityId]);
         $csv = "Name,Address,Capacity\n$theater->name,\"$theater->address\",$theater->capacity";
         $data = [
             'csv' => UploadedFile::fake()->createWithContent('theaters.csv', $csv),

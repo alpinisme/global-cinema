@@ -15,8 +15,8 @@ class PermissionsRequestReviewTest extends TestCase
     /** @test */
     public function an_admin_can_review_unverified_users()
     {
-        $verifiedUsers = factory(User::class, 2)->states('instructor')->create();
-        $unverifiedUsers = factory(User::class, 2)->states('needs verification')->create();
+        $verifiedUsers = User::factory()->instructor()->count(2)->create();
+        $unverifiedUsers = User::factory()->needsVerification()->count(2)->create();
         $this->asAdmin()
                 ->getJson('/review/users')
                 ->assertOK()
@@ -27,7 +27,7 @@ class PermissionsRequestReviewTest extends TestCase
     /** @test */
     public function a_contributor_canot_review_unverified_users()
     {
-        $this->actingAs(factory(User::class)->make(['role' => 'contributor']))
+        $this->actingAs(User::factory()->make(['role' => 'contributor']))
                 ->getJson('/review/users')
                 ->assertStatus(403);
     }

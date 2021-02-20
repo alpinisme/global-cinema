@@ -4,11 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use App\AssignmentSetting;
 use DateTime;
+use Exception;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Assignment extends Model
 {
-    const START_YEAR = '1952'; // earliest year to be assigned
+    use HasFactory;
+
+    const ASSIGNMENTS_PER_MONTH = 2;
 
     public $timestamps = false;
 
@@ -20,16 +25,25 @@ class Assignment extends Model
      */
     public static function nextDate()
     {
-        $assignmentsPerMonth = 2;
-        $count = self::count();
-        $monthOffset = floor($count / $assignmentsPerMonth);
+        $setting = AssignmentSetting::currentSetting();
 
-        $date = new DateTime;
-        $date->setDate(self::START_YEAR, 1, 1);
+        if (!$setting) {
+            throw new Exception('Cannot set assignment date without assignment settings in database');
+        }
+
+        $assignmentCount = static::where('city_id', $setting->city_id)->after($setting->date)->count();
+        $monthOffset = floor($assignmentCount / static::ASSIGNMENTS_PER_MONTH);
+
+        $date = new DateTime($setting->date);
         $date->modify($monthOffset . ' Months');
         $dateString = $date->format('Y-m-d');
 
         return $dateString;
+    }
+
+    public function scopeAfter($query, $date)
+    {
+        return $query->where('date', '>=', $date);
     }
 
     public function assignedBy()

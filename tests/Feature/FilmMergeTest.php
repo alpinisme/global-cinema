@@ -14,8 +14,8 @@ class FilmMergeTest extends TestCase
     /** @test */
     public function merging_two_films_leaves_only_the_specified_behind()
     {
-        $from = factory(Film::class)->create();
-        $to = factory(Film::class)->create();
+        $from = Film::factory()->create();
+        $to = Film::factory()->create();
         $this->asAdmin()->patch('/merge/films/?from=' . $from->id . '&to=' . $to->id)->assertStatus(204);
         $this->assertDatabaseHas('films', ['id' => $to->id]);
         $this->assertDatabaseMissing('films', ['id' => $from->id]);
@@ -24,9 +24,9 @@ class FilmMergeTest extends TestCase
     /** @test */
     public function merging_two_films_also_updates_screenings_of_old_film_to_new_film()
     {
-        $from = factory(Film::class)->create();
-        $to = factory(Film::class)->create();
-        factory(Screening::class)->create(['film_id' => $from->id]);
+        $from = Film::factory()->create();
+        $to = Film::factory()->create();
+        Screening::factory()->create(['film_id' => $from->id]);
         $this->asAdmin()->patch('/merge/films/', ['from' => $from->id, 'to' => $to->id]);
         $this->assertDatabaseHas('screenings', ['film_id' => $to->id]);
         $this->assertDatabaseMissing('screenings', ['film_id' => $from->id]);
@@ -35,11 +35,11 @@ class FilmMergeTest extends TestCase
     /** @test */
     public function merging_two_films_only_updates_screenings_of_old_film()
     {
-        $from = factory(Film::class)->create();
-        $to = factory(Film::class)->create();
-        $untouched = factory(Film::class)->create();
-        factory(Screening::class)->create(['film_id' => $from->id]);
-        factory(Screening::class)->create(['film_id' => $untouched->id]);
+        $from = Film::factory()->create();
+        $to = Film::factory()->create();
+        $untouched = Film::factory()->create();
+        Screening::factory()->create(['film_id' => $from->id]);
+        Screening::factory()->create(['film_id' => $untouched->id]);
         $this->asAdmin()->patch('/merge/films/', ['from' => $from->id, 'to' => $to->id]);
         $this->assertDatabaseHas('screenings', ['film_id' => $untouched->id]);
     }

@@ -47,7 +47,7 @@ class CsvUploadTest extends TestCase
         $data = [
             'csv' => UploadedFile::fake()->create('screenings.csv'),
             'date' => '1955-09-09',
-            'city' => factory(City::class)->create()->id,
+            'city' => City::factory()->create()->id,
         ];
 
         $this->asAdmin()->post($this->uri, $data)->assertSessionDoesntHaveErrors()->assertOk();
@@ -64,7 +64,7 @@ class CsvUploadTest extends TestCase
         $data = [
             'csv' => $file,
             'date' => '1955-09-09',
-            'city' => factory(City::class)->create()->id,
+            'city' => City::factory()->create()->id,
         ];
 
         $this->asAdmin()->post($this->uri, $data);
@@ -82,7 +82,7 @@ class CsvUploadTest extends TestCase
         $data = [
             'csv' => $file,
             'date' => '1955-09-09',
-            'city' => factory(City::class)->create()->id,
+            'city' => City::factory()->create()->id,
         ];
 
         $this->asAdmin()->post($this->uri, $data);
@@ -95,10 +95,10 @@ class CsvUploadTest extends TestCase
     /** @test */
     public function new_screenings_use_existing_theaters_and_films_where_possible()
     {
-        $city = factory(City::class)->create()->id;
+        $city = City::factory()->create()->id;
         $year = $this->faker->year;
-        $film = factory(Film::class)->create(['id' => 32, 'year' => $year]);
-        $theater = factory(Theater::class)->create(['id' => 11, 'city_id' => $city]);
+        $film = Film::factory()->create(['id' => 32, 'year' => $year]);
+        $theater = Theater::factory()->create(['id' => 11, 'city_id' => $city]);
         $csv = "theater,title\n$theater->name,$film->title";
         $file = UploadedFile::fake()->createWithContent('screenings.csv', $csv);
 
@@ -116,11 +116,11 @@ class CsvUploadTest extends TestCase
     /** @test */
     public function new_screenings_do_not_use_existing_theaters_from_other_cities()
     {
-        $city1 = factory(City::class)->create()->id;
-        $city2 = factory(City::class)->create()->id;
+        $city1 = City::factory()->create()->id;
+        $city2 = City::factory()->create()->id;
         $year = $this->faker->year;
-        $film = factory(Film::class)->create(['id' => 32, 'year' => $year]);
-        $theater = factory(Theater::class)->create(['id' => 11, 'city_id' => $city1]);
+        $film = Film::factory()->create(['id' => 32, 'year' => $year]);
+        $theater = Theater::factory()->create(['id' => 11, 'city_id' => $city1]);
         $csv = "theater,title\n$theater->name,$film->title";
         $file = UploadedFile::fake()->createWithContent('screenings.csv', $csv);
 
@@ -138,10 +138,10 @@ class CsvUploadTest extends TestCase
     /** @test */
     public function new_screenings_do_not_use_films_released_after_screening_year()
     {
-        $city = factory(City::class)->create()->id;
+        $city = City::factory()->create()->id;
         $year = $this->faker->year;
-        $film = factory(Film::class)->create(['id' => 32, 'year' => $year + 5]);
-        $theater = factory(Theater::class)->create(['id' => 11, 'city_id' => $city]);
+        $film = Film::factory()->create(['id' => 32, 'year' => $year + 5]);
+        $theater = Theater::factory()->create(['id' => 11, 'city_id' => $city]);
         $csv = "theater,title\n$theater->name,$film->title";
         $file = UploadedFile::fake()->createWithContent('screenings.csv', $csv);
 
@@ -159,10 +159,10 @@ class CsvUploadTest extends TestCase
     /** @test */
     public function new_screenings_reuse_newly_created_theaters_and_films_where_possible()
     {
-        $city = factory(City::class)->create()->id;
+        $city = City::factory()->create()->id;
         $year = $this->faker->year;
-        $film = factory(Film::class)->make()->title;
-        $theater = factory(Theater::class)->make()->name;
+        $film = Film::factory()->make()->title;
+        $theater = Theater::factory()->make()->name;
         $csv = "theater,title\n$theater,$film\n$theater,another title\nanother theater,$film";
         $file = UploadedFile::fake()->createWithContent('screenings.csv', $csv);
 
@@ -182,10 +182,10 @@ class CsvUploadTest extends TestCase
     /** @test */
     public function new_screenings_use_approximate_matching_theaters_and_films_when_no_exact_match()
     {
-        $city = factory(City::class)->create()->id;
+        $city = City::factory()->create()->id;
         $year = $this->faker->year;
-        $film = factory(Film::class)->create(['id' => 32, 'year' => $year, 'verified' => true]);
-        $theater = factory(Theater::class)->create(['id' => 11, 'city_id' => $city, 'verified' => true]);
+        $film = Film::factory()->create(['id' => 32, 'year' => $year, 'verified' => true]);
+        $theater = Theater::factory()->create(['id' => 11, 'city_id' => $city, 'verified' => true]);
         $corruptedTitle = $film->title . 'z';
         $corruptedTheater = 'r' . $theater->name . 'f';
         $csv = "theater,title\n$corruptedTheater,$corruptedTitle";

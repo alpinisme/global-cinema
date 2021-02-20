@@ -12,7 +12,6 @@
         "doctrine/dbal": "^3.0",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^8.21",
-        "laravel/legacy-factories": "^1.1",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.2"
     },
@@ -41,7 +40,9 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         },
         "classmap": [
             "database/seeds",

@@ -3,9 +3,11 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Assignment;
+use App\User;
+use App\AssignmentSetting;
+use App\City;
 
 class AssignmentsTest extends TestCase
 {
@@ -14,12 +16,15 @@ class AssignmentsTest extends TestCase
     /** @test */
     public function gives_correct_next_date_for_new_assignment()
     {
+        $city = City::factory()->create();
+        AssignmentSetting::factory()->create(['date' => '1952-01-01', 'city_id' => $city->id]);
+
         $this->assertEquals(Assignment::nextDate(), '1952-01-01');
-        factory('App\Assignment', 5)->create();
+        Assignment::factory()->count(5)->create(['city_id' => $city->id]);
         $this->assertEquals(Assignment::nextDate(), '1952-03-01');
-        factory('App\Assignment')->create();
+        Assignment::factory()->create(['city_id' => $city->id]);
         $this->assertEquals(Assignment::nextDate(), '1952-04-01');
-        factory('App\Assignment')->create();
+        Assignment::factory()->create(['city_id' => $city->id]);
         $this->assertEquals(Assignment::nextDate(), '1952-04-01');
     }
 }

@@ -2,17 +2,19 @@
 
 namespace Database\Factories;
 
+use App\AssignmentSetting;
 use App\City;
+use App\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CityFactory extends Factory
+class AssignmentSettingFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = City::class;
+    protected $model = AssignmentSetting::class;
 
     /**
      * Define the model's default state.
@@ -22,10 +24,9 @@ class CityFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
-            'country' => $this->faker->name(),
-            'lat' => $this->faker->latitude,
-            'lng' => $this->faker->longitude,
+            'city_id' => City::factory()->create(),
+            'date' => $this->faker->date,
+            'created_by' => User::factory()->create(),
         ];
     }
 }

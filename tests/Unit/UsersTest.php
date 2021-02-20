@@ -14,14 +14,14 @@ class UsersTest extends TestCase
     /** @test */
     public function an_admin_user_is_an_admin()
     {
-        $admin = factory(User::class)->states('admin')->create();
+        $admin = User::factory()->admin()->create();
         $this->assertTrue($admin->hasRole('admin'));
     }
 
     /** @test */
     public function a_user_has_screenings()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->assertInstanceOf(Collection::class, $user->screenings);
     }
 }

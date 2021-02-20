@@ -9,7 +9,7 @@ class AssignmentSetting extends Model
 {
     use HasFactory;
 
-    public static function current()
+    public static function currentSetting()
     {
         return static::latest()->first();
     }

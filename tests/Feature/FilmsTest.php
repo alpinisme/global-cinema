@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Film;
+use App\Theater;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -14,14 +16,14 @@ class FilmsTest extends TestCase
 
     protected function asUser()
     {
-        return $this->actingAs(factory('App\User')->make());
+        return $this->actingAs(User::factory()->make());
     }
 
     /** @test */
     public function an_admin_can_see_films_list()
     {
-        $film = factory('App\Film')->create();
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        $film = Film::factory()->create();
+        $this->actingAs(User::factory()->admin()->make())
              ->get('/films')
              ->assertSuccessful()
              ->assertSee($film->title);
@@ -30,8 +32,8 @@ class FilmsTest extends TestCase
     /** @test */
     public function an_admin_can_add_a_film()
     {
-        $user = factory('App\User')->state('admin')->create();
-        $film = factory('App\Film')->raw(['created_by' => $user->id]);
+        $user = User::factory()->admin()->create();
+        $film = Film::factory()->raw(['created_by' => $user->id]);
         $this->actingAs($user)
              ->post('/films', $film)
              ->assertStatus(201)
@@ -42,12 +44,12 @@ class FilmsTest extends TestCase
     /** @test */
     public function an_admin_can_edit_a_film()
     {
-        $film = factory('App\Film')->create();
+        $film = Film::factory()->create();
         $attributes = [
             'title' => 'Some Other Title',
             'year' => 1987,
         ];
-        $this->actingAs(factory('App\User')->state('admin')->create())
+        $this->asAdmin()
              ->patch('/films/' . $film->id, $attributes)
              ->assertOk()
              ->assertJson(['id' => $film->id]);
@@ -59,8 +61,8 @@ class FilmsTest extends TestCase
     /** @test */
     public function an_admin_can_delete_a_film()
     {
-        $film = factory('App\Film')->create();
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        $film = Film::factory()->create();
+        $this->asAdmin()
              ->delete('/films/' . $film->id)
              ->assertStatus(204);
         $this->assertDatabaseMissing('films', ['id' => $film->id]);
@@ -73,7 +75,7 @@ class FilmsTest extends TestCase
             'title' => '',
             'year' => 'a non-year',
         ];
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        $this->asAdmin()
              ->post('/films', $attributes)
              ->assertSessionHasErrors(['title', 'year']);
     }
@@ -81,8 +83,8 @@ class FilmsTest extends TestCase
     /** @test */
     public function a_json_request_to_films_returns_json()
     {
-        factory('App\Theater', 10);
-        $this->actingAs(factory('App\User')->state('admin')->make())
+        Theater::factory()->count(10)->create();
+        $this->asAdmin()
              ->json('GET', 'films')->assertOk()
              ->assertJsonFragment(Film::all()->toArray());
     }
@@ -96,22 +98,22 @@ class FilmsTest extends TestCase
     /** @test */
     public function an_admin_can_search_films_by_title_fragment()
     {
-        factory(Film::class)->create(['title' => 'My Favorite Movie']);
+        Film::factory()->create(['title' => 'My Favorite Movie']);
         $this->asUser()->get('/films/search/my%20')->assertJsonFragment(['title' => 'My Favorite Movie']);
     }
 
     /** @test */
     public function title_search_results_do_not_include_nonmatches()
     {
-        factory(Film::class)->create(['title' => 'My Favorite Movie']);
+        Film::factory()->create(['title' => 'My Favorite Movie']);
         $this->asUser()->get('/films/search/som')->assertJsonMissing(['title' => 'My Favorite Movie']);
     }
 
     /** @test */
     public function title_search_results_will_supply_missing_articles()
     {
-        factory(Film::class)->create(['title' => 'The Favorite Movie']);
-        factory(Film::class)->create(['title' => 'A Favorite Movie']);
+        Film::factory()->create(['title' => 'The Favorite Movie']);
+        Film::factory()->create(['title' => 'A Favorite Movie']);
         $this->asUser()->get('/films/search/fav')
                         ->assertJsonFragment(['title' => 'The Favorite Movie'])
                         ->assertJsonFragment(['title' => 'A Favorite Movie']);
@@ -126,8 +128,8 @@ class FilmsTest extends TestCase
     /** @test */
     public function passing_a_year_as_query_param_will_limit_films_search_to_films_prior_to_that_year()
     {
-        factory(Film::class)->create(['title' => 'The Favorite Movie', 'year' => 1988]);
-        factory(Film::class)->create(['title' => 'A Favorite Movie', 'year' => 1990]);
+        Film::factory()->create(['title' => 'The Favorite Movie', 'year' => 1988]);
+        Film::factory()->create(['title' => 'A Favorite Movie', 'year' => 1990]);
         $this->asUser()->get('/films/search/fav?year=1989')
                         ->assertJsonFragment(['title' => 'The Favorite Movie'])
                         ->assertJsonMissing(['title' => 'A Favorite Movie']);

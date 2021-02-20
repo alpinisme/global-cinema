@@ -2,9 +2,13 @@
 
 namespace Tests\Unit;
 
+use App\Assignment;
+use App\Film;
+use App\Screening;
+use App\Theater;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\User;
 
 class RelationshipsTest extends TestCase
 {
@@ -13,9 +17,9 @@ class RelationshipsTest extends TestCase
     /** @test */
     public function instructors_and_students_are_connected_via_assignments()
     {
-        $instructor = factory('App\User')->create();
-        $student = factory('App\User')->create();
-        $assignment = factory('App\Assignment')->create([
+        $instructor = User::factory()->create();
+        $student = User::factory()->create();
+        $assignment = Assignment::factory()->create([
             'instructor_id' => $instructor->id,
             'student_id' => $student->id,
         ]);
@@ -31,14 +35,14 @@ class RelationshipsTest extends TestCase
     /** @test */
     public function a_screening_belongs_to_a_theater_and_a_film()
     {
-        $theater = factory('App\Theater')->create();
-        $film = factory('App\Film')->create();
+        $theater = Theater::factory()->create();
+        $film = Film::factory()->create();
         $attributes = [
             'date' => '1999-10-10',
             'theater_id' => $theater->id,
             'film_id' => $film->id,
         ];
-        $screening = factory('App\Screening')->create($attributes);
+        $screening = Screening::factory()->create($attributes);
         $this->assertEquals($screening->theater->id, $theater->id);
         $this->assertEquals($screening->film->id, $film->id);
     }
@@ -46,28 +50,28 @@ class RelationshipsTest extends TestCase
     /** @test */
     public function a_theater_has_many_screenings()
     {
-        $theater = factory('App\Theater')->create();
-        $film = factory('App\Film')->create();
+        $theater = Theater::factory()->create();
+        $film = Film::factory()->create();
         $attributes = [
             'date' => '1999-10-10',
             'theater_id' => $theater->id,
             'film_id' => $film->id,
         ];
-        $screening = factory('App\Screening')->create($attributes);
+        $screening = Screening::factory()->create($attributes);
         $this->assertEquals($screening->id, $theater->screenings[0]->id);
     }
 
     /** @test */
     public function a_film_has_many_screenings()
     {
-        $theater = factory('App\Theater')->create();
-        $film = factory('App\Film')->create();
+        $theater = Theater::factory()->create();
+        $film = Film::factory()->create();
         $attributes = [
             'date' => '1999-10-10',
             'theater_id' => $theater->id,
             'film_id' => $film->id,
         ];
-        $screening = factory('App\Screening')->create($attributes);
+        $screening = Screening::factory()->create($attributes);
         $this->assertEquals($screening->id, $film->screenings[0]->id);
     }
 }

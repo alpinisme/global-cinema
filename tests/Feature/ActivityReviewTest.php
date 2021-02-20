@@ -25,9 +25,9 @@ class ActivityReviewTest extends TestCase
     /** @test */
     public function theaters_review_returns_both_unverified_theaters_and_possible_duplicates_among_verified()
     {
-        $unverified = factory(Theater::class)->create(['name' => 'Priyamvada', 'verified' => false, 'city_id' => 1]);
-        $match = factory(Theater::class)->create(['name' => 'Priamvadaa', 'verified' => true, 'city_id' => 1]);
-        $nonmatch = factory(Theater::class)->create(['name' => 'Shakuntala', 'verified' => true, 'city_id' => 1]);
+        $unverified = Theater::factory()->create(['name' => 'Priyamvada', 'verified' => false, 'city_id' => 1]);
+        $match = Theater::factory()->create(['name' => 'Priamvadaa', 'verified' => true, 'city_id' => 1]);
+        $nonmatch = Theater::factory()->create(['name' => 'Shakuntala', 'verified' => true, 'city_id' => 1]);
 
         $response = $this->asAdmin()->get('/review/theaters');
         $response->assertJsonPath('0.current.name', $unverified->name);
@@ -38,8 +38,8 @@ class ActivityReviewTest extends TestCase
     /** @test */
     public function theaters_review_returns_at_most_five_alternates_per_theater()
     {
-        factory(Theater::class)->create(['verified' => false, 'name' => 'Priyamvada', 'city_id' => 1]);
-        factory(Theater::class, 10)->create(['verified' => true, 'name' => 'Priyamvada', 'city_id' => 1]);
+        Theater::factory()->create(['verified' => false, 'name' => 'Priyamvada', 'city_id' => 1]);
+        Theater::factory()->count(10)->create(['verified' => true, 'name' => 'Priyamvada', 'city_id' => 1]);
 
         $response = $this->asAdmin()->get('/review/theaters');
         $this->assertEquals(5, count($response->getData()[0]->alternates));

@@ -1,15 +1,34 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+namespace Database\Factories;
 
+use App\Film;
 use App\Screening;
-use Faker\Generator as Faker;
+use App\Theater;
+use App\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Screening::class, function (Faker $faker) {
-    return [
-        'date' => $faker->date,
-        'theater_id' => factory('App\Theater')->create()->id,
-        'film_id' => factory('App\Film')->create()->id,
-        'created_by' => factory('App\User')->create()->id,
-    ];
-});
+class ScreeningFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Screening::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'date' => $this->faker->date,
+            'theater_id' => Theater::factory()->create()->id,
+            'film_id' => Film::factory()->create()->id,
+            'created_by' => User::factory()->create()->id,
+        ];
+    }
+}
