@@ -20,7 +20,7 @@ function useFilmSearch(): [Film[], (input: string, year?: string | undefined) =>
 
         let query: string;
         if (input.length > 3) {
-            query = stripArticles(input).trim();
+            query = stripArticles(input);
         } else {
             query = input;
         }

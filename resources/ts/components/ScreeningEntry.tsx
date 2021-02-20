@@ -4,13 +4,14 @@ import ErrorBox from './ErrorBox';
 import Select from './Select';
 import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
-import type { Film, Screening, City } from '../types/api';
+import type { Film, Screening } from '../types/api';
 import { useCityContext } from '../contexts/CityContext';
 import { ScreeningsContext } from '../contexts/ScreeningsContext';
+import LoadingIndicator from './LoadingIndicator';
 
 const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
     const { films, theaters, getFilms } = useContext(ScreeningsContext);
-    const [city] = useCityContext() as City[];
+    const [city] = useCityContext();
     const [newTitle, setNewTitle] = useState<string | null>(null);
 
     const [submissionError, setSubmissionError] = useState('');
@@ -18,9 +19,9 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
     const init = useMemo(
         () => ({
             date: date.toISOString().slice(0, 10),
-            city_id: city.id,
+            city_id: city?.id,
         }),
-        [city.id, date]
+        [city, date]
     );
 
     const year = date.toISOString().slice(0, 4);
@@ -56,6 +57,10 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
         },
         [handleSuccess, init, screening]
     );
+
+    if (!city) {
+        return <LoadingIndicator />;
+    }
 
     return (
         <>

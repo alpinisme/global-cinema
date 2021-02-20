@@ -60,6 +60,7 @@ export interface User {
     assignment?: {
         date: string;
         instructor_id: string;
+        city: City;
     };
 }
 
