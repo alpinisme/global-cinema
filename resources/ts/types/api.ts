@@ -57,6 +57,10 @@ export interface User {
     name: string;
     id: number;
     role: string;
+    assignment?: {
+        date: string;
+        instructor_id: string;
+    };
 }
 
 /**

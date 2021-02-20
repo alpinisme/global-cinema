@@ -11,7 +11,7 @@ class CurrentUserController extends Controller
         $user = auth()->user();
 
         if ($user->isStudent()) {
-            User::with('assignment')->find($user->id);
+            return response()->json(User::with('assignment')->find($user->id));
         }
 
         return $user;
