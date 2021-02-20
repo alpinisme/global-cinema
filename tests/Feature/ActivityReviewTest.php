@@ -14,14 +14,12 @@ class ActivityReviewTest extends TestCase
     /** @test */
     public function films_endpoint_works()
     {
-        $this->withoutExceptionHandling();
         $this->asAdmin()->get('/review/films')->assertOk();
     }
 
     /** @test */
     public function theaters_endpoint_works()
     {
-        $this->withoutExceptionHandling();
         $this->asAdmin()->get('/review/theaters')->assertOk();
     }
 

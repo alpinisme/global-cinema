@@ -14,7 +14,6 @@ class ScreeningsTest extends TestCase
     /** @test */
     public function an_admin_can_delete_a_screening()
     {
-        $this->withoutExceptionHandling();
         $screening = factory('App\Screening')->create();
         $this->actingAs(factory('App\User')->state('admin')->make())
             ->delete('/screenings/' . $screening->id)
