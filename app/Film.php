@@ -2,14 +2,10 @@
 
 namespace App;
 
-use DB;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Schema;
 
 class Film extends Model
 {
-    // TODO: consider removing guard on createdBy to allow mass assignment; ditto for other classes
-    // instead, rely on resource request classes and validation to avoid malicious assignment
     protected $guarded = [
         'id', 'created_at', 'updated_at',
     ];
