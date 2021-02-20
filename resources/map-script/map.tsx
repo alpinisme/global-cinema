@@ -95,7 +95,7 @@ const Root = () => {
     // fetch theaters each time city or date changes, if valid date selected (city will always be valid)
     useEffect(() => {
         if (date) {
-            const url = `/map/${city.id}/${toDateString(date)}`;
+            const url = `/geojson?city=${city.id}&date=${toDateString(date)}`;
             fetchJSON(url, setIsError).then(setScreenings).catch(log);
         }
     }, [date, city.id]);

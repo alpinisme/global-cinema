@@ -89,7 +89,7 @@ export interface ScreeningsGeoJSONFeature {
 }
 
 /**
- * get request to map/{city}/{date}
+ * get request to `geojson`
  */
 export interface ScreeningsGeoJSON {
     type: 'FeatureCollection';

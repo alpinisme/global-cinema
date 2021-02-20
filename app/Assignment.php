@@ -25,6 +25,7 @@ class Assignment extends Model
      */
     public static function nextDate()
     {
+        // TODO: change so that we find the first instance after date setting where count < assignmentspermonth
         $setting = AssignmentSetting::currentSetting();
 
         if (!$setting) {

@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 use App\Screening;
 
-class ScreeningsGeoJSON
+class ScreeningsGeoJson
 {
     public $type = 'FeatureCollection';
 

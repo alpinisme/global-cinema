@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Screening;
-use App\Helpers\ScreeningsGeoJSON;
 use App\Http\Requests\ScreeningRequest;
 
 class ScreeningController extends Controller
@@ -83,19 +82,5 @@ class ScreeningController extends Controller
     public function map()
     {
         return view('map');
-    }
-
-    /**
-     * Show all theaters for the specified date and city along with their screenings
-     * @param string $city city id
-     * @param string $date Y-m-d date string
-     * @return \Illuminate\Http\Response
-     */
-    public function geoJSON($city, $date)
-    {
-        // TODO: this method belong to Theaters and its controller, not here
-        $screenings = Screening::byCityAndDate($city, $date);
-
-        return response()->json(new ScreeningsGeoJSON($date, $screenings));
     }
 }

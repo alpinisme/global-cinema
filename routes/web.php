@@ -22,6 +22,7 @@ use App\Http\Controllers\GradingController;
 use App\Http\Controllers\ProgressReviewController;
 use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\ScreeningCsvUploadController;
+use App\Http\Controllers\ScreeningsGeoJsonController;
 use App\Http\Controllers\TempFilmMergeController;
 use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\TheaterCsvUploadController;
@@ -58,7 +59,7 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/map', [ScreeningController::class, 'map']);
-Route::get('/map/{city}/{date}', [ScreeningController::class, 'geoJSON']);
+Route::get('/geojson', ScreeningsGeoJsonController::class);
 Route::get('/cities', [CityController::class, 'index']);
 Route::get('/instructors', function () {
     return User::select('id', 'name')->where('role', 'instructor')->get(); // TODO: switch to controller
