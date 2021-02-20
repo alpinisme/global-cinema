@@ -62,6 +62,19 @@ class Film extends Model
     }
 
     /**
+     * Scope a query to include only titles released between the given years (inclusive).
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int $minYear
+     * @param  int $miaxYear
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBefore($query, $maxYear)
+    {
+        return $query->where('year', '<=', $maxYear);
+    }
+
+    /**
      * Scope a query to include only titles containing one or more of the specified substrings.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
