@@ -27,7 +27,7 @@ const finishMonth = (date: Date) => {
  */
 const createDateRange = (start: Date, end: Date) => {
     const current = new Date(start);
-    const range = [] as Date[];
+    const range: Date[] = [];
     for (const d = new Date(current); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
         range.push(new Date(d));
     }
