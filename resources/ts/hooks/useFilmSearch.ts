@@ -20,6 +20,7 @@ function useFilmSearch(): [Film[], (input: string, year?: string | undefined) =>
 
         let query: string;
         if (input.length > 3) {
+            // TODO: there's a bug here, because the site requires that the term be at least 3 chars *trimmed*
             query = stripArticles(input);
         } else {
             query = input;
