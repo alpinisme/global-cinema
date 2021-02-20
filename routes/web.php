@@ -16,8 +16,6 @@ use App\User;
 Route::get('/', function () {
     return view('app');
 });
-Route::post('/csv/screenings', 'ScreeningCsvUploadController');
-Route::post('/csv/theaters', 'TheaterCsvUploadController');
 Route::get('/test', 'TempFilmMergeController');
 Route::get('/grading', 'GradingController@index')->middleware(['can:grade']);
 
@@ -41,6 +39,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/role', function () {
         return auth()->user()->role;
     });
+    Route::post('/csv/screenings', 'ScreeningCsvUploadController');
+    Route::post('/csv/theaters', 'TheaterCsvUploadController');
 });
 
 Route::get('/map', 'ScreeningController@map');
