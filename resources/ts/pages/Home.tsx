@@ -4,12 +4,11 @@ import { useAuth } from '../hooks/useAuth';
 import LoginPage from './Login';
 import InstructorPage from './Instructor';
 import AdminPage from './Admin';
-import { addOnce } from '../utils/functions';
 import Student from './Student';
 import { CityContextProvider } from '../contexts/CityContext';
 
 const Home = (): ReactElement => {
-    const [errors, setErrors] = useState<string[]>([]);
+    const [errors, setErrors] = useState<string>('');
     const auth = useAuth();
 
     if (auth.isLoading) {
@@ -28,7 +27,7 @@ const Home = (): ReactElement => {
 
     // show appropriate page
     switch (auth.user.role) {
-        case 'user':
+        case 'student':
             return (
                 <CityContextProvider>
                     <Student />
@@ -70,7 +69,7 @@ const Home = (): ReactElement => {
             );
 
         default:
-            setErrors(addOnce("couldn't recognize user role"));
+            setErrors("couldn't recognize user role");
             return <></>;
     }
 };
