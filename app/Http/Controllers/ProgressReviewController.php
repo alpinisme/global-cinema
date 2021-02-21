@@ -16,12 +16,17 @@ class ProgressReviewController extends Controller
      */
     public function index($city)
     {
-        return Screening::selectRaw('DATE_FORMAT(date, "%Y-%M") as month, MAX(date)')
+        // to allow for testing
+        $dateClause = env('DB_CONNECTION') === 'sqlite'
+                    ? 'strftime("%Y-%m", date)'
+                    : 'DATE_FORMAT(date, "%Y-%M")';
+
+        return Screening::selectRaw("$dateClause as month, MAX(date)")
                         ->distinct()
                         ->inCity($city)
                         ->groupBy('month')
                         ->orderBy('MAX(date)')
                         ->get()
-                        ->map(function ($d) {return $d['month']; });
+                        ->map(fn ($d) => $d['month']);
     }
 }
