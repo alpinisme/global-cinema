@@ -50,6 +50,16 @@ class Screening extends Model
         return $query->where('id', $id);
     }
 
+    public function scopeInCity($query, $city)
+    {
+        return $query->whereIn(
+            'theater_id',
+            function ($query) use ($city) {
+                $query->select('id')->from('theaters')->where('city_id', $city);
+            }
+        );
+    }
+
     /**
      * Find all screenings for a given city on a given date
      *
