@@ -43,10 +43,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::apiResource('/cities', CityController::class);
     Route::apiResource('/theaters', TheaterController::class);
 
-    Route::get('/assignment', function () {
-        return auth()->user()->assignment->assignment; // TODO: switch to controller
-    });
-
     Route::get('/user', [CurrentUserController::class, 'show']);
     Route::post('/csv/screenings', ScreeningCsvUploadController::class);
     Route::post('/csv/theaters', TheaterCsvUploadController::class);
