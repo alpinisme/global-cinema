@@ -23,7 +23,7 @@ class AssignmentFactory extends Factory
     public function definition()
     {
         return [
-            'Assignment' => $this->faker->sentence(),
+            'date' => $this->faker->date,
             'student_id' => User::factory()->create(),
             'instructor_id' => User::factory()->create(),
         ];

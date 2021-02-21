@@ -83,7 +83,7 @@ class RegisterController extends Controller
 
         if ($user->role == 'student') {
             Assignment::create([
-                'assignment' => Assignment::nextDate(),
+                'date' => Assignment::nextDate(),
                 'student_id' => $user->id,
                 'instructor_id' => $data['instructor_id'],
             ]);
