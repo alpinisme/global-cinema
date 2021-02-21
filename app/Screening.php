@@ -61,6 +61,21 @@ class Screening extends Model
     }
 
     /**
+     * Scope query to include only screenings from the month to which the specified date belongs
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $date date in Y-m-d format
+     */
+    public function scopeInMonth($query, $date)
+    {
+        $year = substr($date, 0, 4);
+        $month = substr($date, 5, 2);
+        $daysInMonth = cal_days_in_month(\CAL_GREGORIAN, $month, $year);
+
+        return $query->whereBetween('date', ["$year-$month-01", "$year-$month->$daysInMonth"]);
+    }
+
+    /**
      * Find all screenings for a given city on a given date
      *
      * @param int $city id of city
