@@ -24,7 +24,6 @@ use App\Http\Controllers\ProgressReviewController;
 use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\ScreeningCsvUploadController;
 use App\Http\Controllers\ScreeningsGeoJsonController;
-use App\Http\Controllers\TempFilmMergeController;
 use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\TheaterCsvUploadController;
 use App\Http\Controllers\UserController;
@@ -33,7 +32,7 @@ use App\User;
 Route::get('/', function () {
     return view('app');
 });
-Route::get('/test', TempFilmMergeController::class);
+
 Route::get('/grading', [GradingController::class, 'index'])->middleware(['can:grade']);
 
 Route::group(['middleware' => ['auth']], function () {
