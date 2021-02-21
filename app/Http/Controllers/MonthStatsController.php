@@ -7,6 +7,11 @@ use App\Screening;
 
 class MonthStatsController extends Controller
 {
+    /**
+     * Find all movies screened in a given city + month and count the number of times each was screened
+     *
+     * @param App\Http\Requests\MonthStatsRequest
+     */
     public function __invoke(MonthStatsRequest $request)
     {
         return Screening::with('film')
