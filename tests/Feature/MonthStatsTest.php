@@ -33,9 +33,22 @@ class MonthStatsTest extends TestCase
         $date = $this->faker->date;
         $city = City::factory()->create()->id;
         $theater = Theater::factory()->create(['city_id' => $city]);
-        $screenings = Screening::factory()->count(4)->create(['theater_id' => $theater->id]);
+        $screenings = Screening::factory()->count(4)->create(['theater_id' => $theater->id, 'date' => $date]);
         $this->get("/month-stats?city=$city&date=$date")
                 ->assertJsonPath('0.film_id', strval($screenings[0]->film_id))
                 ->assertJsonPath('3.film_id', strval($screenings[3]->film_id));
+    }
+
+    /** @test */
+    public function response_contains_no_films_screened_during_other_months()
+    {
+        $date = '1997-09-09';
+        $city = City::factory()->create()->id;
+        $theater = Theater::factory()->create(['city_id' => $city]);
+        Screening::factory()->create(['theater_id' => $theater->id, 'date' => '1997-10-04']); // decoy
+        $screening = Screening::factory()->create(['theater_id' => $theater->id, 'date' => '1997-09-04']);
+        $this->get("/month-stats?city=$city&date=$date")
+                   ->assertJsonPath('0.film_id', strval($screening->film_id))
+                   ->assertJsonCount(1);
     }
 }

@@ -12,6 +12,7 @@ class MonthStatsController extends Controller
         return Screening::with('film')
                         ->selectRaw('film_id, count(*) as screening_count')
                         ->inCity($request->city)
+                        ->inMonth($request->date)
                         ->groupBy('film_id')
                         ->get();
     }
