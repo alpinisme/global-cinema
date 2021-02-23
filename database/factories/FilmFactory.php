@@ -25,7 +25,7 @@ class FilmFactory extends Factory
         return [
             'title' => $this->faker->name,
             'year' => $this->faker->year,
-            'created_by' => User::factory()->create()->id,
+            'created_by' => User::factory(),
             'verified' => $this->faker->boolean,
         ];
     }

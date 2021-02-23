@@ -24,8 +24,8 @@ class AssignmentFactory extends Factory
     {
         return [
             'date' => $this->faker->date,
-            'student_id' => User::factory()->create(),
-            'instructor_id' => User::factory()->create(),
+            'student_id' => User::factory(),
+            'instructor_id' => User::factory(),
         ];
     }
 }

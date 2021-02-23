@@ -24,9 +24,9 @@ class AssignmentSettingFactory extends Factory
     public function definition()
     {
         return [
-            'city_id' => City::factory()->create(),
+            'city_id' => City::factory(),
             'date' => $this->faker->date,
-            'created_by' => User::factory()->create(),
+            'created_by' => User::factory(),
         ];
     }
 }

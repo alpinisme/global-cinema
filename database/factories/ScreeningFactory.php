@@ -26,9 +26,9 @@ class ScreeningFactory extends Factory
     {
         return [
             'date' => $this->faker->date,
-            'theater_id' => Theater::factory()->create()->id,
-            'film_id' => Film::factory()->create()->id,
-            'created_by' => User::factory()->create()->id,
+            'theater_id' => Theater::factory(),
+            'film_id' => Film::factory(),
+            'created_by' => User::factory(),
         ];
     }
 }
