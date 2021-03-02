@@ -1,3 +1,20 @@
+.margin {
+    padding: 4rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.flex {
+    display: flex;
+}
+
+.flexCol {
+    flex-direction: column;
+}
+
 .info {
     list-style-type: none;
     padding-left: 0;
@@ -29,5 +46,61 @@
 @media (max-width: 800px) {
     .cancelButton {
         display: initial;
+    }
+}
+
+#map-menu-box {
+    font-size: 0.8rem;
+    margin: 0.5rem 0.5rem;
+    text-align: center;
+    // position: absolute;
+    // left: 0;
+    // top: 14%;
+}
+
+#mobile-status-button {
+    background: white;
+    padding: 0.6rem 1rem 0.4rem;
+    border: 2px solid #b0b0b0;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #515151;
+    cursor: pointer;
+
+    &:hover {
+        background: #f4f2f2;
+    }
+}
+
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 800px) {
+    .mobile-fullscreen-visible {
+        height: 100vh;
+        width: 100vw;
+
+        #map {
+            position: absolute;
+            height: 100vh;
+            width: 100vw;
+            z-index: 1;
+            top: 0;
+            left: 0;
+        }
+    }
+
+    .mobile-invisible {
+        visibility: hidden;
+    }
+
+    .mobile-only {
+        display: initial;
+    }
+
+    #map-menu-box button {
+        display: block;
+        margin: auto;
     }
 }

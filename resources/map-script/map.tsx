@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import React, { useState, useEffect, SyntheticEvent, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
 import { TileLayer, Popup, CircleMarker, LayerGroup, MapContainer } from 'react-leaflet';
@@ -7,6 +7,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import 'leaflet/dist/leaflet.css';
 import style from './Map.scss';
 import { City, ScreeningsGeoJSON, ScreeningsGeoJSONFeature } from '../ts/types/api';
+import Stats from './Stats';
+import { Map } from 'leaflet';
 
 const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';
@@ -105,23 +107,41 @@ const Root = () => {
     );
 
     return (
-        <>
-            <div id="map-menu-box" className={isActiveMap ? MOBILE_INVISIBLE : MOBILE_VISIBLE}>
-                <CityPicker cities={cities} value={city.id} handleChange={handleCitySelection} />
+        <div className={style.grid + ' ' + style.margin}>
+            <div className={style.flex}>
+                <div
+                    id="map-menu-box"
+                    className={
+                        isActiveMap
+                            ? style[MOBILE_INVISIBLE]
+                            : style[MOBILE_VISIBLE] + ' ' + style.flexCol
+                    }
+                >
+                    <CityPicker
+                        cities={cities}
+                        value={city.id}
+                        handleChange={handleCitySelection}
+                    />
 
-                <DatePicker
-                    placeholderText="Select Date"
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    selected={date}
-                    onChange={setTypedDate}
-                />
+                    <DatePicker
+                        placeholderText="Select Date"
+                        minDate={minDate}
+                        maxDate={maxDate}
+                        selected={date}
+                        onChange={setTypedDate}
+                    />
 
-                <button type="button" className={MOBILE_ONLY} onClick={handleActiveStatusChange}>
-                    Show Map
-                </button>
+                    <button
+                        type="button"
+                        className={style[MOBILE_ONLY]}
+                        onClick={handleActiveStatusChange}
+                    >
+                        Show Map
+                    </button>
 
-                {isError && <ErrorDisplay />}
+                    {isError && <ErrorDisplay />}
+                </div>
+                <Stats city={city} date={date && toDateString(date)} />
             </div>
 
             <div className={isActiveMap ? MOBILE_VISIBLE : MOBILE_INVISIBLE}>
@@ -132,7 +152,7 @@ const Root = () => {
                 )}
                 <ScreeningsMap city={city} screenings={mappableScreenings} />
             </div>
-        </>
+        </div>
     );
 };
 
@@ -151,48 +171,57 @@ const ErrorDisplay = () => (
 );
 
 const ScreeningsMap = ({ city, screenings }: MapProps) => {
-    const position: [number, number] = [city.lat, city.lng];
+    const position: [number, number] = useMemo(() => [Number(city.lat), Number(city.lng)], [city]);
+    const [map, setMap] = useState<Map | null>(null);
 
-    return (
-        <MapContainer center={position} zoom={city.zoom} id="map">
-            <TileLayer
-                url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                id="mapbox/light-v10"
-                accessToken="pk.eyJ1IjoibWVuZWxzbzIiLCJhIjoiY2tra3A0aGtlMHZ4bDJ3cW5ncGY0M3FucCJ9.P4agnONVKGYVz32aZxP24A"
-            />
-            <LayerGroup>
-                {screenings?.map(screening => (
-                    <CircleMarker
-                        key={screening.properties.theater}
-                        radius={6}
-                        center={screening.geometry.coordinates.reverse() as [number, number]}
-                        color={'purple'}
-                        opacity={0}
-                        fillOpacity={0.8}
-                        weight={0.6}
-                    >
-                        <Popup>
-                            <ul className={style.info}>
-                                <li className={style.label}>
-                                    theater:
-                                    <span className={style.value}>
-                                        {screening.properties.theater}
-                                    </span>
-                                </li>
-                                <li className={style.label}>
-                                    title:
-                                    <span className={style.value}>
-                                        {screening.properties.title}
-                                    </span>
-                                </li>
-                            </ul>
-                        </Popup>
-                    </CircleMarker>
-                ))}
-            </LayerGroup>
-        </MapContainer>
-    );
+    const displayMap = useMemo(() => {
+        return (
+            <MapContainer center={position} zoom={city.zoom} id="map" whenCreated={setMap}>
+                <TileLayer
+                    url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    id="mapbox/light-v10"
+                    accessToken="pk.eyJ1IjoibWVuZWxzbzIiLCJhIjoiY2tra3A0aGtlMHZ4bDJ3cW5ncGY0M3FucCJ9.P4agnONVKGYVz32aZxP24A"
+                />
+                <LayerGroup>
+                    {screenings?.map(screening => (
+                        <CircleMarker
+                            key={screening.properties.theater}
+                            radius={6}
+                            center={screening.geometry.coordinates.reverse() as [number, number]}
+                            color={'purple'}
+                            opacity={0}
+                            fillOpacity={0.8}
+                            weight={0.6}
+                        >
+                            <Popup>
+                                <ul className={style.info}>
+                                    <li className={style.label}>
+                                        theater:
+                                        <span className={style.value}>
+                                            {screening.properties.theater}
+                                        </span>
+                                    </li>
+                                    <li className={style.label}>
+                                        title:
+                                        <span className={style.value}>
+                                            {screening.properties.title}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </Popup>
+                        </CircleMarker>
+                    ))}
+                </LayerGroup>
+            </MapContainer>
+        );
+    }, [city.zoom, screenings, position]);
+
+    useEffect(() => {
+        map?.setView(position);
+    }, [map, position]);
+
+    return displayMap;
 };
 
 interface MapProps {
