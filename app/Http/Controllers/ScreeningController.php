@@ -14,10 +14,6 @@ class ScreeningController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->isAdmin()) {
-            return Screening::joined()->get();
-        }
-
         return Screening::joined()->createdBy(auth()->id())->get();
     }
 
