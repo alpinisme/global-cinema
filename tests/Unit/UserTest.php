@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
 use App\User;
 
-class UsersTest extends TestCase
+class UserTest extends TestCase
 {
     use RefreshDatabase;
 

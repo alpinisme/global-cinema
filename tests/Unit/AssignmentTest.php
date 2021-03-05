@@ -9,7 +9,7 @@ use App\User;
 use App\AssignmentSetting;
 use App\City;
 
-class AssignmentsTest extends TestCase
+class AssignmentTest extends TestCase
 {
     use RefreshDatabase;
 

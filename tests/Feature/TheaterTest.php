@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\User;
 
-class TheatersTest extends TestCase
+class TheaterTest extends TestCase
 {
     use RefreshDatabase;
 

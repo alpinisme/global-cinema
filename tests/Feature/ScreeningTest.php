@@ -8,7 +8,7 @@ use App\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ScreeningsTest extends TestCase
+class ScreeningTest extends TestCase
 {
     use WithFaker;
     use RefreshDatabase;
