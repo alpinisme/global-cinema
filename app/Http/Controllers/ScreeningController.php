@@ -10,11 +10,16 @@ class ScreeningController extends Controller
     /**
      * Show all screenings the user is authorized to view
      *
+     * @param string date
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($date = null)
     {
-        return Screening::joined()->createdBy(auth()->id())->get();
+        if (!$date) {
+            return Screening::joined()->createdBy(auth()->id())->paginate(50);
+        }
+
+        return Screening::joined()->date($date)->createdBy(auth()->id())->get();
     }
 
     /**
@@ -27,9 +32,10 @@ class ScreeningController extends Controller
     public function store(ScreeningRequest $request, Screening $screening)
     {
         $screening->create($request->validated());
-        $response = Screening::joined()->id($screening->id)->first();
 
-        return response()->json($response, 201);
+        return Screening::joined()->id($screening->id)->first();
+
+        //     return response()->json($response);
     }
 
     /**

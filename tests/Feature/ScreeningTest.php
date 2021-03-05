@@ -35,7 +35,7 @@ class ScreeningTest extends TestCase
     {
         $student = User::factory()->student()->create();
         $screening = Screening::factory()->raw(['created_by' => $student->id]);
-        $this->actingAs($student)->post('/screenings', $screening)->assertStatus(201);
+        $this->actingAs($student)->post('/screenings', $screening)->assertOk();
         $this->assertDatabaseHas('screenings', $screening);
     }
 
@@ -51,7 +51,7 @@ class ScreeningTest extends TestCase
 
         $this->actingAs($student)->get('/screenings')
             ->assertJsonMissing([['film_id' => $notOwnScreening->film->id]])
-            ->assertJson([['film_id' => $ownScreening->film->id]]);
+            ->assertJsonPath('data.0.film_id', \strval($ownScreening->film->id));
     }
 
     /** @test */
