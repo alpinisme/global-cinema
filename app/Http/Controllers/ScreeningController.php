@@ -31,11 +31,9 @@ class ScreeningController extends Controller
      */
     public function store(ScreeningRequest $request, Screening $screening)
     {
-        $screening->create($request->validated());
+        $created = $screening->create($request->validated());
 
-        return Screening::joined()->id($screening->id)->first();
-
-        //     return response()->json($response);
+        return Screening::joined()->id($created->id)->first();
     }
 
     /**
