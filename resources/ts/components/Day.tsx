@@ -17,9 +17,14 @@ const Day = (props: DayProps): ReactElement => {
      * and also removes it from current application state
      *
      * @param {number} id id to be deleted
-     * @param {number} index location in state array
      */
-    const destroy = (id: number, index: number) => {
+    const destroy = (id: number) => {
+        const index = screenings.data?.findIndex(screening => (screening.id = id));
+
+        if (index === undefined) {
+            throw new Error('Cannot delete nonexistent screening with id ' + id);
+        }
+
         axios
             .delete(`/screenings/${id}`)
             .then(() => screenings.update(old => removeFrom(old, index)))
@@ -56,11 +61,11 @@ const Day = (props: DayProps): ReactElement => {
                 <div className="box">
                     <h2>Already Saved</h2>
                     <ul className="already-saved">
-                        {savedScreenings.map((screening, index) => (
+                        {savedScreenings.map(screening => (
                             <SavedScreening
                                 key={screening.id}
                                 screening={screening}
-                                handleDelete={() => destroy(screening.id, index)}
+                                handleDelete={() => destroy(screening.id)}
                             />
                         ))}
                     </ul>
