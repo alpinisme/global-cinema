@@ -1,7 +1,7 @@
 import React, { useState, ReactElement, FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import ErrorBox from '../../components/ErrorBox';
 import { useAuth } from '../../hooks/useAuth';
-import Register from '../Register';
 import styles from './Login.scss';
 
 export interface User {
@@ -17,12 +17,7 @@ const LoginPage = (): ReactElement => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
-    const [isRegistered, setIsRegistered] = useState(true);
     const auth = useAuth();
-
-    if (!isRegistered) {
-        return <Register />;
-    }
 
     const login = (e: FormEvent) => {
         e.preventDefault();
@@ -84,13 +79,9 @@ const LoginPage = (): ReactElement => {
 
             <div className={styles.container}>
                 Not registered yet?
-                <button
-                    className={styles.register}
-                    type="button"
-                    onClick={() => setIsRegistered(false)}
-                >
+                <Link className={styles.register} to="/register">
                     Create an account
-                </button>
+                </Link>
             </div>
         </div>
     );

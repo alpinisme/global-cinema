@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './NavBar.scss';
 
@@ -13,9 +14,9 @@ const NavBar = (): ReactElement => {
                         logout
                     </a>
                 ) : (
-                    <a href="/login" className="user-link">
+                    <Link to="/login" className="user-link">
                         login
-                    </a>
+                    </Link>
                 )}
             </div>
         </nav>

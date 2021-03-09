@@ -1,11 +1,11 @@
 import React, { ReactElement, useState } from 'react';
 import ErrorBox from '../components/ErrorBox';
 import { useAuth } from '../hooks/useAuth';
-import LoginPage from './Login';
 import InstructorPage from './Instructor';
 import AdminPage from './Admin';
 import Student from './Student';
 import { CityContextProvider } from '../contexts/CityContext';
+import { Redirect } from 'react-router';
 
 const Home = (): ReactElement => {
     const [errors, setErrors] = useState<string>('');
@@ -17,7 +17,7 @@ const Home = (): ReactElement => {
 
     // display login form if not already logged in
     if (!auth.user) {
-        return <LoginPage />;
+        return <Redirect to="/login" />;
     }
 
     // display errors if any
