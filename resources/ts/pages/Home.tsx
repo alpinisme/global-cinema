@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/useAuth';
 import InstructorPage from './Instructor';
 import AdminPage from './Admin';
 import Student from './Student';
-import { CityContextProvider } from '../contexts/CityContext';
 import { Redirect } from 'react-router';
 
 const Home = (): ReactElement => {
@@ -28,21 +27,13 @@ const Home = (): ReactElement => {
     // show appropriate page
     switch (auth.user.role) {
         case 'student':
-            return (
-                <CityContextProvider>
-                    <Student />
-                </CityContextProvider>
-            );
+            return <Student />;
 
         case 'instructor':
             return <InstructorPage />;
 
         case 'admin':
-            return (
-                <CityContextProvider>
-                    <AdminPage />
-                </CityContextProvider>
-            );
+            return <AdminPage />;
 
         case 'unconfirmed_instructor':
             return (

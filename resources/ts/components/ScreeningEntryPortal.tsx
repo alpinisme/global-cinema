@@ -4,7 +4,7 @@ import MonthPicker from './MonthPicker';
 import { useCityContext } from '../contexts/CityContext';
 import { AdminContext } from '../contexts/AdminContext';
 
-const ScreeningEntryPortal = ({ setMonth }: Props): ReactElement => {
+const ScreeningEntryPortal = (): ReactElement => {
     const [city, setCity] = useCityContext();
     const { cities } = useContext(AdminContext);
 
@@ -29,13 +29,9 @@ const ScreeningEntryPortal = ({ setMonth }: Props): ReactElement => {
                 value={selectedCity}
                 handleChange={handleChange}
             />
-            {city && <MonthPicker setMonth={setMonth} />}
+            {city && <MonthPicker />}
         </>
     );
 };
-
-interface Props {
-    setMonth: (month: string) => void;
-}
 
 export default ScreeningEntryPortal;

@@ -1,11 +1,13 @@
 import React, { ReactElement, useState, ChangeEvent, FormEvent } from 'react';
+import { useHistory } from 'react-router';
 import ErrorBox from '../ErrorBox';
 import styles from './MonthPicker.scss';
 
-const MonthPicker = ({ setMonth }: Props): ReactElement => {
+const MonthPicker = (): ReactElement => {
     const [isValid, setIsValid] = useState<boolean>(false);
     const [input, setInput] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const history = useHistory();
 
     const validate = (input: string): boolean => {
         const year = parseInt(input.slice(3));
@@ -27,8 +29,7 @@ const MonthPicker = ({ setMonth }: Props): ReactElement => {
         if (isValid) {
             const month = input.slice(0, 2);
             const year = input.slice(3);
-            const date = `${year}-${month}-01`;
-            setMonth(date);
+            history.push(`/screening-entry/${year}-${month}`);
         }
     };
 
@@ -52,9 +53,5 @@ const MonthPicker = ({ setMonth }: Props): ReactElement => {
         </form>
     );
 };
-
-export interface Props {
-    setMonth: (month: string) => void;
-}
 
 export default MonthPicker;

@@ -7,9 +7,13 @@ import { Screening } from '../types/api';
 import { useGetRequest } from '../hooks/requestHooks';
 import LoadingIndicator from './LoadingIndicator';
 import ErrorBox from './ErrorBox';
+import { Link, useParams } from 'react-router-dom';
 
-const Day = (props: DayProps): ReactElement => {
-    const endpoint = '/screenings/' + props.date.toISOString().slice(0, 10);
+const Day = (): ReactElement => {
+    const { month, day } = useParams<DayParams>();
+    const ISOdate = month + '-' + day;
+    const date = new Date(ISOdate);
+    const endpoint = '/screenings/' + ISOdate;
     const screenings = useGetRequest<Screening[]>(endpoint);
 
     /**
@@ -39,22 +43,20 @@ const Day = (props: DayProps): ReactElement => {
         return <ErrorBox errors={screenings.error} />;
     }
 
-    const date = toDateString(props.date);
+    const humanReadableDate = toDateString(date);
     const handleSuccess = (screening: Screening) => screenings.update(old => [...old, screening]);
     // slice to avoid mutating array, and hence toggling order on each render
     const savedScreenings = screenings.data.slice().reverse();
 
     return (
         <>
-            <h1>{date}</h1>
+            <h1>{humanReadableDate}</h1>
 
-            <button className="cancel-btn" onClick={props.cancel}>
-                Back to all dates
-            </button>
+            <Link to={`/screening-entry/${month}`}>Back to all dates</Link>
 
             <div className="box">
                 <h2>Save new screening</h2>
-                <ScreeningEntry date={props.date} handleSuccess={handleSuccess} />
+                <ScreeningEntry date={date} handleSuccess={handleSuccess} />
             </div>
 
             {savedScreenings.length > 0 && (
@@ -75,9 +77,9 @@ const Day = (props: DayProps): ReactElement => {
     );
 };
 
-export interface DayProps {
-    date: Date;
-    cancel: () => void;
+interface DayParams {
+    month: string;
+    day: string;
 }
 
 export default Day;

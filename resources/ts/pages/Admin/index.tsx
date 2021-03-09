@@ -1,12 +1,10 @@
 import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
-import Month from '../../components/Month';
 import Collapsible from '../../components/Collapsible';
 import styles from './Admin.scss';
 import UserEdit from '../../components/UserEdit';
 import PasswordReset from '../../components/PasswordReset';
 import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
 import AdminProvider from '../../contexts/AdminContext';
-import ScreeningsProvider from '../../contexts/ScreeningsContext';
 import ActivityReview from '../ActivityReview';
 import ProgressChecker from '../ProgressChecker/ index';
 import CsvUploader from '../CsvUploader';
@@ -43,7 +41,6 @@ const handleClick = (fn: Dispatch<SetStateAction<Action | null>>, next: Action) 
  * manually reset passwords, and input data for any city and date they like.
  */
 const AdminPage = (): ReactElement => {
-    const [month, setMonth] = useState<string | null>(null);
     const [action, setAction] = useState<Action | null>(null);
 
     /**
@@ -51,14 +48,6 @@ const AdminPage = (): ReactElement => {
      * @param item action assigned to the collapsible item
      */
     const isOpen = (item: Action) => item == action;
-
-    if (month) {
-        return (
-            <ScreeningsProvider>
-                <Month month={month} cancel={() => setMonth(null)} />
-            </ScreeningsProvider>
-        );
-    }
 
     return (
         <AdminProvider>
@@ -101,7 +90,7 @@ const AdminPage = (): ReactElement => {
                         handleClick={() => handleClick(setAction, 'enter screenings')}
                         label="enter screenings"
                     >
-                        <ScreeningEntryPortal setMonth={setMonth} />
+                        <ScreeningEntryPortal />
                     </Collapsible>
                 </li>
 

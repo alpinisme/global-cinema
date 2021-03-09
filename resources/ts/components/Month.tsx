@@ -1,25 +1,25 @@
-import React, { useState, ReactElement } from 'react';
-import Day from './Day';
+import React, { ReactElement } from 'react';
+import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import DayPicker from './DayPicker';
 
-const Month = ({ month, cancel }: Props): ReactElement => {
-    const [date, setDate] = useState<Date | null>(null);
+const Month = (): ReactElement => {
+    const { month } = useParams<MonthParams>();
+
+    if (!month) {
+        throw new Error('Month component requires url param "month"');
+    }
 
     return (
         <>
-            {date ? (
-                <Day date={date} cancel={() => setDate(null)} />
-            ) : (
-                <DayPicker month={month} handleClick={setDate} />
-            )}
-            <button onClick={cancel}>Back to Admin Home</button>
+            <DayPicker month={month} />
+            <Link to="/">Back to Admin Home</Link>
         </>
     );
 };
 
 export default Month;
 
-export interface Props {
-    month: string;
-    cancel?: () => void;
+interface MonthParams {
+    month?: string;
 }

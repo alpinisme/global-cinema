@@ -15,7 +15,7 @@ describe('With valid context provider, ScreeningEntryPortal', () => {
         render(
             <CityContextProvider>
                 <AdminContext.Provider value={{ cities, users: [] }}>
-                    <ScreeningEntryPortal setMonth={console.log} />
+                    <ScreeningEntryPortal />
                 </AdminContext.Provider>
             </CityContextProvider>
         )

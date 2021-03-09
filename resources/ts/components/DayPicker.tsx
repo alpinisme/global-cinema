@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { toDateString } from '../utils/functions';
 
 /**
@@ -34,10 +35,12 @@ const createDateRange = (start: Date, end: Date) => {
     return range;
 };
 
-const DayPicker = ({ month, handleClick }: Props): ReactElement => {
+const DayPicker = ({ month }: Props): ReactElement => {
     const start = new Date(month);
     const end = finishMonth(new Date(month));
     const range = createDateRange(start, end);
+    const getDay = (date: Date) => String(date.getDate()).padStart(2, '0');
+    const { url } = useRouteMatch();
 
     return (
         <>
@@ -46,7 +49,7 @@ const DayPicker = ({ month, handleClick }: Props): ReactElement => {
             <ul className="button-list">
                 {range.map(date => (
                     <li key={date.toString()}>
-                        <button onClick={() => handleClick(date)}>{toDateString(date)}</button>
+                        <Link to={`${url}/${getDay(date)}`}>{toDateString(date)}</Link>
                     </li>
                 ))}
             </ul>
@@ -58,5 +61,4 @@ export default DayPicker;
 
 export interface Props {
     month: string;
-    handleClick: (date: Date) => void;
 }

@@ -11,7 +11,7 @@ const Student = (): ReactElement => {
     const [films, getFilms] = useFilmSearch();
     const theaters = useGetRequest<Theater[]>('/theaters');
     const auth = useAuth();
-    const [city, setCity] = useCityContext();
+    const [, setCity] = useCityContext();
 
     if (!auth.user || !auth.user.assignment) {
         throw Error(
@@ -33,7 +33,7 @@ const Student = (): ReactElement => {
 
     return (
         <ScreeningsContext.Provider value={context}>
-            <Month month={auth.user.assignment.date} />
+            <Month />
         </ScreeningsContext.Provider>
     );
 };
