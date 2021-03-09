@@ -58,10 +58,7 @@ const Register = (): ReactElement => {
                         name="instructor"
                         id="instructor"
                         value={instructor}
-                        onChange={e => {
-                            console.log('setting to', instructor);
-                            setInstructor(e.target.value);
-                        }}
+                        onChange={e => setInstructor(e.target.value)}
                     >
                         {instructors.data?.map(instructor => (
                             <option key={instructor.id} value={instructor.id}>
