@@ -8,7 +8,7 @@ import { ModalProvider } from './contexts/ModalContext';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/Login';
 import Register from './pages/Register';
-import Month from './components/Month';
+import Month from './pages/Month';
 import ScreeningsProvider from './contexts/ScreeningsContext';
 import Day from './components/Day';
 

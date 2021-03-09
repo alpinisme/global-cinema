@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from 'react';
-import Month from '../components/Month';
+import Month from './Month';
 import type { Theater } from '../types/api';
 import { ScreeningsContext } from '../contexts/ScreeningsContext';
 import { useGetRequest } from '../hooks/requestHooks';
