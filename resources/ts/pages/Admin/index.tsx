@@ -47,10 +47,10 @@ const AdminPage = (): ReactElement => {
     const [action, setAction] = useState<Action | null>(null);
 
     /**
-     * checks if the clicked on collapsible is already open
-     * @param el Action assigned to the collapsible element
+     * checks if the collapsible item is already open
+     * @param item action assigned to the collapsible item
      */
-    const isOpen = (el: Action) => el == action;
+    const isOpen = (item: Action) => item == action;
 
     if (month) {
         return (
