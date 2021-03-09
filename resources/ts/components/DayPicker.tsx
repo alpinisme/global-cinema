@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useLocation, useRouteMatch } from 'react-router-dom';
 import { toDateString } from '../utils/functions';
 
 /**
@@ -36,11 +36,13 @@ const createDateRange = (start: Date, end: Date) => {
 };
 
 const DayPicker = ({ month }: Props): ReactElement => {
+    const { url } = useRouteMatch();
+    const search = useLocation().search;
+
     const start = new Date(month);
     const end = finishMonth(new Date(month));
     const range = createDateRange(start, end);
-    const getDay = (date: Date) => String(date.getDate()).padStart(2, '0');
-    const { url } = useRouteMatch();
+    const getDay = (date: Date) => String(date.getUTCDate()).padStart(2, '0');
 
     return (
         <>
@@ -49,7 +51,9 @@ const DayPicker = ({ month }: Props): ReactElement => {
             <ul className="button-list">
                 {range.map(date => (
                     <li key={date.toString()}>
-                        <Link to={`${url}/${getDay(date)}`}>{toDateString(date)}</Link>
+                        <Link to={{ pathname: `${url}/${getDay(date)}`, search }}>
+                            {toDateString(date)}
+                        </Link>
                     </li>
                 ))}
             </ul>

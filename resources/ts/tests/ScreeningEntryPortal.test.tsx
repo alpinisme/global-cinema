@@ -3,21 +3,21 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 
-import { CityContextProvider } from '../contexts/CityContext';
 import ScreeningEntryPortal from '../components/ScreeningEntryPortal';
 import { AdminContext } from '../contexts/AdminContext';
 import { cities } from './backend-helpers/mock-backend-data';
+import { MemoryRouter } from 'react-router';
 
 const city = cities[0];
 
 describe('With valid context provider, ScreeningEntryPortal', () => {
     beforeEach(() =>
         render(
-            <CityContextProvider>
+            <MemoryRouter>
                 <AdminContext.Provider value={{ cities, users: [] }}>
                     <ScreeningEntryPortal />
                 </AdminContext.Provider>
-            </CityContextProvider>
+            </MemoryRouter>
         )
     );
 

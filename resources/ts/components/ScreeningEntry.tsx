@@ -5,21 +5,29 @@ import Select from './Select';
 import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
 import type { Film, Screening } from '../types/api';
-import { useCityContext } from '../contexts/CityContext';
 import { ScreeningsContext } from '../contexts/ScreeningsContext';
 import LoadingIndicator from './LoadingIndicator';
+import useQuery from '../hooks/useQuery';
+import { useHistory } from 'react-router';
 
 const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
     const { films, theaters, getFilms } = useContext(ScreeningsContext);
-    const [city] = useCityContext();
+    const query = useQuery();
+    const history = useHistory();
+    const city = query.get('city');
     const [newTitle, setNewTitle] = useState<string | null>(null);
+
+    if (city == null) {
+        history.goBack();
+        throw new Error('city required');
+    }
 
     const [submissionError, setSubmissionError] = useState('');
 
     const init = useMemo(
         () => ({
             date: date.toISOString().slice(0, 10),
-            city_id: city?.id,
+            city_id: Number(city),
         }),
         [city, date]
     );
@@ -68,7 +76,7 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
             <Select
                 id="theater-select"
                 options={theaters
-                    .filter(t => t.city_id == city?.id)
+                    .filter(t => t.city_id == Number(city))
                     .map(t => ({ label: t.name, value: t.id }))}
                 value={screening.theater_id?.toString() ?? ''}
                 handleChange={(e: React.ChangeEvent<HTMLSelectElement>) => {

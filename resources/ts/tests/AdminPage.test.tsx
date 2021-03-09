@@ -1,18 +1,19 @@
 import React from 'react';
-import { CityContextProvider } from '../contexts/CityContext';
+
 import { render, waitFor, screen } from '@testing-library/react';
 import AdminPage from '../pages/Admin';
 import { cities } from './backend-helpers/mock-backend-data';
 import '@testing-library/jest-dom/extend-expect';
 import 'jest-extended';
 import { server, rest } from './backend-helpers/server';
+import { StaticRouter } from 'react-router';
 
 describe('With happy-path api calls', () => {
     beforeEach(() => {
         render(
-            <CityContextProvider>
+            <StaticRouter>
                 <AdminPage />
-            </CityContextProvider>
+            </StaticRouter>
         );
     });
 
@@ -32,9 +33,9 @@ describe('With problematic api calls', () => {
         );
 
         render(
-            <CityContextProvider>
+            <StaticRouter>
                 <AdminPage />
-            </CityContextProvider>
+            </StaticRouter>
         );
 
         // await waitFor(() => expect(errMsg).toStartWith('Cities could not be loaded'));

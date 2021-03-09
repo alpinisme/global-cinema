@@ -1,24 +1,22 @@
 import React, { ReactElement, ChangeEvent, useContext } from 'react';
 import Select from './Select';
 import MonthPicker from './MonthPicker';
-import { useCityContext } from '../contexts/CityContext';
 import { AdminContext } from '../contexts/AdminContext';
+import { useHistory } from 'react-router';
+import useQuery from '../hooks/useQuery';
 
 const ScreeningEntryPortal = (): ReactElement => {
-    const [city, setCity] = useCityContext();
+    const history = useHistory();
+    const query = useQuery();
+    const city = query.get('city') ?? '';
     const { cities } = useContext(AdminContext);
-
-    const selectedCity = city ? city.id.toString() : '';
 
     const options = cities ? cities.map(city => ({ value: city.id, label: city.name })) : [];
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        const selected = cities.find(city => city.id.toString() == e.target.value);
-        if (!selected) {
-            setCity(null);
-        } else {
-            setCity(selected);
-        }
+        const search = new URLSearchParams();
+        search.append('city', e.target.value);
+        history.push({ search: search.toString() });
     };
 
     return (
@@ -26,10 +24,10 @@ const ScreeningEntryPortal = (): ReactElement => {
             <Select
                 label="Choose a city:"
                 options={options}
-                value={selectedCity}
+                value={city}
                 handleChange={handleChange}
             />
-            {city && <MonthPicker />}
+            {city.length > 0 && <MonthPicker />}
         </>
     );
 };

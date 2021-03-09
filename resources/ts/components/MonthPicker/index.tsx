@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, ChangeEvent, FormEvent } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import ErrorBox from '../ErrorBox';
 import styles from './MonthPicker.scss';
 
@@ -7,6 +7,7 @@ const MonthPicker = (): ReactElement => {
     const [isValid, setIsValid] = useState<boolean>(false);
     const [input, setInput] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const search = useLocation().search;
     const history = useHistory();
 
     const validate = (input: string): boolean => {
@@ -29,7 +30,7 @@ const MonthPicker = (): ReactElement => {
         if (isValid) {
             const month = input.slice(0, 2);
             const year = input.slice(3);
-            history.push(`/screening-entry/${year}-${month}`);
+            history.push({ pathname: `/screening-entry/${year}-${month}`, search });
         }
     };
 

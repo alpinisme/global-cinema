@@ -4,14 +4,14 @@ import type { Theater } from '../types/api';
 import { ScreeningsContext } from '../contexts/ScreeningsContext';
 import { useGetRequest } from '../hooks/requestHooks';
 import { useAuth } from '../hooks/useAuth';
-import { useCityContext } from '../contexts/CityContext';
 import useFilmSearch from '../hooks/useFilmSearch';
+import { useHistory } from 'react-router';
 
 const Student = (): ReactElement => {
     const [films, getFilms] = useFilmSearch();
     const theaters = useGetRequest<Theater[]>('/theaters');
     const auth = useAuth();
-    const [, setCity] = useCityContext();
+    const history = useHistory();
 
     if (!auth.user || !auth.user.assignment) {
         throw Error(
@@ -22,8 +22,10 @@ const Student = (): ReactElement => {
     const assignedCity = auth.user.assignment.city;
 
     useEffect(() => {
-        setCity(assignedCity);
-    }, [assignedCity, setCity]);
+        const search = new URLSearchParams();
+        search.append('city', assignedCity.id.toString());
+        history.push({ search: search.toString() });
+    }, [assignedCity, history]);
 
     const context = {
         theaters: theaters.data ?? [],
