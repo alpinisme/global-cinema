@@ -3,7 +3,7 @@ import Collapsible from '../../../components/Collapsible';
 import styles from './Admin.scss';
 import UserEdit from './UserEdit';
 import PasswordReset from '../../../components/PasswordReset';
-import ScreeningEntryPortal from '../../../components/ScreeningEntryPortal';
+import ScreeningEntryPortal from './ScreeningEntryPortal';
 import AdminProvider from '../../../contexts/AdminContext';
 import ActivityReview from './ActivityReview';
 import ProgressChecker from './ProgressChecker/ index';

@@ -1,12 +1,12 @@
 import React, { useState, useCallback, ReactElement, useContext, useMemo } from 'react';
 import axios from 'axios';
-import ErrorBox from './ErrorBox';
-import Select from './Select';
-import Autosuggest from './Autosuggest';
-import { addOnce } from '../utils/functions';
-import type { Film, Screening } from '../types/api';
-import { ScreeningsContext } from '../contexts/ScreeningsContext';
-import useQuery from '../hooks/useQuery';
+import ErrorBox from '../../components/ErrorBox';
+import Select from '../../components/Select';
+import Autosuggest from '../../components/Autosuggest';
+import { addOnce } from '../../utils/functions';
+import type { Film, Screening } from '../../types/api';
+import { ScreeningsContext } from '../../contexts/ScreeningsContext';
+import useQuery from '../../hooks/useQuery';
 import { useHistory } from 'react-router';
 
 const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {

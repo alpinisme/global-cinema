@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 
-import ScreeningEntryPortal from '../components/ScreeningEntryPortal';
+import ScreeningEntryPortal from '../pages/Home/Admin/ScreeningEntryPortal';
 import { AdminContext } from '../contexts/AdminContext';
 import { cities } from './backend-helpers/mock-backend-data';
 import { MemoryRouter } from 'react-router';

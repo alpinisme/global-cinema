@@ -1,9 +1,9 @@
 import React, { ReactElement, ChangeEvent, useContext } from 'react';
-import Select from './Select';
-import MonthPicker from './MonthPicker';
-import { AdminContext } from '../contexts/AdminContext';
+import Select from '../../../components/Select';
+import MonthPicker from '../../../components/MonthPicker';
+import { AdminContext } from '../../../contexts/AdminContext';
 import { useHistory } from 'react-router';
-import useQuery from '../hooks/useQuery';
+import useQuery from '../../../hooks/useQuery';
 
 const ScreeningEntryPortal = (): ReactElement => {
     const history = useHistory();

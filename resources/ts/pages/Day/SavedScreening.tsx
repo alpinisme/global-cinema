@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import type { Screening } from '../types/api';
+import type { Screening } from '../../types/api';
 
 const SavedScreening = ({ screening, handleDelete }: Props): ReactElement => (
     <li>
