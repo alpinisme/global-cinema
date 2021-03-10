@@ -30,49 +30,34 @@ use App\Http\Controllers\TheaterCsvUploadController;
 use App\Http\Controllers\UserController;
 use App\User;
 
-Route::get('/', function () {
-    return view('app');
-});
-
 Route::get('/grading', [GradingController::class, 'index'])->middleware(['can:grade']);
+Route::get('/geojson', ScreeningsGeoJsonController::class);
+Route::get('/month-stats', MonthStatsController::class);
+Route::get('/cities', [CityController::class, 'index']);
+Route::get('/completed/{city}', [ProgressReviewController::class, 'index']);
+Route::get('/instructors', fn () => User::select('id', 'name')->where('role', 'instructor')->get()); // TODO: switch to controller
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/screenings/{date?}', [ScreeningController::class, 'index']);
-
     Route::apiResource('/screenings', ScreeningController::class);
     Route::apiResource('/films', FilmController::class);
     Route::apiResource('/cities', CityController::class);
     Route::apiResource('/theaters', TheaterController::class);
-
     Route::get('/user', [CurrentUserController::class, 'show']);
     Route::post('/csv/screenings', ScreeningCsvUploadController::class);
     Route::post('/csv/theaters', TheaterCsvUploadController::class);
 });
 
-Route::get('/geojson', ScreeningsGeoJsonController::class);
-Route::get('/month-stats', MonthStatsController::class);
-Route::get('/cities', [CityController::class, 'index']);
-Route::get('/instructors', function () {
-    return User::select('id', 'name')->where('role', 'instructor')->get(); // TODO: switch to controller
-});
-
 Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::apiResource('/users', UserController::class);
-
     Route::get('/assigned-city', [AssignmentSettingController::class, 'show']);
     Route::post('/assigned-city', [AssignmentSettingController::class, 'create']);
-
     Route::post('/password/reset/{id}', [ResetPasswordController::class, 'getResetLink']);
-
     Route::get('/review/{category}', ActivityReviewController::class);
     Route::patch('/merge/films', [FilmMergeController::class, 'update']);
 });
 
-Auth::routes();
-Route::get('/logout', [LoginController::class, 'logout']);
-
-Route::get('/completed/{city}', [ProgressReviewController::class, 'index']);
+Auth::routes(); // TODO: get rid of all view-based auth routes (by switching to manually routing the post routes)
+Route::get('/logout', [LoginController::class, 'logout']); // TODO: switch to POST on front end for this
 
 Route::fallback(fn () => view('app'));
-
-// Route::get('/log',                          '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index'); // see github for how to add
