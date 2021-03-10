@@ -66,10 +66,6 @@ const ScreeningEntry = ({ date, handleSuccess }: Props): ReactElement => {
         [handleSuccess, init, screening]
     );
 
-    if (!city) {
-        return <LoadingIndicator />;
-    }
-
     return (
         <>
             <label htmlFor="theater-select">Theater</label>
