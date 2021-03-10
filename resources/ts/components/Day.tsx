@@ -13,6 +13,9 @@ const Day = (): ReactElement => {
     const { month, day } = useParams<DayParams>();
     const ISOdate = month + '-' + day;
     const date = new Date(ISOdate);
+    // TODO: check if valid date and return redirect if not
+    // This will likely require putting everything below here in a dummy component
+    // to avoid conditionally calling hooks
     const endpoint = '/screenings/' + ISOdate;
     const screenings = useGetRequest<Screening[]>(endpoint);
 

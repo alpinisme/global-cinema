@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { useLocation, useParams, useRouteMatch } from 'react-router';
+import { Redirect, useLocation, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 import { toDateString } from '../utils/functions';
 
@@ -49,6 +49,11 @@ const Month = (): ReactElement => {
     const { url } = useRouteMatch();
     const search = useLocation().search;
     const startDate = new Date(month);
+
+    if (isNaN(startDate.getTime())) {
+        return <Redirect to="/404" />;
+    }
+
     const endDate = finishMonth(new Date(month));
     const dateRange = createDateRange(startDate, endDate);
     const getDay = (date: Date) => String(date.getUTCDate()).padStart(2, '0');
