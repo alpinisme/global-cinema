@@ -63,24 +63,4 @@ class ScreeningController extends Controller
 
         return response('', 204);
     }
-
-    /**
-     * Shows all screenings for the specified date created by the user
-     *
-     * @param string $date
-     * @return \Illuminate\Http\Response
-     */
-    public function date($date)
-    {
-        return Screening::joined()->date($date)->createdBy(auth()->id())->get();
-    }
-
-    /**
-     * Show the view for the screenings map
-     * @return \Illuminate\Http\Response
-     */
-    public function map()
-    {
-        return view('map');
-    }
 }
