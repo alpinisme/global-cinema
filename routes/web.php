@@ -74,4 +74,6 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::get('/completed/{city}', [ProgressReviewController::class, 'index']);
 
+Route::fallback(fn () => view('app'));
+
 // Route::get('/log',                          '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index'); // see github for how to add
