@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="author" content="Matthew Nelson">
-<meta name="description" content="{{ config('app.name') }}">
-<meta name="twitter:title" content="{{ config('app.name') }}">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ config('app.name') }}</title>
-<link href="{{ asset('css/app.css') }}" rel="stylesheet">
-<link href="{{ asset('css/styles.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/map.css') }}" />
-<link href="https://fonts.googleapis.com/css?family=Lato:300,300b,300i" rel="stylesheet">
-<script src="/js/app.js" defer></script>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="author" content="Matthew Nelson">
+  <meta name="description" content="{{ config('app.name') }}">
+  <meta name="twitter:title" content="{{ config('app.name') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ config('app.name') }}</title>
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/map.css') }}" />
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,300b,300i" rel="stylesheet">
+  <script src="/js/app.js" defer></script>
 </head>
 
 <body>
