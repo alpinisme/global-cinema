@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import Month from './pages/Month';
 import ScreeningsProvider from './contexts/ScreeningsContext';
 import Day from './components/Day';
+import NotFound from './pages/NotFound';
 
 const App = (): ReactElement => (
     <ErrorBoundary>
@@ -37,6 +38,9 @@ const App = (): ReactElement => (
                                 <ScreeningsProvider>
                                     <Day />
                                 </ScreeningsProvider>
+                            </Route>
+                            <Route path="*">
+                                <NotFound />
                             </Route>
                         </Switch>
                     </Layout>
