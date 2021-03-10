@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import Home from './pages/Home';
 import { AuthProvider } from './hooks/useAuth';
@@ -12,6 +12,8 @@ import Month from './pages/Month';
 import ScreeningsProvider from './contexts/ScreeningsContext';
 import Day from './pages/Day';
 import NotFound from './pages/NotFound';
+import LoadingIndicator from './components/LoadingIndicator';
+import LoadableMap from './pages/LoadableMap';
 
 const App = (): ReactElement => (
     <ErrorBoundary>
@@ -38,6 +40,11 @@ const App = (): ReactElement => (
                                 <ScreeningsProvider>
                                     <Day />
                                 </ScreeningsProvider>
+                            </Route>
+                            <Route path="/map">
+                                <Suspense fallback={<LoadingIndicator />}>
+                                    <LoadableMap />
+                                </Suspense>
                             </Route>
                             <Route path="*">
                                 <NotFound />

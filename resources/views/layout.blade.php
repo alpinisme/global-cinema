@@ -10,6 +10,7 @@
 <title>@yield('title', 'CWL 207')</title>
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/map.css') }}" />
 <link href="https://fonts.googleapis.com/css?family=Lato:300,300b,300i" rel="stylesheet">
 @yield('scripts')
 </head>

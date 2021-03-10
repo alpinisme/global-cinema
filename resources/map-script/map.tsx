@@ -1,5 +1,4 @@
-import React, { useState, useEffect, SyntheticEvent, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect, SyntheticEvent, useMemo, ReactElement } from 'react';
 import DatePicker from 'react-datepicker';
 import { TileLayer, Popup, CircleMarker, LayerGroup, MapContainer } from 'react-leaflet';
 import { log } from '../ts/utils/functions';
@@ -48,7 +47,7 @@ const fetchJSON = async (url: string, setIsError: (isError: boolean) => void) =>
     }
 };
 
-const Root = () => {
+const Root = (): ReactElement => {
     const minDate = new Date('1945');
     const maxDate = new Date('1995');
 
@@ -235,4 +234,4 @@ interface CityPickerProps {
     handleChange: (e: SyntheticEvent) => void;
 }
 
-ReactDOM.render(<Root />, document.getElementById('react-root'));
+export default Root;

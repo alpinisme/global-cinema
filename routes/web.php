@@ -49,7 +49,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/csv/theaters', TheaterCsvUploadController::class);
 });
 
-Route::get('/map', [ScreeningController::class, 'map']);
 Route::get('/geojson', ScreeningsGeoJsonController::class);
 Route::get('/month-stats', MonthStatsController::class);
 Route::get('/cities', [CityController::class, 'index']);
