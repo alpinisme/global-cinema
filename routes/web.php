@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::apiResource('/films', FilmController::class);
     Route::apiResource('/cities', CityController::class);
     Route::apiResource('/theaters', TheaterController::class);
-    Route::get('/user', [CurrentUserController::class, 'show']);
+    Route::get('/user', CurrentUserController::class);
     Route::post('/csv/screenings', ScreeningCsvUploadController::class);
     Route::post('/csv/theaters', TheaterCsvUploadController::class);
 });

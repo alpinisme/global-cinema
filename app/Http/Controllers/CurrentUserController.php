@@ -6,7 +6,7 @@ use App\User;
 
 class CurrentUserController extends Controller
 {
-    public function show()
+    public function __invoke()
     {
         $user = auth()->user();
 
