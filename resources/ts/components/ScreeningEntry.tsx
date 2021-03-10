@@ -6,7 +6,6 @@ import Autosuggest from './Autosuggest';
 import { addOnce } from '../utils/functions';
 import type { Film, Screening } from '../types/api';
 import { ScreeningsContext } from '../contexts/ScreeningsContext';
-import LoadingIndicator from './LoadingIndicator';
 import useQuery from '../hooks/useQuery';
 import { useHistory } from 'react-router';
 
