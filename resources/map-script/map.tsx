@@ -2,7 +2,7 @@ import React, { useState, useEffect, SyntheticEvent, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import DatePicker from 'react-datepicker';
 import { TileLayer, Popup, CircleMarker, LayerGroup, MapContainer } from 'react-leaflet';
-import { log } from './utils';
+import { log } from '../ts/utils/functions';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'leaflet/dist/leaflet.css';
 import style from './Map.scss';

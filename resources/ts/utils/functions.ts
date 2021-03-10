@@ -47,3 +47,13 @@ export function removeFrom<A>(array: A[], index: number): A[] {
     }
     return [...array.slice(0, index), ...array.slice(index + 1)];
 }
+
+/**
+ *
+ * @param  {...any} args msgs to be logged
+ * @returns the first argument passed
+ */
+export const log = (...args: unknown[]): unknown => {
+    console.log(...args);
+    return args[0];
+};
