@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { ReactElement } from 'react';
-import ErrorBox from '../components/ErrorBox';
-import LoadingIndicator from '../components/LoadingIndicator';
-import { useGetRequest } from '../hooks/requestHooks';
-import { User } from '../types/api';
-import { removeFrom } from '../utils/functions';
+import ErrorBox from '../../../../components/ErrorBox';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
+import { useGetRequest } from '../../../../hooks/requestHooks';
+import { User } from '../../../../types/api';
+import { removeFrom } from '../../../../utils/functions';
 
 const UserReview = (): ReactElement => {
     const url = '/review/users';

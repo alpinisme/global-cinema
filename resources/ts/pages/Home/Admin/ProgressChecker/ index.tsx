@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { ChangeEvent, ReactElement, useEffect, useState } from 'react';
-import TreeList, { Data as TreeListData } from '../../components/TreeList';
-import Select from '../../components/Select';
+import TreeList, { Data as TreeListData } from '../../../../components/TreeList';
+import Select from '../../../../components/Select';
 import styles from './ProgressChecker.scss';
-import { useAdminContext } from '../../contexts/AdminContext';
+import { useAdminContext } from '../../../../contexts/AdminContext';
 
 /**
  * Callback for reduce function. Transforms a list of formatted date strings (YYYY-month, ex: 1987-May)

@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
-import FilmReview from '../FilmReview';
-import TheaterReview from '../TheaterReview';
-import UserReview from '../UserReview';
+import FilmReview from './FilmReview';
+import TheaterReview from './TheaterReview';
+import UserReview from './UserReview';
 import styles from './ActivityReview.scss';
 
 const ActivityReview = (): ReactElement => {

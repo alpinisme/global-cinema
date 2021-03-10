@@ -1,13 +1,13 @@
 import React, { useState, ReactElement, Dispatch, SetStateAction } from 'react';
-import Collapsible from '../../components/Collapsible';
+import Collapsible from '../../../components/Collapsible';
 import styles from './Admin.scss';
-import UserEdit from '../../components/UserEdit';
-import PasswordReset from '../../components/PasswordReset';
-import ScreeningEntryPortal from '../../components/ScreeningEntryPortal';
-import AdminProvider from '../../contexts/AdminContext';
-import ActivityReview from '../ActivityReview';
-import ProgressChecker from '../ProgressChecker/ index';
-import CsvUploader from '../CsvUploader';
+import UserEdit from './UserEdit';
+import PasswordReset from '../../../components/PasswordReset';
+import ScreeningEntryPortal from '../../../components/ScreeningEntryPortal';
+import AdminProvider from '../../../contexts/AdminContext';
+import ActivityReview from './ActivityReview';
+import ProgressChecker from './ProgressChecker/ index';
+import CsvUploader from './CsvUploader';
 
 type Action =
     | 'edit users'

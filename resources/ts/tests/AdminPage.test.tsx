@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { render, waitFor, screen } from '@testing-library/react';
-import AdminPage from '../pages/Admin';
+import AdminPage from '../pages/Home/Admin';
 import { cities } from './backend-helpers/mock-backend-data';
 import '@testing-library/jest-dom/extend-expect';
 import 'jest-extended';

@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
-import ErrorBox from '../components/ErrorBox';
-import { useAuth } from '../hooks/useAuth';
+import ErrorBox from '../../components/ErrorBox';
+import { useAuth } from '../../hooks/useAuth';
 import InstructorPage from './Instructor';
 import AdminPage from './Admin';
 import Student from './Student';

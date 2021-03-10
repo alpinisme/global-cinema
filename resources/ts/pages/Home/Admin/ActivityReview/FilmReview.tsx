@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect, ReactElement } from 'react';
-import DuplicatesDisplay from '../components/DuplicatesDisplay';
-import ItemToReview from '../components/ItemToReview';
-import TextButton from '../components/TextButton';
-import { Film, FilmToReview } from '../types/api';
-import { usePatchRequest } from '../hooks/requestHooks';
+import DuplicatesDisplay from '../../../../components/DuplicatesDisplay';
+import ItemToReview from '../../../../components/ItemToReview';
+import TextButton from '../../../../components/TextButton';
+import { Film, FilmToReview } from '../../../../types/api';
+import { usePatchRequest } from '../../../../hooks/requestHooks';
 
 const FilmReview = (): ReactElement => {
     const url = '/review/films';

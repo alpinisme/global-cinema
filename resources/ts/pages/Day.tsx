@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react';
 import axios from 'axios';
-import ScreeningEntry from './ScreeningEntry';
-import SavedScreening from './SavedScreening';
+import ScreeningEntry from '../components/ScreeningEntry';
+import SavedScreening from '../components/SavedScreening';
 import { removeFrom, toDateString } from '../utils/functions';
 import { Screening } from '../types/api';
 import { useGetRequest } from '../hooks/requestHooks';
-import LoadingIndicator from './LoadingIndicator';
-import ErrorBox from './ErrorBox';
+import LoadingIndicator from '../components/LoadingIndicator';
+import ErrorBox from '../components/ErrorBox';
 import { Link, useParams } from 'react-router-dom';
 
 const Day = (): ReactElement => {

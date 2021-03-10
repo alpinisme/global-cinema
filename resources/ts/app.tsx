@@ -10,7 +10,7 @@ import LoginPage from './pages/Login';
 import Register from './pages/Register';
 import Month from './pages/Month';
 import ScreeningsProvider from './contexts/ScreeningsContext';
-import Day from './components/Day';
+import Day from './pages/Day';
 import NotFound from './pages/NotFound';
 
 const App = (): ReactElement => (

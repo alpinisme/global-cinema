@@ -1,7 +1,7 @@
 import React, { ReactElement, useState } from 'react';
-import { User } from '../types/api';
-import Autosuggest from './Autosuggest';
-import { useAdminContext } from '../contexts/AdminContext';
+import { User } from '../../../types/api';
+import Autosuggest from '../../../components/Autosuggest';
+import { useAdminContext } from '../../../contexts/AdminContext';
 
 const UserEdit = (): ReactElement => {
     const [user, setUser] = useState<User | null>(null);

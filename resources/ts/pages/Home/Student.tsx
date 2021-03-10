@@ -1,10 +1,10 @@
 import React, { ReactElement, useEffect } from 'react';
-import Month from './Month';
-import type { Theater } from '../types/api';
-import { ScreeningsContext } from '../contexts/ScreeningsContext';
-import { useGetRequest } from '../hooks/requestHooks';
-import { useAuth } from '../hooks/useAuth';
-import useFilmSearch from '../hooks/useFilmSearch';
+import Month from '../Month';
+import type { Theater } from '../../types/api';
+import { ScreeningsContext } from '../../contexts/ScreeningsContext';
+import { useGetRequest } from '../../hooks/requestHooks';
+import { useAuth } from '../../hooks/useAuth';
+import useFilmSearch from '../../hooks/useFilmSearch';
 import { useHistory } from 'react-router';
 
 const Student = (): ReactElement => {
