@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'CWL 207 Data Entry'),
+    'name' => env('APP_NAME', 'Filmapping Data Entry'),
 
     /*
     |--------------------------------------------------------------------------
