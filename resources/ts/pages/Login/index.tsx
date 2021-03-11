@@ -1,5 +1,5 @@
-import React, { useState, ReactElement, FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, ReactElement, FormEvent, useEffect } from 'react';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import ErrorBox from '../../components/ErrorBox';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './Login.scss';
@@ -18,11 +18,18 @@ const LoginPage = (): ReactElement => {
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
     const auth = useAuth();
+    const history = useHistory();
 
     const login = (e: FormEvent) => {
         e.preventDefault();
         auth.login({ password, email, remember });
     };
+
+    useEffect(() => {
+        if (auth.user) {
+            history.replace('/');
+        }
+    }, [auth.user, history]);
 
     return (
         <div>
