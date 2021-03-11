@@ -7,7 +7,7 @@ import 'leaflet/dist/leaflet.css';
 import style from './Map.scss';
 import { City, ScreeningsGeoJSON, ScreeningsGeoJSONFeature } from '../ts/types/api';
 import Stats from './Stats';
-import { Map } from 'leaflet';
+import { Map as LeafletMap } from 'leaflet';
 
 const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';
@@ -47,7 +47,7 @@ const fetchJSON = async (url: string, setIsError: (isError: boolean) => void) =>
     }
 };
 
-const Root = (): ReactElement => {
+const Map = (): ReactElement => {
     const minDate = new Date('1945');
     const maxDate = new Date('1995');
 
@@ -171,7 +171,7 @@ const ErrorDisplay = () => (
 
 const ScreeningsMap = ({ city, screenings }: MapProps) => {
     const position: [number, number] = useMemo(() => [Number(city.lat), Number(city.lng)], [city]);
-    const [map, setMap] = useState<Map | null>(null);
+    const [map, setMap] = useState<LeafletMap | null>(null);
 
     const displayMap = useMemo(() => {
         return (
@@ -234,4 +234,4 @@ interface CityPickerProps {
     handleChange: (e: SyntheticEvent) => void;
 }
 
-export default Root;
+export default Map;
