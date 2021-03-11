@@ -10,7 +10,7 @@ module.exports = env => {
         devtool: isDev ? 'eval-cheap-source-map' : false,
         entry: {
             app: './resources/ts/app.tsx',
-            map: './resources/map-script/map.tsx',
+            map: './resources/map-script/Map.tsx',
         },
         output: {
             filename: '[name].js',
