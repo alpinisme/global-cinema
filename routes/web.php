@@ -14,6 +14,7 @@
 use App\Http\Controllers\ActivityReviewController;
 use App\Http\Controllers\AssignmentSettingController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CurrentUserController;
@@ -57,7 +58,9 @@ Route::group(['middleware' => ['can:see admin tools']], function () {
     Route::patch('/merge/films', [FilmMergeController::class, 'update']);
 });
 
-Auth::routes(); // TODO: get rid of all view-based auth routes (by switching to manually routing the post routes)
-Route::get('/logout', [LoginController::class, 'logout']); // TODO: switch to POST on front end for this
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout']);
+Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
 
 Route::fallback(fn () => view('app'));
