@@ -142,7 +142,7 @@ const Map = (): ReactElement => {
 
                     {isError && <ErrorDisplay />}
                 </div>
-                <Stats city={city} date={date && toDateString(date)} />
+                <Stats city={city.id} date={date && toDateString(date)} />
             </div>
 
             <div className={isActiveMap ? MOBILE_VISIBLE : MOBILE_INVISIBLE}>

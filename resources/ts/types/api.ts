@@ -124,4 +124,12 @@ export interface FilmToReview {
     alternates: Film[];
 }
 
+/**
+ * get request to month-stats
+ */
+export interface StatsResponse {
+    screening_count: number;
+    film: Film;
+}
+
 // TODO I think the screenings interface needs to be split, depending on whether we are posting or getting.
