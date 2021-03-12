@@ -8,6 +8,7 @@ import style from './Map.scss';
 import { City, ScreeningsGeoJSON, ScreeningsGeoJSONFeature } from '../ts/types/api';
 import Stats from './Stats';
 import { Map as LeafletMap } from 'leaflet';
+import useTitle from '../ts/hooks/useTitle';
 
 const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';
@@ -48,6 +49,7 @@ const fetchJSON = async (url: string, setIsError: (isError: boolean) => void) =>
 };
 
 const Map = (): ReactElement => {
+    useTitle('Map');
     const minDate = new Date('1945');
     const maxDate = new Date('1995');
 

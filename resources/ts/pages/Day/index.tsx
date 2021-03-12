@@ -8,6 +8,7 @@ import { useGetRequest } from '../../hooks/requestHooks';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorBox from '../../components/ErrorBox';
 import { Link, useParams } from 'react-router-dom';
+import useTitle from '../../hooks/useTitle';
 
 const Day = (): ReactElement => {
     const { month, day } = useParams<DayParams>();
@@ -18,6 +19,7 @@ const Day = (): ReactElement => {
     // to avoid conditionally calling hooks
     const endpoint = '/screenings/' + ISOdate;
     const screenings = useGetRequest<Screening[]>(endpoint);
+    useTitle('Screening Entry');
 
     /**
      * sends request to server to destroy record at `id`

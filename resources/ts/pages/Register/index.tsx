@@ -4,6 +4,7 @@ import { User } from '../../types/api';
 import { useGetRequest } from '../../hooks/requestHooks';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './Register.scss';
+import useTitle from '../../hooks/useTitle';
 
 const Register = (): ReactElement => {
     const [role, setRole] = useState('');
@@ -14,6 +15,7 @@ const Register = (): ReactElement => {
     const [password, setPassword] = useState('');
     const [passConfirm, setPassConfirm] = useState('');
     const auth = useAuth();
+    useTitle('Register');
 
     useEffect(() => {
         if (instructors.data) {

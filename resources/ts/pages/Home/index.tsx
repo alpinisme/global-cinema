@@ -5,10 +5,12 @@ import InstructorPage from './Instructor';
 import AdminPage from './Admin';
 import Student from './Student';
 import { Redirect } from 'react-router';
+import useTitle from '../../hooks/useTitle';
 
 const Home = (): ReactElement => {
     const [errors, setErrors] = useState<string>('');
     const auth = useAuth();
+    useTitle('User Home');
 
     if (auth.isLoading) {
         return <div>...loading</div>;

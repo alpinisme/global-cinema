@@ -2,6 +2,7 @@ import React, { useState, ReactElement, FormEvent, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import ErrorBox from '../../components/ErrorBox';
 import { useAuth } from '../../hooks/useAuth';
+import useTitle from '../../hooks/useTitle';
 import styles from './Login.scss';
 
 export interface User {
@@ -19,6 +20,7 @@ const LoginPage = (): ReactElement => {
     const [remember, setRemember] = useState(false);
     const auth = useAuth();
     const history = useHistory();
+    useTitle('Login');
 
     const login = (e: FormEvent) => {
         e.preventDefault();
