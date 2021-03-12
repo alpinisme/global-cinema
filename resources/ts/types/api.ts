@@ -3,7 +3,9 @@
  * The interfaces are non-exhaustive. That is, additional data may also be transmitted
  * But these interfaces represent a minimum as well as a necessary structure
  *
- * Backend api tests should be maintained so ensure that data is delivered in this format
+ * Backend api tests should be maintained to ensure that data is delivered in this format.
+ * Don't change anything in this file without ensuring that there are backend tests to cover
+ * the change.
  */
 
 /**
@@ -94,7 +96,7 @@ export interface ScreeningsGeoJSONFeature {
 }
 
 /**
- * get request to `geojson`
+ * get request to `geojson` returns this exactly
  */
 export interface ScreeningsGeoJSON {
     type: 'FeatureCollection';
@@ -109,7 +111,7 @@ export interface ScreeningsGeoJSON {
 }
 
 /**
- * get request to review/theaters
+ * get request to `review/theaters` gives an array of these
  */
 export interface TheaterToReview {
     current: Theater;
@@ -117,7 +119,7 @@ export interface TheaterToReview {
 }
 
 /**
- * get request to review/films
+ * get request to `review/films` gives an array of these
  */
 export interface FilmToReview {
     current: Film;
@@ -125,7 +127,7 @@ export interface FilmToReview {
 }
 
 /**
- * get request to month-stats
+ * get request to `month-stats` gives an array of these
  */
 export interface StatsResponse {
     screening_count: number;
