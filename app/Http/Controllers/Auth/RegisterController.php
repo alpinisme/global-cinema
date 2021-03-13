@@ -102,6 +102,6 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, User $user)
     {
-        return response(['role' => $user->role], 201);
+        return response($user, 201);
     }
 }
