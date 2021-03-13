@@ -64,7 +64,7 @@ class AuthenticationsTest extends TestCase
     public function an_existing_user_cannot_register()
     {
         $user = User::factory()->make();
-        $this->actingAs($user)->get('/register')->assertRedirect('/');
+        $this->actingAs($user)->postJson('/register', $user->toArray())->assertRedirect('/');
     }
 
     /** @test */
@@ -94,7 +94,7 @@ class AuthenticationsTest extends TestCase
     /** @test */
     public function a_user_can_log_out()
     {
-        $this->actingAs(User::factory()->make())->get('/logout');
+        $this->actingAs(User::factory()->make())->post('/logout');
         $this->assertGuest();
     }
 

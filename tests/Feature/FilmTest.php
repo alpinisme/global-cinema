@@ -122,7 +122,7 @@ class FilmTest extends TestCase
     /** @test */
     public function a_guest_cannot_search_films()
     {
-        $this->get('/films')->assertRedirect('login');
+        $this->getJson('/films')->assertStatus(401);
     }
 
     /** @test */

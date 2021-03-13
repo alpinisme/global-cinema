@@ -27,7 +27,7 @@ class ScreeningTest extends TestCase
     public function only_authenticated_users_can_add_a_screening()
     {
         $screening = Screening::factory()->raw();
-        $this->post('/screenings', $screening)->assertRedirect('login');
+        $this->postJson('/screenings', $screening)->assertStatus(401);
     }
 
     /** @test */
