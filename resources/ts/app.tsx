@@ -13,7 +13,8 @@ import ScreeningsProvider from './contexts/ScreeningsContext';
 import Day from './pages/Day';
 import NotFound from './pages/NotFound';
 import LoadingIndicator from './components/LoadingIndicator';
-import LoadableMap from './pages/LoadableMap';
+
+const Map = React.lazy(() => import('./pages/Map'));
 
 const App = (): ReactElement => (
     <ErrorBoundary>
@@ -43,7 +44,7 @@ const App = (): ReactElement => (
                             </Route>
                             <Route path="/map">
                                 <Suspense fallback={<LoadingIndicator />}>
-                                    <LoadableMap />
+                                    <Map />
                                 </Suspense>
                             </Route>
                             <Route path="*">

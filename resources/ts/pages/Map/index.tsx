@@ -1,14 +1,14 @@
 import React, { useState, useEffect, SyntheticEvent, useMemo, ReactElement } from 'react';
 import DatePicker from 'react-datepicker';
 import { TileLayer, Popup, CircleMarker, LayerGroup, MapContainer } from 'react-leaflet';
-import { log } from '../ts/utils/functions';
+import { log } from '../../utils/functions';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'leaflet/dist/leaflet.css';
 import style from './Map.scss';
-import { City, ScreeningsGeoJSON, ScreeningsGeoJSONFeature } from '../ts/types/api';
+import { City, ScreeningsGeoJSON, ScreeningsGeoJSONFeature } from '../../types/api';
 import Stats from './Stats';
 import { Map as LeafletMap } from 'leaflet';
-import useTitle from '../ts/hooks/useTitle';
+import useTitle from '../../hooks/useTitle';
 
 const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';

@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
-import ErrorBox from '../ts/components/ErrorBox';
-import LoadingIndicator from '../ts/components/LoadingIndicator';
-import { useGetRequest } from '../ts/hooks/requestHooks';
-import { StatsResponse } from '../ts/types/api';
+import ErrorBox from '../../components/ErrorBox';
+import LoadingIndicator from '../../components/LoadingIndicator';
+import { useGetRequest } from '../../hooks/requestHooks';
+import { StatsResponse } from '../../types/api';
 
 const Stats = ({ city, date }: Props): ReactElement => {
     const stats = useGetRequest<StatsResponse[]>(`/month-stats?city=${city}&date=${date}`);
