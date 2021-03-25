@@ -20,7 +20,7 @@ const AdminProvider = ({ children }: Props): ReactElement => {
 
 export default AdminProvider;
 
-export interface AdminContextData {
+interface AdminContextData {
     users: User[];
     cities: City[];
 }
