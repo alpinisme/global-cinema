@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import userEvent, { TargetElement } from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import TreeList from '../components/TreeList';
 
 const sampleData = [
@@ -37,7 +37,7 @@ describe('TreeList', () => {
     it('should display second-level items after parent has been clicked', () => {
         render(<TreeList data={sampleData} />);
         const topLevelItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Herb');
-        userEvent.click(topLevelItem as TargetElement);
+        userEvent.click(topLevelItem as HTMLElement);
         const secondaryItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Eric');
         expect(topLevelItem).toBeInTheDocument();
         expect(secondaryItem).toBeInTheDocument();
@@ -46,7 +46,7 @@ describe('TreeList', () => {
     it('should display second-level items as children of parent', () => {
         render(<TreeList data={sampleData} />);
         const topLevelItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Herb');
-        userEvent.click(topLevelItem as TargetElement);
+        userEvent.click(topLevelItem as HTMLElement);
         const secondaryItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Eric');
         // the parent of the secondary item is a ul tag, the li tag is actually parent of the parent
         expect(secondaryItem?.parentElement?.parentElement).toBe(topLevelItem);
@@ -55,8 +55,8 @@ describe('TreeList', () => {
     it('should hide second-level items after parent has been clicked again', () => {
         render(<TreeList data={sampleData} />);
         const topLevelItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Herb');
-        userEvent.click(topLevelItem as TargetElement);
-        userEvent.click(topLevelItem as TargetElement);
+        userEvent.click(topLevelItem as HTMLElement);
+        userEvent.click(topLevelItem as HTMLElement);
         const secondaryItem = screen
             .queryAllByRole('listitem')
             .find(el => el.textContent == 'Eric');
@@ -66,12 +66,12 @@ describe('TreeList', () => {
     it('should work recursively', () => {
         render(<TreeList data={sampleData} />);
         const topLevelItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Herb');
-        userEvent.click(topLevelItem as TargetElement);
+        userEvent.click(topLevelItem as HTMLElement);
         const secondaryItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Eric');
-        userEvent.click(secondaryItem as TargetElement);
+        userEvent.click(secondaryItem as HTMLElement);
         const tertiaryItem = screen.getAllByRole('listitem').find(el => el.textContent == 'Gabe');
         expect(tertiaryItem).toBeInTheDocument();
-        userEvent.click(topLevelItem as TargetElement);
+        userEvent.click(topLevelItem as HTMLElement);
         expect(tertiaryItem).not.toBeInTheDocument();
         expect(secondaryItem).not.toBeInTheDocument();
     });
