@@ -76,6 +76,8 @@ export interface City {
     lat: number;
     lng: number;
     zoom: number;
+    oldest?: string;
+    latest?: string;
 }
 
 /**
