@@ -7,7 +7,7 @@ import { Screening } from '../../types/api';
 import { useGetRequest } from '../../hooks/requestHooks';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorBox from '../../components/ErrorBox';
-import { Link, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
 import ContentContainer from '../../components/ContentContainer';
 
@@ -20,6 +20,7 @@ const Day = (): ReactElement => {
     // to avoid conditionally calling hooks
     const endpoint = '/screenings/' + ISOdate;
     const screenings = useGetRequest<Screening[]>(endpoint);
+    const history = useHistory();
     useTitle('Screening Entry');
 
     /**
@@ -58,7 +59,9 @@ const Day = (): ReactElement => {
         <ContentContainer>
             <h1>{humanReadableDate}</h1>
 
-            <Link to={`/screening-entry/${month}`}>Back to all dates</Link>
+            <button type="button" onClick={() => history.goBack()}>
+                Back to all dates
+            </button>
 
             <div className="box">
                 <h2>Save new screening</h2>
