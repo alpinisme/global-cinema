@@ -7,7 +7,7 @@ const Layout = ({ children }: Props): ReactElement => {
     return (
         <div className={styles.parent}>
             <NavBar />
-            {children}
+            <main>{children}</main>
             <Footer />
         </div>
     );
