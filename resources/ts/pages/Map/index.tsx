@@ -21,7 +21,7 @@ const bombay: City = {
     country: 'India',
     lat: 19.07283,
     lng: 72.8832,
-    zoom: 11,
+    zoom: 2,
 };
 
 /**
@@ -114,29 +114,34 @@ const Map = (): ReactElement => {
                             : style[MOBILE_VISIBLE] + ' ' + style.flexCol
                     }
                 >
-                    <CityPicker
-                        cities={cities.data ?? []}
-                        value={city.id}
-                        handleChange={handleCitySelection}
-                    />
+                    <div>
+                        <CityPicker
+                            cities={cities.data ?? []}
+                            value={city.id}
+                            handleChange={handleCitySelection}
+                        />
 
-                    <DatePicker
-                        placeholderText="Select Date"
-                        minDate={minDate}
-                        maxDate={maxDate}
-                        selected={date}
-                        onChange={setTypedDate}
-                    />
+                        <div className={style.grid}>
+                            <p>Pick a date: </p>
+                            <DatePicker
+                                placeholderText="Select Date"
+                                minDate={minDate}
+                                maxDate={maxDate}
+                                selected={date}
+                                onChange={setTypedDate}
+                            />
+                        </div>
 
-                    <button
-                        type="button"
-                        className={style[MOBILE_ONLY]}
-                        onClick={handleActiveStatusChange}
-                    >
-                        Show Map
-                    </button>
+                        <button
+                            type="button"
+                            className={style[MOBILE_ONLY]}
+                            onClick={handleActiveStatusChange}
+                        >
+                            Show Map
+                        </button>
 
-                    {isError && <ErrorDisplay />}
+                        {isError && <ErrorDisplay />}
+                    </div>
                 </div>
                 <Stats city={city.id} date={date && toDateString(date)} />
             </div>
@@ -160,13 +165,16 @@ const Map = (): ReactElement => {
 };
 
 const CityPicker = ({ cities, value, handleChange }: CityPickerProps) => (
-    <select value={value} onChange={handleChange}>
-        {cities.map(city => (
-            <option key={city.id} value={city.id}>
-                {city.name}
-            </option>
-        ))}
-    </select>
+    <div className={style.grid}>
+        <label htmlFor="city-picker">Pick a city: </label>
+        <select id="city-picker" value={value} onChange={handleChange}>
+            {cities.map(city => (
+                <option key={city.id} value={city.id}>
+                    {city.name}
+                </option>
+            ))}
+        </select>
+    </div>
 );
 
 const ErrorDisplay = () => (
@@ -226,8 +234,8 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
     }, [city.zoom, screenings, position]);
 
     useEffect(() => {
-        map?.setView(position);
-    }, [map, position]);
+        map?.setView(position, city.zoom);
+    }, [map, position, city.zoom]);
 
     return displayMap;
 };
