@@ -1,5 +1,6 @@
 import React, { useState, ReactElement, FormEvent, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import ContentContainer from '../../components/ContentContainer';
 import ErrorBox from '../../components/ErrorBox';
 import { useAuth } from '../../hooks/useAuth';
 import useTitle from '../../hooks/useTitle';
@@ -34,7 +35,7 @@ const LoginPage = (): ReactElement => {
     }, [auth.user, history]);
 
     return (
-        <div>
+        <ContentContainer>
             <h2 className={styles.header}>Login</h2>
             <form onSubmit={login} className={styles.container}>
                 <div className={styles.field}>
@@ -92,7 +93,7 @@ const LoginPage = (): ReactElement => {
                     Create an account
                 </Link>
             </div>
-        </div>
+        </ContentContainer>
     );
 };
 

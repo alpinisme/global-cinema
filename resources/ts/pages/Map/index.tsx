@@ -9,6 +9,7 @@ import { City, ScreeningsGeoJSON, ScreeningsGeoJSONFeature } from '../../types/a
 import Stats from './Stats';
 import { Map as LeafletMap } from 'leaflet';
 import useTitle from '../../hooks/useTitle';
+import { useGetRequest } from '../../hooks/requestHooks';
 
 const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';
@@ -48,20 +49,20 @@ const fetchJSON = async (url: string, setIsError: (isError: boolean) => void) =>
     }
 };
 
+// since dates are stored in database without timestamp, we only want first ten chars
+const toDateString = (date: Date) => date.toISOString().slice(0, 10);
+
 const Map = (): ReactElement => {
     useTitle('Map');
     const minDate = new Date('1945');
     const maxDate = new Date('1995');
-
-    // since dates are stored in database without timestamp, we only want first ten chars
-    const toDateString = (date: Date) => date.toISOString().slice(0, 10);
 
     // isActiveMap is a boolean that signifies whether the map should be visible to mobile users.
     const [isActiveMap, setIsActiveMap] = useState(false);
     const [date, setDate] = useState<Date | null>(minDate);
     const [isError, setIsError] = useState(false);
     const [city, setCity] = useState(bombay);
-    const [cities, setCities] = useState<City[]>([]);
+    const cities = useGetRequest<City[]>('/cities');
     const [screenings, setScreenings] = useState<ScreeningsGeoJSON | null>(null);
 
     // added because official typings now allow for [Date, Date] to be passed in,
@@ -87,13 +88,8 @@ const Map = (): ReactElement => {
         const id = parseInt(event.target.value, 10);
 
         // the dropdown only lists valid cities, so we know there will be a match and can type cast confidently
-        setCity(cities.find(city => city.id == id) as City);
+        setCity(cities.data?.find(city => city.id == id) as City);
     };
-
-    // fetch cities on page load
-    useEffect(() => {
-        fetchJSON('/cities', setIsError).then(setCities).catch(log);
-    }, []);
 
     // fetch theaters each time city or date changes, if valid date selected (city will always be valid)
     useEffect(() => {
@@ -119,7 +115,7 @@ const Map = (): ReactElement => {
                     }
                 >
                     <CityPicker
-                        cities={cities}
+                        cities={cities.data ?? []}
                         value={city.id}
                         handleChange={handleCitySelection}
                     />
@@ -145,7 +141,13 @@ const Map = (): ReactElement => {
                 <Stats city={city.id} date={date && toDateString(date)} />
             </div>
 
-            <div className={isActiveMap ? MOBILE_VISIBLE : MOBILE_INVISIBLE}>
+            <div
+                className={
+                    style.map +
+                    ' ' +
+                    (isActiveMap ? style[MOBILE_VISIBLE] : style[MOBILE_INVISIBLE])
+                }
+            >
                 {isActiveMap && (
                     <button className={style.cancelButton} onClick={handleActiveStatusChange}>
                         Search Again
@@ -177,7 +179,12 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
 
     const displayMap = useMemo(() => {
         return (
-            <MapContainer center={position} zoom={city.zoom} id="map" whenCreated={setMap}>
+            <MapContainer
+                center={position}
+                zoom={city.zoom}
+                className={style.map}
+                whenCreated={setMap}
+            >
                 <TileLayer
                     url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

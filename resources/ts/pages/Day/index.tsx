@@ -9,6 +9,7 @@ import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorBox from '../../components/ErrorBox';
 import { Link, useParams } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
+import ContentContainer from '../../components/ContentContainer';
 
 const Day = (): ReactElement => {
     const { month, day } = useParams<DayParams>();
@@ -54,7 +55,7 @@ const Day = (): ReactElement => {
     const savedScreenings = screenings.data.slice().reverse();
 
     return (
-        <>
+        <ContentContainer>
             <h1>{humanReadableDate}</h1>
 
             <Link to={`/screening-entry/${month}`}>Back to all dates</Link>
@@ -78,7 +79,7 @@ const Day = (): ReactElement => {
                     </ul>
                 </div>
             )}
-        </>
+        </ContentContainer>
     );
 };
 
