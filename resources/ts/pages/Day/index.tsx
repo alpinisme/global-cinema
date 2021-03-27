@@ -42,10 +42,6 @@ const Day = (): ReactElement => {
             .catch(console.log);
     };
 
-    if (screenings.isLoading) {
-        return <LoadingIndicator />;
-    }
-
     if (screenings.error != null) {
         return <ErrorBox errors={screenings.error} />;
     }
@@ -53,7 +49,7 @@ const Day = (): ReactElement => {
     const humanReadableDate = toDateString(date);
     const handleSuccess = (screening: Screening) => screenings.update(old => [...old, screening]);
     // slice to avoid mutating array, and hence toggling order on each render
-    const savedScreenings = screenings.data.slice().reverse();
+    const savedScreenings = screenings.data?.slice().reverse();
 
     return (
         <ContentContainer>
@@ -65,21 +61,30 @@ const Day = (): ReactElement => {
 
             <div className="box">
                 <h2>Save new screening</h2>
-                <ScreeningEntry date={date} handleSuccess={handleSuccess} />
+                {screenings.isLoading ? (
+                    <LoadingIndicator />
+                ) : (
+                    <ScreeningEntry date={date} handleSuccess={handleSuccess} />
+                )}
             </div>
 
-            {savedScreenings.length > 0 && (
+            {savedScreenings && (
                 <div className="box">
                     <h2>Already Saved</h2>
-                    <ul className="already-saved">
-                        {savedScreenings.map(screening => (
-                            <SavedScreening
-                                key={screening.id}
-                                screening={screening}
-                                handleDelete={() => destroy(screening.id)}
-                            />
-                        ))}
-                    </ul>
+
+                    {savedScreenings.length > 0 ? (
+                        <ul className="already-saved">
+                            {savedScreenings.map(screening => (
+                                <SavedScreening
+                                    key={screening.id}
+                                    screening={screening}
+                                    handleDelete={() => destroy(screening.id)}
+                                />
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No screenings saved yet</p>
+                    )}
                 </div>
             )}
         </ContentContainer>
