@@ -17,11 +17,11 @@ import LoadingIndicator from './components/LoadingIndicator';
 const Map = React.lazy(() => import('./pages/Map'));
 
 const App = (): ReactElement => (
-    <ErrorBoundary>
-        <AuthProvider>
-            <ModalProvider>
-                <Router>
-                    <Layout>
+    <Router>
+        <Layout>
+            <ErrorBoundary>
+                <AuthProvider>
+                    <ModalProvider>
                         <Switch>
                             <Route exact path="/">
                                 <Home />
@@ -51,11 +51,11 @@ const App = (): ReactElement => (
                                 <NotFound />
                             </Route>
                         </Switch>
-                    </Layout>
-                </Router>
-            </ModalProvider>
-        </AuthProvider>
-    </ErrorBoundary>
+                    </ModalProvider>
+                </AuthProvider>
+            </ErrorBoundary>
+        </Layout>
+    </Router>
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));
