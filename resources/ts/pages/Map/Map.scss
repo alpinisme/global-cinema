@@ -10,6 +10,12 @@
     padding: 4rem;
 }
 
+.page {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    padding: 4rem;
+}
+
 .grid {
     display: grid;
     grid-template-columns: 40% 60%;
@@ -17,6 +23,9 @@
 
 .flex {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 3rem;
 }
 
 .flexCol {
@@ -57,10 +66,12 @@
     }
 }
 
-#map-menu-box {
+.menuBox {
     font-size: 0.8rem;
     margin: 0.5rem 0.5rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
     // position: absolute;
     // left: 0;
     // top: 14%;
@@ -111,4 +122,27 @@
         display: block;
         margin: auto;
     }
+}
+
+/* Element | http://127.0.0.1:8000/map/ */
+
+.cityPicker {
+    border: 1px solid navy;
+    border-radius: 4px;
+    width: 100%;
+    // margin: 5px 2px;
+    margin: 5px 0;
+}
+
+/* Element | http://127.0.0.1:8000/map/ */
+
+.datepicker {
+    border: 1px solid navy;
+    border-radius: 4px;
+    text-align: center;
+    width: 100%;
+}
+
+.controls {
+    margin: 2rem 0;
 }

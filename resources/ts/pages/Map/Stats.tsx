@@ -15,19 +15,26 @@ const Stats = ({ city, date }: Props): ReactElement => {
         return <ErrorBox errors={stats.error} />;
     }
 
+    if (stats.data.length == 0) {
+        return <p>Sorry, we have no data for that city on that day</p>;
+    }
+
     const topFilmsByScreeningCountDesc = stats.data
         .slice()
         .sort((a, b) => b.screening_count - a.screening_count)
         .slice(0, 5);
 
     return (
-        <ul>
-            {topFilmsByScreeningCountDesc.map(entry => (
-                <li key={entry.film.id}>
-                    {entry.film.title}: {entry.screening_count}
-                </li>
-            ))}
-        </ul>
+        <>
+            <h4>Most Popular Films That Month</h4>
+            <ul>
+                {topFilmsByScreeningCountDesc.map(entry => (
+                    <li key={entry.film.id}>
+                        {entry.film.title}: {entry.screening_count}
+                    </li>
+                ))}
+            </ul>
+        </>
     );
 };
 

@@ -15,12 +15,9 @@ const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';
 const MOBILE_ONLY = 'mobile-only';
 
-const bombay: City = {
-    id: 8,
-    name: 'Bombay',
-    country: 'India',
-    lat: 19.07283,
-    lng: 72.8832,
+const worldMapCenter: Partial<City> = {
+    lat: 0,
+    lng: 0,
     zoom: 2,
 };
 
@@ -61,7 +58,7 @@ const Map = (): ReactElement => {
     const [isActiveMap, setIsActiveMap] = useState(false);
     const [date, setDate] = useState<Date | null>(minDate);
     const [isError, setIsError] = useState(false);
-    const [city, setCity] = useState(bombay);
+    const [city, setCity] = useState<City | null>(null);
     const cities = useGetRequest<City[]>('/cities');
     const [screenings, setScreenings] = useState<ScreeningsGeoJSON | null>(null);
 
@@ -93,31 +90,33 @@ const Map = (): ReactElement => {
 
     // fetch theaters each time city or date changes, if valid date selected (city will always be valid)
     useEffect(() => {
-        if (date) {
+        if (city && date) {
             const url = `/geojson?city=${city.id}&date=${toDateString(date)}`;
             fetchJSON(url, setIsError).then(setScreenings).catch(log);
         }
-    }, [date, city.id]);
+    }, [date, city]);
 
     const mappableScreenings = screenings?.features.filter(
         screening => screening.geometry.coordinates[0] != null
     );
 
     return (
-        <div className={style.grid + ' ' + style.margin}>
+        <div className={style.page}>
             <div className={style.flex}>
                 <div
                     id="map-menu-box"
                     className={
                         isActiveMap
                             ? style[MOBILE_INVISIBLE]
-                            : style[MOBILE_VISIBLE] + ' ' + style.flexCol
+                            : style[MOBILE_VISIBLE] + ' ' + style.flexCol + ' ' + style.menuBox
                     }
                 >
-                    <div>
+                    <h2>Film History from the Edges</h2>
+                    <h3>Mapping Global Cinema</h3>
+                    <div className={style.controls}>
                         <CityPicker
                             cities={cities.data ?? []}
-                            value={city.id}
+                            value={city?.id}
                             handleChange={handleCitySelection}
                         />
 
@@ -129,6 +128,7 @@ const Map = (): ReactElement => {
                                 maxDate={maxDate}
                                 selected={date}
                                 onChange={setTypedDate}
+                                className={style.datepicker}
                             />
                         </div>
 
@@ -142,8 +142,8 @@ const Map = (): ReactElement => {
 
                         {isError && <ErrorDisplay />}
                     </div>
+                    {city && <Stats city={city.id} date={date && toDateString(date)} />}
                 </div>
-                <Stats city={city.id} date={date && toDateString(date)} />
             </div>
 
             <div
@@ -158,7 +158,7 @@ const Map = (): ReactElement => {
                         Search Again
                     </button>
                 )}
-                <ScreeningsMap city={city} screenings={mappableScreenings} />
+                <ScreeningsMap city={city ?? worldMapCenter} screenings={mappableScreenings} />
             </div>
         </div>
     );
@@ -167,7 +167,7 @@ const Map = (): ReactElement => {
 const CityPicker = ({ cities, value, handleChange }: CityPickerProps) => (
     <div className={style.grid}>
         <label htmlFor="city-picker">Pick a city: </label>
-        <select id="city-picker" value={value} onChange={handleChange}>
+        <select id="city-picker" value={value} onChange={handleChange} className={style.cityPicker}>
             {cities.map(city => (
                 <option key={city.id} value={city.id}>
                     {city.name}
@@ -192,6 +192,7 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
                 zoom={city.zoom}
                 className={style.map}
                 whenCreated={setMap}
+                scrollWheelZoom={false}
             >
                 <TileLayer
                     url="https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}"
@@ -241,13 +242,13 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
 };
 
 interface MapProps {
-    city: City;
+    city: Partial<City>;
     screenings: ScreeningsGeoJSONFeature[] | undefined;
 }
 
 interface CityPickerProps {
     cities: City[];
-    value: number;
+    value: number | undefined;
     handleChange: (e: SyntheticEvent) => void;
 }
 

@@ -2,6 +2,9 @@
 // Please do not change this file!
 interface CssExports {
   'cancelButton': string;
+  'cityPicker': string;
+  'controls': string;
+  'datepicker': string;
   'flex': string;
   'flexCol': string;
   'grid': string;
@@ -10,10 +13,12 @@ interface CssExports {
   'map': string;
   'map-menu-box': string;
   'margin': string;
+  'menuBox': string;
   'mobile-fullscreen-visible': string;
   'mobile-invisible': string;
   'mobile-only': string;
   'mobile-status-button': string;
+  'page': string;
   'value': string;
 }
 export const cssExports: CssExports;
