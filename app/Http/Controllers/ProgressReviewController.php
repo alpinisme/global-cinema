@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Screening;
+use Cache;
+use Carbon\Carbon;
 
 class ProgressReviewController extends Controller
 {
@@ -21,12 +23,16 @@ class ProgressReviewController extends Controller
                     ? 'strftime("%Y-%m", date)'
                     : 'DATE_FORMAT(date, "%Y-%M")';
 
-        return Screening::selectRaw("$dateClause as month, MAX(date)")
-                        ->distinct()
-                        ->inCity($city)
-                        ->groupBy('month')
-                        ->orderBy('MAX(date)')
-                        ->get()
-                        ->map(fn ($d) => $d['month']);
+        $rememberUntil = Carbon::now()->addWeek();
+
+        return Cache::remember('progress-review', $rememberUntil, function () use ($dateClause, $city) {
+            return Screening::selectRaw("$dateClause as month, MAX(date)")
+                ->distinct()
+                ->inCity($city)
+                ->groupBy('month')
+                ->orderBy('MAX(date)')
+                ->get()
+                ->map(fn ($d) => $d['month']);
+        }) ;
     }
 }
