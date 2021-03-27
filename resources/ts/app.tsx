@@ -23,42 +23,42 @@ const App = (): ReactElement => (
             <ErrorBoundary>
                 <AuthProvider>
                     <ModalProvider>
-                        <Route>
+                        <Switch>
                             <Route path="/map">
                                 <Suspense fallback={<LoadingIndicator />}>
                                     <Map />
                                 </Suspense>
                             </Route>
-                        </Route>
 
-                        <Route>
-                            <ContentContainer>
-                                <Switch>
-                                    <Route exact path="/">
-                                        <Home />
-                                    </Route>
-                                    <Route path="/login">
-                                        <LoginPage />
-                                    </Route>
-                                    <Route path="/register">
-                                        <Register />
-                                    </Route>
-                                    <Route exact path="/screening-entry/:month">
-                                        <ScreeningsProvider>
-                                            <Month />
-                                        </ScreeningsProvider>
-                                    </Route>
-                                    <Route path="/screening-entry/:month/:day">
-                                        <ScreeningsProvider>
-                                            <Day />
-                                        </ScreeningsProvider>
-                                    </Route>
-                                    <Route path="*">
-                                        <NotFound />
-                                    </Route>
-                                </Switch>
-                            </ContentContainer>
-                        </Route>
+                            <Route>
+                                <ContentContainer>
+                                    <Switch>
+                                        <Route exact path="/">
+                                            <Home />
+                                        </Route>
+                                        <Route path="/login">
+                                            <LoginPage />
+                                        </Route>
+                                        <Route path="/register">
+                                            <Register />
+                                        </Route>
+                                        <Route exact path="/screening-entry/:month">
+                                            <ScreeningsProvider>
+                                                <Month />
+                                            </ScreeningsProvider>
+                                        </Route>
+                                        <Route path="/screening-entry/:month/:day">
+                                            <ScreeningsProvider>
+                                                <Day />
+                                            </ScreeningsProvider>
+                                        </Route>
+                                        <Route path="*">
+                                            <NotFound />
+                                        </Route>
+                                    </Switch>
+                                </ContentContainer>
+                            </Route>
+                        </Switch>
                     </ModalProvider>
                 </AuthProvider>
             </ErrorBoundary>
