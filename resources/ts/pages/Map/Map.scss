@@ -1,10 +1,18 @@
+.map {
+    width: 800px;
+    height: 500px;
+    // position: absolute;
+    // left: 33.3333%;
+    // top: 14%;
+}
+
 .margin {
     padding: 4rem;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 40% 60%;
 }
 
 .flex {
