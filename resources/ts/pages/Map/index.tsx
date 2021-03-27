@@ -51,16 +51,17 @@ const toDateString = (date: Date) => date.toISOString().slice(0, 10);
 
 const Map = (): ReactElement => {
     useTitle('Map');
-    const minDate = new Date('1945');
-    const maxDate = new Date('1995');
 
     // isActiveMap is a boolean that signifies whether the map should be visible to mobile users.
     const [isActiveMap, setIsActiveMap] = useState(false);
-    const [date, setDate] = useState<Date | null>(minDate);
+    const [date, setDate] = useState<Date | null>(null);
     const [isError, setIsError] = useState(false);
     const [city, setCity] = useState<City | null>(null);
     const cities = useGetRequest<City[]>('/cities');
     const [screenings, setScreenings] = useState<ScreeningsGeoJSON | null>(null);
+
+    const minDate = city?.oldest ? new Date(city.oldest) : null;
+    const maxDate = city?.latest ? new Date(city.latest) : null;
 
     // added because official typings now allow for [Date, Date] to be passed in,
     // to account for time when selectsRange is set to true, which it is not here
@@ -83,6 +84,9 @@ const Map = (): ReactElement => {
     const handleCitySelection = event => {
         // user input will be a string, so parse it to get a number, base 10
         const id = parseInt(event.target.value, 10);
+
+        // reset date, otherwise an unavailable date may remain selected
+        setDate(null);
 
         // the dropdown only lists valid cities, so we know there will be a match and can type cast confidently
         setCity(cities.data?.find(city => city.id == id) as City);
@@ -126,6 +130,7 @@ const Map = (): ReactElement => {
                                 placeholderText="Select Date"
                                 minDate={minDate}
                                 maxDate={maxDate}
+                                disabled={minDate == null}
                                 selected={date}
                                 onChange={setTypedDate}
                                 className={style.datepicker}
@@ -142,7 +147,8 @@ const Map = (): ReactElement => {
 
                         {isError && <ErrorDisplay />}
                     </div>
-                    {city && <Stats city={city.id} date={date && toDateString(date)} />}
+                    {city && minDate == null && <p>Sorry, no data available for that city yet</p>}
+                    {city && date && <Stats city={city.id} date={toDateString(date)} />}
                 </div>
             </div>
 
@@ -168,6 +174,7 @@ const CityPicker = ({ cities, value, handleChange }: CityPickerProps) => (
     <div className={style.grid}>
         <label htmlFor="city-picker">Pick a city: </label>
         <select id="city-picker" value={value} onChange={handleChange} className={style.cityPicker}>
+            <option value="">Select...</option>
             {cities.map(city => (
                 <option key={city.id} value={city.id}>
                     {city.name}
