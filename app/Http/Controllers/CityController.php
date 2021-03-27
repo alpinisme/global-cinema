@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\City;
 use App\Http\Requests\CityRequest;
+use App\Screening;
+use Cache;
+use Carbon\Carbon;
 
 class CityController extends Controller
 {
@@ -14,7 +17,14 @@ class CityController extends Controller
      */
     public function index()
     {
-        return City::orderBy('name')->get();
+        $cities = City::orderBy('name')->get();
+
+        return $cities->map(function ($city) {
+            $city['latest'] = Screening::select('date')->inCity($city->id)->latest('date')->first()->date ?? null;
+            $city['oldest'] = Screening::select('date')->inCity($city->id)->oldest('date')->first()->date ?? null;
+
+            return $city;
+        });
     }
 
     /**
