@@ -6,7 +6,6 @@ import { useGetRequest } from '../../hooks/requestHooks';
 import { useAuth } from '../../hooks/useAuth';
 import useFilmSearch from '../../hooks/useFilmSearch';
 import { useHistory } from 'react-router';
-import ContentContainer from '../../components/ContentContainer';
 
 const Student = (): ReactElement => {
     const [films, getFilms] = useFilmSearch();
@@ -36,9 +35,7 @@ const Student = (): ReactElement => {
 
     return (
         <ScreeningsContext.Provider value={context}>
-            <ContentContainer>
-                <Month />
-            </ContentContainer>
+            <Month />
         </ScreeningsContext.Provider>
     );
 };

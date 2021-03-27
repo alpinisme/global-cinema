@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Redirect, useLocation, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-import ContentContainer from '../components/ContentContainer';
 import { toDateString } from '../utils/functions';
 
 /**
@@ -60,7 +59,7 @@ const Month = (): ReactElement => {
     const getDay = (date: Date) => String(date.getUTCDate()).padStart(2, '0');
 
     return (
-        <ContentContainer>
+        <>
             <h1>Data Entry</h1>
             <p>Select a date to enter screenings for</p>
             <ul className="button-list">
@@ -73,7 +72,7 @@ const Month = (): ReactElement => {
                 ))}
             </ul>
             <Link to="/">Back to Admin Home</Link>
-        </ContentContainer>
+        </>
     );
 };
 
