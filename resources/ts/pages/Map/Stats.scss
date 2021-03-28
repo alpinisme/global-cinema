@@ -1,0 +1,12 @@
+@use '../../../sass/variables';
+
+.table {
+    caption-side: top;
+
+    & > caption {
+        font-size: 1rem;
+        text-align: center;
+        margin: 0;
+        color: variables.$main;
+    }
+}

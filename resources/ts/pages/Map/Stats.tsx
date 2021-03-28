@@ -3,6 +3,7 @@ import ErrorBox from '../../components/ErrorBox';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import { useGetRequest } from '../../hooks/requestHooks';
 import { StatsResponse } from '../../types/api';
+import styles from './Stats.scss';
 
 const Stats = ({ city, date }: Props): ReactElement => {
     const stats = useGetRequest<StatsResponse[]>(`/month-stats?city=${city}&date=${date}`);
@@ -24,22 +25,35 @@ const Stats = ({ city, date }: Props): ReactElement => {
         .sort((a, b) => b.screening_count - a.screening_count)
         .slice(0, 5);
 
+    const month = new Date(date).toLocaleString('default', {
+        timeZone: 'UTC',
+        month: 'long',
+        year: 'numeric',
+    });
+
     return (
-        <>
-            <h4>Most Popular Films That Month</h4>
-            <ul>
+        <table className={styles.table}>
+            <caption style={{ captionSide: 'top' }}>Most Popular Films in {month}</caption>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Screenings Advertised</th>
+                </tr>
+            </thead>
+            <tbody>
                 {topFilmsByScreeningCountDesc.map(entry => (
-                    <li key={entry.film.id}>
-                        {entry.film.title}: {entry.screening_count}
-                    </li>
+                    <tr key={entry.film.id}>
+                        <td>{entry.film.title}</td>
+                        <td>{entry.screening_count}</td>
+                    </tr>
                 ))}
-            </ul>
-        </>
+            </tbody>
+        </table>
     );
 };
 
 interface Props {
-    date: string | null;
+    date: string;
     city: number;
 }
 
