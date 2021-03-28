@@ -13,4 +13,16 @@ class City extends Model
     {
         $this->hasMany(Theater::class);
     }
+
+    public static function allWithLatestAndOldestScreenings()
+    {
+        $cities = City::orderBy('name')->get();
+
+        return $cities->map(function ($city) {
+            $city['latest'] = Screening::select('date')->inCity($city->id)->latest('date')->first()->date ?? null;
+            $city['oldest'] = Screening::select('date')->inCity($city->id)->oldest('date')->first()->date ?? null;
+
+            return $city;
+        });
+    }
 }
