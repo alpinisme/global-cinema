@@ -2,11 +2,18 @@
 
 .table {
     caption-side: top;
+    width: 1%;
+    white-space: nowrap;
 
     & > caption {
         font-size: 1rem;
         text-align: center;
         margin: 0;
         color: variables.$main;
+    }
+
+    td:first-child,
+    th:first-child {
+        text-align: right;
     }
 }

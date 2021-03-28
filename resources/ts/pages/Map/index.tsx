@@ -115,8 +115,8 @@ const Map = (): ReactElement => {
                             : style[MOBILE_VISIBLE] + ' ' + style.flexCol + ' ' + style.menuBox
                     }
                 >
-                    <h2>Film History from the Edges</h2>
-                    <h3>Mapping Global Cinema</h3>
+                    <h1>Film History from the Edges</h1>
+                    <h2>Mapping Global Cinema</h2>
                     <div className={style.controls}>
                         <CityPicker
                             cities={cities.data ?? []}
@@ -154,7 +154,7 @@ const Map = (): ReactElement => {
 
             <div
                 className={
-                    style.map +
+                    style.mapContainer +
                     ' ' +
                     (isActiveMap ? style[MOBILE_VISIBLE] : style[MOBILE_INVISIBLE])
                 }

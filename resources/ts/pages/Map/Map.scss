@@ -1,9 +1,20 @@
-.map {
-    width: 800px;
-    height: 500px;
+@use '../../../sass/variables';
+
+$map-width: 800px;
+$map-height: 500px;
+
+.map,
+.mapContainer {
+    width: $map-width;
+    height: $map-height;
+
     // position: absolute;
     // left: 33.3333%;
     // top: 14%;
+}
+
+.map {
+    border: 2px solid;
 }
 
 .margin {
@@ -127,7 +138,7 @@
 /* Element | http://127.0.0.1:8000/map/ */
 
 .cityPicker {
-    border: 1px solid navy;
+    border: 1px solid variables.$main;
     border-radius: 4px;
     width: 100%;
     // margin: 5px 2px;
@@ -137,12 +148,12 @@
 /* Element | http://127.0.0.1:8000/map/ */
 
 .datepicker {
-    border: 1px solid navy;
+    border: 1px solid variables.$main;
     border-radius: 4px;
     text-align: center;
     width: 100%;
 }
 
 .controls {
-    margin: 2rem 0;
+    margin: 2rem 0 1rem 0;
 }

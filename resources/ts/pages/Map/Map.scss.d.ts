@@ -12,6 +12,7 @@ interface CssExports {
   'label': string;
   'map': string;
   'map-menu-box': string;
+  'mapContainer': string;
   'margin': string;
   'menuBox': string;
   'mobile-fullscreen-visible': string;
