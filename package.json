@@ -10,8 +10,8 @@
         "build": "npm run production",
         "prod": "npm run production",
         "production": "npm run sass & webpack --env NODE_ENV=production",
-        "t": "./vendor/bin/phpunit & jest",
-        "test": "./vendor/bin/phpunit & jest",
+        "t": "jest",
+        "test": "jest",
         "watch-test": "jest --watch"
     },
     "devDependencies": {
