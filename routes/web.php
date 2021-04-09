@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/screenings/{date?}', [ScreeningController::class, 'index']);
     Route::apiResource('/screenings', ScreeningController::class);
     Route::apiResource('/films', FilmController::class);
-    Route::apiResource('/cities', CityController::class);
+    Route::apiResource('/cities', CityController::class)->except('index');
     Route::apiResource('/theaters', TheaterController::class);
     Route::get('/user', CurrentUserController::class);
     Route::post('/csv/screenings', ScreeningCsvUploadController::class);
