@@ -68,9 +68,9 @@ class Screening extends Model
      */
     public function scopeInMonth($query, $date)
     {
-        $year = substr($date, 0, 4);
-        $month = substr($date, 5, 2);
-        $daysInMonth = cal_days_in_month(\CAL_GREGORIAN, $month, $year);
+        $year = \substr($date, 0, 4);
+        $month = \substr($date, 5, 2);
+        $daysInMonth = \cal_days_in_month(\CAL_GREGORIAN, $month, $year);
 
         return $query->whereBetween('date', ["$year-$month-01", "$year-$month->$daysInMonth"]);
     }
