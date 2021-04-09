@@ -17,7 +17,7 @@ class CityController extends Controller
     public function index()
     {
         return Cache::remember('cities_index', Carbon::now()->addWeek(), function () {
-            City::allWithLatestAndOldestScreenings();
+            return City::allWithLatestAndOldestScreenings();
         });
     }
 
