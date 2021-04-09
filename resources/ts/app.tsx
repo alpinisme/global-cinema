@@ -19,10 +19,10 @@ const Map = React.lazy(() => import('./pages/Map'));
 
 const App = (): ReactElement => (
     <Router>
-        <Layout>
-            <ErrorBoundary>
-                <AuthProvider>
-                    <ModalProvider>
+        <ErrorBoundary>
+            <AuthProvider>
+                <ModalProvider>
+                    <Layout>
                         <Switch>
                             <Route path="/map">
                                 <Suspense fallback={<LoadingIndicator />}>
@@ -59,10 +59,10 @@ const App = (): ReactElement => (
                                 </ContentContainer>
                             </Route>
                         </Switch>
-                    </ModalProvider>
-                </AuthProvider>
-            </ErrorBoundary>
-        </Layout>
+                    </Layout>
+                </ModalProvider>
+            </AuthProvider>
+        </ErrorBoundary>
     </Router>
 );
 
