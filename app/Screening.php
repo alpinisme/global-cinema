@@ -60,6 +60,12 @@ class Screening extends Model
         );
     }
 
+    protected function daysInMonth($month, $year)
+    {
+        // calculate number of days in a month
+        return $month == 2 ? ($year % 4 ? 28 : ($year % 100 ? 29 : ($year % 400 ? 28 : 29))) : (($month - 1) % 7 % 2 ? 30 : 31);
+    }
+
     /**
      * Scope query to include only screenings from the month to which the specified date belongs
      *
@@ -68,15 +74,9 @@ class Screening extends Model
      */
     public function scopeInMonth($query, $date)
     {
-        function daysInMonth($month, $year)
-        {
-            // calculate number of days in a month
-            return $month == 2 ? ($year % 4 ? 28 : ($year % 100 ? 29 : ($year % 400 ? 28 : 29))) : (($month - 1) % 7 % 2 ? 30 : 31);
-        }
-
         $year = \substr($date, 0, 4);
         $month = \substr($date, 5, 2);
-        $daysInMonth = daysInMonth($month, $year);
+        $daysInMonth = $this->daysInMonth($month, $year);
 
         return $query->whereBetween('date', ["$year-$month-01", "$year-$month->$daysInMonth"]);
     }
