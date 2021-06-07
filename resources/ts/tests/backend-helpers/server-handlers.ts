@@ -31,6 +31,10 @@ const handlers = [
         const { role } = req.body;
         return res(ctx.json({ role }));
     }),
+
+    rest.get('/user', async (req, res, ctx) => {
+        return res(ctx.json(users[0]));
+    }),
 ];
 
 export { handlers };
