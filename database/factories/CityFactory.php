@@ -26,6 +26,7 @@ class CityFactory extends Factory
             'country' => $this->faker->name(),
             'lat' => $this->faker->latitude,
             'lng' => $this->faker->longitude,
+            'zoom' => 6,
         ];
     }
 }
