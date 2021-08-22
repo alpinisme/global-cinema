@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Assignment;
+use App\City;
 use App\Film;
 use App\Screening;
 use App\Theater;
@@ -73,5 +74,14 @@ class RelationshipsTest extends TestCase
         ];
         $screening = Screening::factory()->create($attributes);
         $this->assertEquals($screening->id, $film->screenings[0]->id);
+    }
+
+    /** @test */
+    public function a_city_has_many_theaters()
+    {
+        $city = City::factory()->create();
+        $theater = Theater::factory()->create(['city_id' => $city->id]);
+
+        $this->assertEquals($theater->id, $city->theaters[0]->id);
     }
 }

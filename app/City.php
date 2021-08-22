@@ -11,7 +11,7 @@ class City extends Model
 
     public function theaters()
     {
-        $this->hasMany(Theater::class);
+        return $this->hasMany(Theater::class);
     }
 
     public static function allWithLatestAndOldestScreenings()
