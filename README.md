@@ -1,6 +1,19 @@
-# CWL 207
+# Global Cinema
 
-A laravel app for uploading film screenings
+A laravel app for students to enter film screenings and save them to a project database (and for instructors to verify that they have done so).
+
+## Getting Started
+
+To set up a development environment, clone this repository and then run `sh ./setup.sh` in the project directory (this will require appropriate php, npm, and composer versions). Once that script has finished building the project, you can serve the site with the command, `php artisan serve`.
+
+`setup.sh` will seed the development database with dummy data, including users. The following are sample user credentials to view the site from the perspective of different user types:
+
+| Role        | Username    | email                   | Password |
+| ----------- | ----------- | ----------------------- | -------- |
+| admin       | admin       | admin@example.com       | password |
+| student     | student     | student@example.com     | password |
+| instructor  | instructor  | instructor@example.com  | password |
+| contributor | contributor | contributor@example.com | password |
 
 ## Contributing
 
