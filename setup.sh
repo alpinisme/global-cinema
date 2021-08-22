@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # check for needed commands, notify and exit if any unavailable
 for COMMAND in php npm composer
@@ -35,6 +35,6 @@ echo "- Installing npm dependencies"
 npm install --quiet 1> /dev/null || exit 1
 
 echo "- Building dev bundle with webpack"
-npm run dev ?> /dev/null
+npm run development 1> /dev/null || exit 1
 
-echo "\nProject built. Run `php artisan serve` to start a dev server"
+echo "\nSuccess. Project setup complete. Run \`php artisan serve\` to start a dev server"
