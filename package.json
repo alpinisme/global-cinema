@@ -1,4 +1,5 @@
 {
+    "name": "global-cinema",
     "private": true,
     "scripts": {
         "sass": "sass -c resources/sass:public/css/",
