@@ -22,15 +22,17 @@ class TheaterFactory extends Factory
      */
     public function definition()
     {
+        $city = City::factory()->create();
+        
         return [
             'name' => $this->faker->name(),
             'neighborhood' => $this->faker->word(),
             'capacity' => $this->faker->numberBetween(1, 1000),
             'open_year' => $this->faker->year(),
             'close_year' => $this->faker->year(),
-            'city_id' => City::factory()->create()->id,
-            'lat' => 90.000123,
-            'lng' => 93.759213,
+            'city_id' => $city->id,
+            'lat' => $this->faker->latitude($city->lat - 0.05, $city->lat + 0.05),
+            'lng' => $this->faker->longitude($city->lng - 0.05, $city->lng + 0.05),
             'verified' => $this->faker->boolean(),
             'address' => $this->faker->address(),
         ];
