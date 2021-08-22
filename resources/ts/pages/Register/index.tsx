@@ -18,7 +18,7 @@ const Register = (): ReactElement => {
     useTitle('Register');
 
     useEffect(() => {
-        if (instructors.data) {
+        if (instructors.data?.[0]) {
             const id = instructors.data[0].id.toString();
             setInstructor(id);
         }
