@@ -33,8 +33,8 @@ class TheaterRequest extends FormRequest
             'open_year' => 'nullable|integer|between:1900,2030',
             'close_year' => 'nullable|integer|between:1900,2030',
             'city_id' => $maybe . 'required|exists:cities,id',
-            'lat' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
-            'lng' => 'nullable|regex:/^[0-9]{1,2}.[0-9]{4,6}$/',
+            'lat' => 'nullable|regex:/^-?[0-9]{1,2}.[0-9]{4,6}$/',
+            'lng' => 'nullable|regex:/^-?[0-9]{1,3}.[0-9]{4,6}$/',
             'verified' => 'nullable|boolean',
             'address' => 'nullable|string|max:191',
         ];
