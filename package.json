@@ -4,7 +4,7 @@
     "scripts": {
         "sass": "sass -c resources/sass:public/css/",
         "dev": "npm run development",
-        "development": "npm run sass & webpack --env NODE_ENV=development",
+        "development": "webpack --env NODE_ENV=development",
         "watch": "npm run development -- --watch & npm run sass -- --watch",
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --hide-modules",
