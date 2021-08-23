@@ -46,8 +46,11 @@ const fetchJSON = async (url: string, setIsError: (isError: boolean) => void) =>
     }
 };
 
-// since dates are stored in database without timestamp, we only want first ten chars
-const toDateString = (date: Date) => date.toISOString().slice(0, 10);
+// a bit hacky, but Sweden (sv) uses YYYY-MM-DD and this won't cause timezone conversion problems
+// and react-datepicker requires us to use dates in local timezone
+const toDateString = (date: Date) => date.toLocaleDateString('sv');
+
+const createLocalDay = (dateString: string) => new Date(dateString + 'T00:00:00');
 
 const Map = (): ReactElement => {
     useTitle('Map');
@@ -60,8 +63,8 @@ const Map = (): ReactElement => {
     const cities = useGetRequest<City[]>('/cities');
     const [screenings, setScreenings] = useState<ScreeningsGeoJSON | null>(null);
 
-    const minDate = city?.oldest ? new Date(city.oldest) : null;
-    const maxDate = city?.latest ? new Date(city.latest) : null;
+    const minDate = city?.oldest ? createLocalDay(city.oldest) : null;
+    const maxDate = city?.latest ? createLocalDay(city.latest) : null;
 
     // added because official typings now allow for [Date, Date] to be passed in,
     // to account for time when selectsRange is set to true, which it is not here
