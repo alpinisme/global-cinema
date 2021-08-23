@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { ReactElement } from 'react';
 import ErrorBox from '../../../../components/ErrorBox';
 import LoadingIndicator from '../../../../components/LoadingIndicator';
+import TextButton from '../../../../components/TextButton';
 import { useGetRequest } from '../../../../hooks/requestHooks';
 import { User } from '../../../../types/api';
 import { removeFrom } from '../../../../utils/functions';
@@ -57,10 +58,14 @@ const UserReview = (): ReactElement => {
                     <tr key={user.id}>
                         <td>{user.name}</td>
                         <td>
-                            <button onClick={() => approve(user.id)}>approve</button>
+                            <TextButton label="approve" handleClick={() => approve(user.id)} />
                         </td>
                         <td>
-                            <button onClick={() => reject(user.id)}>reject</button>
+                            <TextButton
+                                label="reject"
+                                style="danger"
+                                handleClick={() => reject(user.id)}
+                            />
                         </td>
                     </tr>
                 ))}
