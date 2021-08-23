@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,7 +8,7 @@ const NavBar = (): ReactElement => {
 
     const handleLogout = e => {
         e.preventDefault();
-        axios.post('/logout').then(() => auth.logout());
+        auth.logout();
     };
 
     return (
