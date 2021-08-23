@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import styles from './ErrorBoundary.scss';
 
 class ErrorBoundary extends Component<ErrorProps, ErrorState> {
     constructor(props: ErrorProps) {
@@ -12,14 +13,14 @@ class ErrorBoundary extends Component<ErrorProps, ErrorState> {
             error: error,
             errorInfo: errorInfo,
         });
-        // Consider logging error messages to server here
+        // TODO: Consider logging error messages to server here
     }
 
     render(): ReactNode {
         if (this.state.errorInfo) {
             // There has been an error
             return (
-                <div>
+                <div className={styles.container}>
                     <h2>Something went wrong.</h2>
                     <p>{this.state.error?.toString()}</p>
                 </div>
