@@ -25,6 +25,8 @@ $hover-color: rgb(240, 240, 240);
     &:hover {
         background-color: white;
     }
+    display: flex;
+    align-items: center;
 }
 
 .icon {
