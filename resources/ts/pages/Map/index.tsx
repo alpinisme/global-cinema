@@ -236,6 +236,22 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
                                             {screening.properties.title}
                                         </span>
                                     </li>
+                                    {screening.properties.language && (
+                                        <li className={style.label}>
+                                            language:
+                                            <span className={style.value}>
+                                                {screening.properties.language}
+                                            </span>
+                                        </li>
+                                    )}
+                                    {screening.properties.country && (
+                                        <li className={style.label}>
+                                            country:
+                                            <span className={style.value}>
+                                                {screening.properties.country}
+                                            </span>
+                                        </li>
+                                    )}
                                 </ul>
                             </Popup>
                         </CircleMarker>

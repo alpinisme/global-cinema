@@ -32,6 +32,7 @@ class ScreeningsGeoJson
                 'theater' => $screening->name,
                 'title' => $screening->title,
                 'language' => $screening->language,
+                'country' => $screening->country,
             ];
 
             $feature = [];
