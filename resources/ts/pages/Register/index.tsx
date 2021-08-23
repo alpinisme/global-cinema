@@ -23,7 +23,7 @@ const Register = (): ReactElement => {
             const id = instructors.data[0].id.toString();
             setInstructor(id);
         }
-    }, [instructors]);
+    }, [instructors.data]);
 
     const register = (e: FormEvent) => {
         e.preventDefault();
