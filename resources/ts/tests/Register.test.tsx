@@ -7,6 +7,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { AuthProvider } from '../hooks/useAuth';
 import { StaticRouter } from 'react-router';
+import { server, rest } from './backend-helpers/server';
 
 const handleSuccess = jest.fn();
 
@@ -21,6 +22,14 @@ beforeEach(() => {
 });
 
 describe('Register page with happy-path api calls', () => {
+    beforeAll(() => {
+        server.use(
+            rest.get('/user', async (req, res, ctx) => {
+                return res(ctx.status(403));
+            })
+        );
+    });
+
     it('should show instructor options when user selects the student role', async () => {
         userEvent.selectOptions(screen.getByRole('combobox'), 'student');
         expect(screen.queryByLabelText("Your instructor's name")).toBeInTheDocument();
