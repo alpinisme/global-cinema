@@ -263,6 +263,9 @@ const ScreeningsMap = ({ city, screenings }: MapProps) => {
 
     useEffect(() => {
         map?.setView(position, city.zoom);
+        // if popups not closed, then changing cities and selecting a date triggers
+        // the map to recenter on old city (and its closing popup action)
+        map?.closePopup();
     }, [map, position, city.zoom]);
 
     return displayMap;
