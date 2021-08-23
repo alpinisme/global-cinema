@@ -1,9 +1,9 @@
-import axios from 'axios';
-import React, { ChangeEvent, ReactElement, useEffect, useState } from 'react';
+import React, { ChangeEvent, ReactElement, useState } from 'react';
 import TreeList, { Data as TreeListData } from '../../../../components/TreeList';
 import Select from '../../../../components/Select';
 import styles from './ProgressChecker.scss';
 import { useAdminContext } from '../../../../contexts/AdminContext';
+import { useGetRequest } from '../../../../hooks/requestHooks';
 
 /**
  * Callback for reduce function. Transforms a list of formatted date strings (YYYY-month, ex: 1987-May)
@@ -32,28 +32,15 @@ const formatDates = (accumulator: TreeListData[], date: string): TreeListData[] 
  * has gathered data for. It displays years and months in a collapsible tree
  */
 const ProgressChecker = (): ReactElement => {
-    const [dates, setDates] = useState<string[] | null>(null);
     const [city, setCity] = useState<string | null>(null);
     const { cities } = useAdminContext();
-
-    // retreive list of completed months for selected city
-    useEffect(() => {
-        let isMounted = true;
-        if (city && isMounted) {
-            axios
-                .get('completed/' + city)
-                .then(d => setDates(d.data))
-                .catch(console.log);
-        }
-        return () => {
-            isMounted = false;
-        };
-    }, [city]);
 
     const options = cities.map(city => ({ label: city.name, value: city.id }));
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => setCity(e.target.value);
 
-    const data = dates?.reduce(formatDates, []) ?? [];
+    // retreive list of completed months for selected city
+    const dates = useGetRequest<string[]>('/completed/' + city);
+    const data = dates.data?.reduce(formatDates, []) ?? [];
 
     return (
         <>
