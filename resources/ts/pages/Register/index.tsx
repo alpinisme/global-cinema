@@ -5,6 +5,7 @@ import { useGetRequest } from '../../hooks/requestHooks';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './Register.scss';
 import useTitle from '../../hooks/useTitle';
+import { Redirect } from 'react-router';
 
 const Register = (): ReactElement => {
     const [role, setRole] = useState('');
@@ -36,6 +37,10 @@ const Register = (): ReactElement => {
             password_confirmation: passConfirm,
         });
     };
+
+    if (auth.user) {
+        return <Redirect to="/" />;
+    }
 
     return (
         <form onSubmit={register} className={styles.container}>
