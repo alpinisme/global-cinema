@@ -3,11 +3,24 @@
     border: none;
     background-color: inherit;
     padding: initial;
-    margin-left: 0.7rem;
+    margin-left: 1rem;
 }
 
 .review ul {
     text-align: left;
+}
+
+.review table {
+    background-color: white;
+}
+
+.review td {
+    text-align: center;
+}
+
+.review td:nth-child(1) {
+    text-align: left;
+    margin: 0;
 }
 
 .accept,
