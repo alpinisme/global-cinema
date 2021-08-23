@@ -27,6 +27,8 @@ class FilmFactory extends Factory
             'year' => $this->faker->year,
             'created_by' => User::factory(),
             'verified' => $this->faker->boolean,
+            'language' => $this->faker->randomElement(['English', 'Gujarati', 'Swahili']),
+            'country' => $this->faker->randomElement(['Greece', 'Sweden', 'Indonesia', 'USA']),
         ];
     }
 }

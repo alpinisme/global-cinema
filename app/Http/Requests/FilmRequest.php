@@ -27,6 +27,8 @@ class FilmRequest extends FormRequest
             'title' => 'required|max:80',
             'year' => 'required|integer|between:1900,2030',
             'verified' => 'boolean',
+            'language' => 'max:80',
+            'country' => 'max:80',
         ];
     }
 }
