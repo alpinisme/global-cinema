@@ -6,18 +6,27 @@ import Register from '../pages/Register';
 import '@testing-library/jest-dom/extend-expect';
 import { jest } from '@jest/globals';
 import { AuthProvider } from '../hooks/useAuth';
+import { StaticRouter } from 'react-router';
 
 const handleSuccess = jest.fn();
 
 beforeEach(() => {
     render(
-        <AuthProvider>
-            <Register />
-        </AuthProvider>
+        <StaticRouter>
+            <AuthProvider>
+                <Register />
+            </AuthProvider>
+        </StaticRouter>
     );
 });
 
 describe('Register page with happy-path api calls', () => {
+    it('should show instructor options when user selects the student role', async () => {
+        userEvent.selectOptions(screen.getByRole('combobox'), 'student');
+        expect(screen.queryByLabelText("Your instructor's name")).toBeInTheDocument();
+        expect(await screen.findByRole('option', { name: users[0].name })).toBeInTheDocument();
+    });
+
     it('should not show further options before user selects a role', () => {
         expect(screen.queryByRole('input')).not.toBeInTheDocument();
     });
@@ -30,12 +39,6 @@ describe('Register page with happy-path api calls', () => {
     it('should not show instructor options when user selects a role other than student', async () => {
         userEvent.selectOptions(screen.getByRole('combobox'), 'contributor');
         expect(screen.queryByLabelText('instructors')).not.toBeInTheDocument();
-    });
-
-    it('should show instructor options when user selects the student role', async () => {
-        userEvent.selectOptions(screen.getByRole('combobox'), 'student');
-        expect(screen.queryByLabelText("Your instructor's name")).toBeInTheDocument();
-        expect(await screen.findByRole('option', { name: users[0].name })).toBeInTheDocument();
     });
 
     it('should call handleSuccess callback with submitted role upon success', async () => {
