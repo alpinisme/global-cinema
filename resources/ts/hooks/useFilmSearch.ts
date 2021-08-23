@@ -18,13 +18,8 @@ function useFilmSearch(): [Film[], (input: string, year?: string | undefined) =>
             return query.join(' ');
         };
 
-        let query: string;
-        if (input.length > 3) {
-            // TODO: there's a bug here, because the site requires that the term be at least 3 chars *trimmed*
-            query = stripArticles(input);
-        } else {
-            query = input;
-        }
+        const query = input.length > 3 ? stripArticles(input) : input;
+        // TODO: there's a bug here, because the site requires that the term be at least 3 chars *trimmed*
 
         if (query.length != 3) {
             return;
