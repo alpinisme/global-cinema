@@ -1,5 +1,5 @@
-import React, { useState, ReactElement, FormEvent, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useState, ReactElement, FormEvent } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import ErrorBox from '../../components/ErrorBox';
 import { useAuth } from '../../hooks/useAuth';
 import useTitle from '../../hooks/useTitle';
@@ -19,7 +19,6 @@ const LoginPage = (): ReactElement => {
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
     const auth = useAuth();
-    const history = useHistory();
     useTitle('Login');
 
     const login = (e: FormEvent) => {
@@ -27,11 +26,9 @@ const LoginPage = (): ReactElement => {
         auth.login({ password, email, remember });
     };
 
-    useEffect(() => {
-        if (auth.user) {
-            history.replace('/');
-        }
-    }, [auth.user, history]);
+    if (auth.user) {
+        return <Redirect to="/" />;
+    }
 
     return (
         <>
