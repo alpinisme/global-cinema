@@ -30,6 +30,7 @@ $map-height: 500px;
 .grid {
     display: grid;
     grid-template-columns: 40% 60%;
+    align-items: center;
 }
 
 .flex {
