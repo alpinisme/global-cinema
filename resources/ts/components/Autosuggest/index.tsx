@@ -13,7 +13,7 @@ function Autosuggest<A extends Identifiable>({
     const [matches, setMatches] = useState<A[]>([]);
     const { label, keys, options, displayMatch } = config;
 
-    // find four closest matches for user-input title in db
+    // find four closest matches
     useEffect(() => {
         const config = {
             shouldSort: true,
@@ -40,7 +40,10 @@ function Autosuggest<A extends Identifiable>({
         setValue(value);
     };
 
-    // TODO: add third display option (not: "no options found") when less than 3 characters
+    // TODO: It would be nice to show a third display option (not "no options found") when a the database
+    // hasn't even been queried yet due to still-incomplete input (e.g., only 1 character typed so far)
+    // This, however, would require additional info from calling context (the minimum characters to search for)
+    // which is outside the scope of this component – it may not be worth implementing
     return (
         <>
             <div>
@@ -78,7 +81,7 @@ function Autosuggest<A extends Identifiable>({
                             {matches.length > 0 ? (
                                 <p>If the correct {label.toLowerCase()} is not listed above, </p>
                             ) : (
-                                <p>Sorry, no matches found.</p>
+                                <p>No matches to display</p>
                             )}
                             <button onClick={() => handleManualAdd(value)}>
                                 Add {label.toLowerCase()} manually
