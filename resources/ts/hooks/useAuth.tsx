@@ -31,17 +31,27 @@ function useAuthProvider() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        let isMounted = true; // prevent state update on unmounted component
+
         if (isLoading) {
             axios
                 .get('/user')
                 .then(res => res.data)
                 .then(user => {
-                    setUser(user);
-                    setIsLoading(false);
+                    if (isMounted) {
+                        setUser(user);
+                        setIsLoading(false);
+                    }
                 })
                 .catch(() => {
-                    setIsLoading(false);
+                    if (isMounted) {
+                        setIsLoading(false);
+                    }
                 });
+
+            return () => {
+                isMounted = false;
+            };
         }
     });
 
