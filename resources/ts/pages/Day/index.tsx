@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
@@ -11,15 +11,17 @@ import { useHistory, useParams } from 'react-router-dom';
 import useTitle from '../../hooks/useTitle';
 
 const Day = (): ReactElement => {
+    const history = useHistory();
     const { month, day } = useParams<DayParams>();
     const ISOdate = month + '-' + day;
     const date = new Date(ISOdate);
-    // TODO: check if valid date and return redirect if not
-    // This will likely require putting everything below here in a dummy component
-    // to avoid conditionally calling hooks
+
+    if (isNaN(date.getTime())) {
+        history.push('/not-found');
+    }
+
     const endpoint = '/screenings/' + ISOdate;
     const screenings = useGetRequest<Screening[]>(endpoint);
-    const history = useHistory();
     useTitle('Screening Entry');
 
     /**
