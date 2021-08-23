@@ -1,8 +1,8 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import axios from 'axios';
 import ScreeningEntry from './ScreeningEntry';
 import SavedScreening from './SavedScreening';
-import { removeFrom, toDateString } from '../../utils/functions';
+import { isValidDate, removeFrom, toDateString } from '../../utils/functions';
 import { Screening } from '../../types/api';
 import { useGetRequest } from '../../hooks/requestHooks';
 import LoadingIndicator from '../../components/LoadingIndicator';
@@ -16,8 +16,8 @@ const Day = (): ReactElement => {
     const ISOdate = month + '-' + day;
     const date = new Date(ISOdate);
 
-    if (isNaN(date.getTime())) {
-        history.push('/not-found');
+    if (!isValidDate(date)) {
+        history.replace('/404');
     }
 
     const endpoint = '/screenings/' + ISOdate;

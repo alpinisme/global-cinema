@@ -57,3 +57,10 @@ export const log = (...args: unknown[]): unknown => {
     console.log(...args);
     return args[0];
 };
+
+/**
+ * Checks if date object contains a valid date
+ */
+export const isValidDate = (date: Date): boolean => {
+    return !isNaN(date.getTime());
+};

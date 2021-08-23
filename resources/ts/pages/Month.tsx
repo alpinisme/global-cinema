@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Redirect, useLocation, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
-import { toDateString } from '../utils/functions';
+import { isValidDate, toDateString } from '../utils/functions';
 
 /**
  * takes a given Date object and returns a new Date
@@ -50,7 +50,7 @@ const Month = (): ReactElement => {
     const search = useLocation().search;
     const startDate = new Date(month);
 
-    if (isNaN(startDate.getTime())) {
+    if (!isValidDate(startDate)) {
         return <Redirect to="/404" />;
     }
 
