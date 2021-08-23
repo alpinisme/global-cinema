@@ -25,7 +25,7 @@ class ProgressReviewController extends Controller
 
         $rememberUntil = Carbon::now()->addWeek();
 
-        return Cache::remember('progress-review', $rememberUntil, function () use ($dateClause, $city) {
+        return Cache::remember("progress-review-$city", $rememberUntil, function () use ($dateClause, $city) {
             return Screening::selectRaw("$dateClause as month, MAX(date)")
                 ->distinct()
                 ->inCity($city)
