@@ -24,7 +24,7 @@ class TheaterFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->words($this->faker->numberBetween(1, 3), true),
             'neighborhood' => $this->faker->word(),
             'capacity' => $this->faker->numberBetween(1, 1000),
             'open_year' => $this->faker->year(),
