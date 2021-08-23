@@ -11,7 +11,6 @@ import { Map as LeafletMap } from 'leaflet';
 import useTitle from '../../hooks/useTitle';
 import { useGetRequest } from '../../hooks/requestHooks';
 
-// TODO: make this work!
 const MOBILE_VISIBLE = 'mobile-fullscreen-visible';
 const MOBILE_INVISIBLE = 'mobile-invisible';
 const MOBILE_ONLY = 'mobile-only';

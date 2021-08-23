@@ -7,10 +7,6 @@ $map-height: 500px;
 .mapContainer {
     width: $map-width;
     height: $map-height;
-
-    // position: absolute;
-    // left: 33.3333%;
-    // top: 14%;
 }
 
 .map {
@@ -62,7 +58,7 @@ $map-height: 500px;
     position: absolute;
     right: 2rem;
     top: 2rem;
-    z-index: 2;
+    z-index: 451; // arbitrary number arrived at through trial and error (alas)
     padding: 0.5rem 1rem;
     background-color: rgb(255, 255, 255);
     border: 2px rgba(0, 0, 0, 0.2) solid;
@@ -108,11 +104,27 @@ $map-height: 500px;
 }
 
 @media (max-width: 800px) {
+    .page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mapContainer {
+        justify-content: flex-end;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .grid {
+        margin: 0.5rem 15vw;
+    }
+
     .mobile-fullscreen-visible {
         height: 100vh;
         width: 100vw;
 
-        #map {
+        &.mapContainer {
             position: absolute;
             height: 100vh;
             width: 100vw;
@@ -120,6 +132,10 @@ $map-height: 500px;
             top: 0;
             left: 0;
         }
+    }
+    .map {
+        height: 100vh;
+        width: 100vw;
     }
 
     .mobile-invisible {
@@ -136,8 +152,6 @@ $map-height: 500px;
     }
 }
 
-/* Element | http://127.0.0.1:8000/map/ */
-
 .cityPicker {
     border: 1px solid variables.$main;
     border-radius: 4px;
@@ -145,8 +159,6 @@ $map-height: 500px;
     // margin: 5px 2px;
     margin: 5px 0;
 }
-
-/* Element | http://127.0.0.1:8000/map/ */
 
 .datepicker {
     border: 1px solid variables.$main;
