@@ -5,7 +5,7 @@ import { useGetRequest } from '../../hooks/requestHooks';
 import { useAuth } from '../../hooks/useAuth';
 import styles from './Register.scss';
 import useTitle from '../../hooks/useTitle';
-import { useHistory } from 'react-router';
+import { Redirect } from 'react-router';
 
 const Register = (): ReactElement => {
     const [role, setRole] = useState('');
@@ -16,14 +16,7 @@ const Register = (): ReactElement => {
     const [password, setPassword] = useState('');
     const [passConfirm, setPassConfirm] = useState('');
     const auth = useAuth();
-    const history = useHistory();
     useTitle('Register');
-
-    useEffect(() => {
-        if (auth.user) {
-            history.push('/');
-        }
-    }, [auth.user, history]);
 
     useEffect(() => {
         if (instructors.data?.[0]) {
@@ -44,6 +37,10 @@ const Register = (): ReactElement => {
             password_confirmation: passConfirm,
         });
     };
+
+    if (auth.user) {
+        return <Redirect to="/" />;
+    }
 
     return (
         <form onSubmit={register} className={styles.container}>
