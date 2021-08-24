@@ -29,7 +29,10 @@ echo "- Generating app key"
 php artisan key:generate -q
 
 echo "- Running database migrations"
-php artisan migrate -q || exit 1
+php artisan migrate 1> /dev/null || exit 1
+
+echo "- Seeding database with dummy data"
+php artisan db:seed 1> /dev/null || exit 1
 
 echo "- Installing npm dependencies"
 npm install --quiet 1> /dev/null || exit 1
@@ -37,4 +40,4 @@ npm install --quiet 1> /dev/null || exit 1
 echo "- Building dev bundle with webpack"
 npm run development 1> /dev/null || exit 1
 
-echo "\nSuccess. Project setup complete. Run \`php artisan serve\` to start a dev server"
+echo -e "\n\033[1mSuccess. Project setup complete. Run \`php artisan serve\` to start a dev server"
