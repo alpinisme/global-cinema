@@ -21,7 +21,7 @@ const InstructorPage = (): ReactElement => {
 
     const studentData = useGetRequest<Student[]>('/grading');
 
-    return studentData ? (
+    return studentData.data ? (
         <>
             <h2 className={styles.margin}>Instructor Overview</h2>
             <p>
@@ -42,7 +42,7 @@ const InstructorPage = (): ReactElement => {
                     </tr>
                 </thead>
                 <tbody>
-                    {studentData.data?.sort(alphabetizeByEmail).map(student => (
+                    {studentData.data.sort(alphabetizeByEmail).map(student => (
                         <tr key={student.info.id} onClick={() => setSelectedStudent(student)}>
                             <td>{student.info.name}</td>
                             <td>{student.info.email}</td>
