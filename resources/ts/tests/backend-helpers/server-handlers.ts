@@ -35,6 +35,10 @@ const handlers = [
     rest.get('/user', async (req, res, ctx) => {
         return res(ctx.json(users[0]));
     }),
+
+    rest.get('/completed/:city', async (req, res, ctx) => {
+        return res(ctx.json([]));
+    }),
 ];
 
 export { handlers };
