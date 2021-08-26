@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             CitiesSeeder::class,
             AssignmentSettingSeeder::class,
+            FilmSeeder::class,
         ]);
     }
 }
