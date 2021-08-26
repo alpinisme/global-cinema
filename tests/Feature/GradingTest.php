@@ -21,7 +21,7 @@ class GradingTest extends TestCase
         $expectedInfo = ['id' => $students[0]->id, 'name' => $students[0]->name, 'email' => $students[0]->email];
         $this->actingAs($instructor)->get('grading')
             ->assertOk()
-            ->assertJsonPath('data.0', ['info' => $expectedInfo, 'datesCompleted' => []]);
+            ->assertJsonPath('0', ['info' => $expectedInfo, 'datesCompleted' => []]);
     }
 
     /** @test */
@@ -33,7 +33,7 @@ class GradingTest extends TestCase
         $screenings = Screening::factory()->count(2)->create(['created_by' => $student->id]);
         $this->actingAs($instructor)->get('grading')
             ->assertOk()
-            ->assertJsonPath('data.0.datesCompleted', [$screenings[0]->date, $screenings[1]->date]);
+            ->assertJsonPath('0.datesCompleted', [$screenings[0]->date, $screenings[1]->date]);
     }
 
     /** @test */
@@ -45,7 +45,7 @@ class GradingTest extends TestCase
         Screening::factory()->count(2)->create(['created_by' => $student->id]);
         $this->actingAs($instructors[1])->get('grading')
                 ->assertOk()
-                ->assertJsonPath('data', []);
+                ->assertJson([]);
     }
 
     /** @test */
